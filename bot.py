@@ -1,6 +1,6 @@
 import logging
 
-from telegram import Update, InlineKeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, constants
+from telegram import Update, ReplyKeyboardMarkup, constants
 from telegram.ext import ContextTypes, ConversationHandler
 
 from dlfunc import get_active_matches, filter_match_data
@@ -39,6 +39,35 @@ async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                     parse_mode=constants.ParseMode.HTML)
 
 
+def get_hero_icon(hero_name: str):
+    hero_icons = {
+        "Abrams": "😈",
+        "Bebop": "🤖",
+        "Dynamo": "❎",
+        "Grey Talon": "🏹",
+        "Haze": "😶‍🌫️",
+        "Infernus": "🔥",
+        "Ivy": "🗿",
+        "Kelvin": "🥶",
+        "Lady Geist": "🔫",
+        "Lash": "👨‍🦰",
+        "McGinnis": "🚀",
+        "Mirage": "🌪",
+        "Mo & Krill": "🐽",
+        "Paradox": "🔄",
+        "Pocket": "💼",
+        "Seven": "⚡️",
+        "Shiv": "🩸",
+        "Vindicta": "🎯",
+        "Viscous": "🟢",
+        "Warden": "👮‍♂️",
+        "Wraith": "🃏",
+        "Yamato": "⛩"
+    }
+
+    return hero_icons.get(hero_name, "")
+
+
 async def format_match_data(filtered_data):
     message = f"<b>Match ID:</b> {filtered_data['match_id']}\n"
     message += "===========================\n"
@@ -57,7 +86,7 @@ async def format_match_data(filtered_data):
     message += "+++++++++++++++++++++++++++\n"
 
     for player in filtered_data['players']:
-        message += f" - <b>{player['player_name']}</b> (Hero: {player['hero']})\n"
+        message += f" - {get_hero_icon(player['hero'])} <b>{player['hero']}</b> (Player: {player['player_name']})\n"
         message += f"Account Link: <a href='{player['account_link']}'>steam link</a>\n"
         message += "Playtime: \n"
         message += f"   Total - {player['playtime']['total']}\n"
@@ -77,7 +106,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_menu = [
             ["◀️ Go back"]
         ]
-        await update.message.reply_text("Sure, send me your match id (you can see it in the bottom-right corner). "
+        await update.message.reply_text("Sure, send me your match id (you can see find in the bottom-right corner). "
                                         "Match duration must be <b>at least 3 minutes</b> for it to be searchable.",
                                         reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
                                         parse_mode=constants.ParseMode.HTML)
@@ -119,7 +148,7 @@ async def match_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             user_menu = [
                 ["Search LIVE game by id"]
             ]
-            await update.message.reply_text("You can search your live game by pressing button below",
+            await update.message.reply_text("You can search your live game by pressing button below.",
                                             reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
             return ConversationHandler.END
