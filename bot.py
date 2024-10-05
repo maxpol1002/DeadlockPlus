@@ -177,5 +177,6 @@ async def match_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def end_conv(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("The current operation has been canceled. You can start over with /start or ask for help with /faq.")
     context.user_data.clear()
     return ConversationHandler.END
