@@ -93,7 +93,7 @@ async def format_match_data(filtered_data):
         message += "h\n" if player['playtime']['total'] != "N/A" else "\n"
         message += f"   2 Weeks - {player['playtime']['2weeks']}"
         message += "h\n" if player['playtime']['2weeks'] != "N/A" else "\n"
-        message += "———————————————\n"
+        message += "————————————————\n"
 
     return message
 
