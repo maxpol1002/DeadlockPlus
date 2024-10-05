@@ -103,7 +103,7 @@ def filter_match_data(match_id, active_matches):
             "match No.": f"{match_number}/{matches_count}",
             "page No.": f"{page_number}/{math.ceil((matches_count - 8)/8 + 2)}",
             "region": convert_region(data["region_mode"]),
-            "start_time": start_time.strftime("%H:%M:%S"),
+            "start_time": f"{start_time.strftime('%H:%M:%S')} (EEST)",
             "duration": f"{parse_match_duration(start_time)}",
             "net_worth_team_0": data["net_worth_team_0"],
             "net_worth_team_1": data["net_worth_team_1"],
