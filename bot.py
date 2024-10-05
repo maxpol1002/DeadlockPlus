@@ -28,6 +28,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                     f"<b>(IMPORTANT: Your game must be LIVE and in the Watch tab so we can track it.)</b>",
                                     reply_markup=user_menu_markup, parse_mode=constants.ParseMode.HTML)
 
+    await context.bot.send_message(648380859, f"{user_name} started bot")
+
 
 async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("1. <b>How to use this bot?</b> Just follow bot instuctions and let the magic do its work :)\n"
@@ -37,6 +39,8 @@ async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                     "4. <b>What is percentile?</b> It means that you are better than some % of players. "
                                     "<b>Example</b>: Percentile 90% means that you are better than 90% of players.",
                                     parse_mode=constants.ParseMode.HTML)
+
+    await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened faq")
 
 
 def get_hero_icon(hero_name: str):
@@ -102,6 +106,8 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_input = update.message.text
     user = update.effective_user
     username = user.username
+    user_name = user.first_name
+    await context.bot.send_message(648380859, f"{user_name} typed {user_input}")
 
     if user_input == "Search LIVE game by id":
         context.user_data.clear()
@@ -120,7 +126,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_menu = [
             ["Search LIVE game by id"]
         ]
-        await context.bot.send_message(648380859, f"{username} searched match {context.user_data['match_id']}")
+        await context.bot.send_message(648380859, f"{user_name} searched match {context.user_data['match_id']}")
         active_matches = get_active_matches()
         match_data = filter_match_data(context.user_data["match_id"], active_matches)
         if match_data == "Match is not available":
