@@ -8,7 +8,7 @@ from telegram.ext import (
     ConversationHandler
 )
 
-from bot import start, message_handler, match_id_handler, faq
+from bot import start, message_handler, match_id_handler, faq, end_conv
 
 MATCH_ID = 1
 
@@ -20,13 +20,16 @@ if __name__ == '__main__':
         states={
             MATCH_ID: [MessageHandler(filters.TEXT & ~filters.COMMAND, match_id_handler)]
         },
-        fallbacks=[]
+        fallbacks=[
+            MessageHandler(filters.COMMAND("start"), end_conv),
+            MessageHandler(filters.COMMAND("faq"), end_conv)
+        ]
     )
 
     application = ApplicationBuilder().token(os.getenv('TOKEN')).build()
+    application.add_handler(conv_handler)
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("faq", faq))
-    application.add_handler(conv_handler)
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
     application.run_webhook(
         listen="0.0.0.0",

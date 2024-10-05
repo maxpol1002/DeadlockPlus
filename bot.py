@@ -30,8 +30,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(648380859, f"{user_name} started bot")
 
-    return ConversationHandler.END
-
 
 async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("1. <b>How to use this bot?</b> Just follow bot instuctions and let the magic do its work :)\n"
@@ -43,8 +41,6 @@ async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                     parse_mode=constants.ParseMode.HTML)
 
     await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened faq")
-
-    return ConversationHandler.END
 
 
 def get_hero_icon(hero_name: str):
@@ -177,4 +173,9 @@ async def match_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(update.effective_user.id, "Press the button below to search.",
                                    reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
+    return ConversationHandler.END
+
+
+async def end_conv(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    context.user_data.clear()
     return ConversationHandler.END
