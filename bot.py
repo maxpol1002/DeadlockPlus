@@ -86,7 +86,7 @@ async def format_match_data(filtered_data):
     message += "+++++++++++++++++++++++++++\n"
 
     for player in filtered_data['players']:
-        message += f" - {get_hero_icon(player['hero'])} <b>{player['hero']}</b> (Player: {player['player_name']})\n"
+        message += f" - {get_hero_icon(player['hero'])} <b>{player['hero']}</b> (Player: <b>{player['player_name']}</b>)\n"
         message += f"Account Link: <a href='{player['account_link']}'>steam link</a>\n"
         message += "Playtime: \n"
         message += f"   Total - {player['playtime']['total']}\n"
