@@ -1,7 +1,5 @@
 import os
 
-from telegram import Update
-
 from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
@@ -26,9 +24,9 @@ if __name__ == '__main__':
     )
 
     application = ApplicationBuilder().token(os.getenv('TOKEN')).build()
+    application.add_handler(conv_handler)
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("faq", faq))
-    application.add_handler(conv_handler)
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
     application.run_webhook(
         listen="0.0.0.0",
