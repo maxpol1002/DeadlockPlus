@@ -88,8 +88,11 @@ async def format_match_data(filtered_data):
     message += "+++++++++++++++++++++++++++\n"
     message += "<b>Players:</b>\n"
     message += "+++++++++++++++++++++++++++\n"
-
+    message += "Team Amber Hand:\n"
+    position = 0
     for player in filtered_data['players']:
+        if position == 6:
+            message += "Team Sapphire Flame:"
         message += f" - {get_hero_icon(player['hero'])} <b>{player['hero']}</b> (Player: <b>{player['player_name']}</b>)\n"
         message += f"Account Link: <a href='{player['account_link']}'>steam link</a>\n"
         message += "<b>Playtime</b>: \n"
@@ -98,6 +101,8 @@ async def format_match_data(filtered_data):
         message += f"   2 Weeks - {player['playtime']['2weeks']}"
         message += "h\n" if player['playtime']['2weeks'] != "N/A" else "\n"
         message += "————————————————\n"
+
+        position += 1
 
     return message
 
@@ -177,6 +182,7 @@ async def match_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def end_conv(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("The current operation has been canceled. You can start over with /start or ask for help with /faq.")
+    await update.message.reply_text("The current operation has been canceled. "
+                                    "You can start over with /start or ask for help with /faq.")
     context.user_data.clear()
     return ConversationHandler.END
