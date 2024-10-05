@@ -1,6 +1,6 @@
 import logging
 
-from telegram import Update, ReplyKeyboardMarkup, constants
+from telegram import Update, ReplyKeyboardMarkup, constants, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, ConversationHandler
 
 from dlfunc import get_active_matches, filter_match_data
@@ -115,7 +115,8 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return MATCH_ID
 
     elif user_input.startswith("🔍 Search match"):
-        await update.message.reply_text(f"Searching match {context.user_data['match_id']}...")
+        await update.message.reply_text(f"Searching match {context.user_data['match_id']}...",
+                                        reply_markup=ReplyKeyboardRemove())
         user_menu = [
             ["Search LIVE game by id"]
         ]
