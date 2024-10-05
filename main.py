@@ -21,8 +21,8 @@ if __name__ == '__main__':
             MATCH_ID: [MessageHandler(filters.TEXT & ~filters.COMMAND, match_id_handler)]
         },
         fallbacks=[
-            MessageHandler(filters.COMMAND("start"), end_conv),
-            MessageHandler(filters.COMMAND("faq"), end_conv)
+            MessageHandler(filters.Command("start"), end_conv),
+            MessageHandler(filters.Command("faq"), end_conv)
         ]
     )
 
