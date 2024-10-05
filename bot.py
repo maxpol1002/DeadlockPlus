@@ -88,12 +88,12 @@ async def format_match_data(filtered_data):
     message += "+++++++++++++++++++++++++++\n"
     message += "<b>Players:</b>\n"
     message += "+++++++++++++++++++++++++++\n"
-    message += "<b>Team Amber Hand:</b>\n"
+    message += "⬇️<b>Team Amber Hand:</b>⬇️\n"
     message += "————————————————\n"
     position = 0
     for player in filtered_data['players']:
         if position == 6:
-            message += "<b>Team Sapphire Flame:</b>\n"
+            message += "⬇️<b>Team Sapphire Flame</b>⬇️\n"
             message += "————————————————\n"
 
         message += f" - {get_hero_icon(player['hero'])} <b>{player['hero']}</b> (Player: <b>{player['player_name']}</b>)\n"
