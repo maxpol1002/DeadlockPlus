@@ -35,13 +35,14 @@ async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_menu = [
         ["Search LIVE game by id"]
     ]
+    markup = ReplyKeyboardMarkup(user_menu, resize_keyboard=True)
     await update.message.reply_text("1. <b>How to use this bot?</b> Just follow bot instuctions and let the magic do its work :)\n"
                                     "2. <b>Why can't I find my match?</b> If you can't find your match there can be 3 reasons: "
                                     "1 - You entered wrong match id, 2 - Your match is already finished, 3 - Your match didn't reach 'watch' tab in game.\n"
                                     "3. <b>Is match MMR(elo) real?</b> Yes, this is Valve's official average lobby rating.\n"
                                     "4. <b>What is percentile?</b> It means that you are better than some % of players. "
                                     "<b>Example</b>: Percentile 90% means that you are better than 90% of players.",
-                                    parse_mode=constants.ParseMode.HTML, reply_markup=ReplyKeyboardMarkup(user_menu))
+                                    parse_mode=constants.ParseMode.HTML, reply_markup=markup)
 
     await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened faq")
 
