@@ -47,6 +47,14 @@ async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened faq")
 
 
+async def ua_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_menu = [
+        ["Search LIVE game by id"]
+    ]
+    await update.message.reply_text("Join ukrainian channel! t.me/Deadlock_UA_News",
+                                    reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+
+
 def get_hero_icon(hero_name: str) -> str:
     hero_icons = {
         "Abrams": "😈",

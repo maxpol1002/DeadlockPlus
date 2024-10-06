@@ -8,7 +8,7 @@ from telegram.ext import (
     ConversationHandler
 )
 
-from bot import start, message_handler, match_id_handler, faq, end_conv
+from bot import start, message_handler, match_id_handler, faq, end_conv, ua_tg
 
 MATCH_ID = 1
 
@@ -21,7 +21,7 @@ if __name__ == '__main__':
             MATCH_ID: [MessageHandler(filters.TEXT & ~filters.COMMAND, match_id_handler)]
         },
         fallbacks=[
-            MessageHandler(filters.Command("start") | filters.Command("faq"), end_conv)
+            MessageHandler(filters.Command("start") | filters.Command("faq") | filters.Command("ua_tg"), end_conv)
         ]
     )
 
@@ -29,6 +29,7 @@ if __name__ == '__main__':
     application.add_handler(conv_handler)
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("faq", faq))
+    application.add_handler(CommandHandler("ua_tg", ua_tg))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
     application.run_webhook(
         listen="0.0.0.0",
