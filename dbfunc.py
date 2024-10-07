@@ -69,3 +69,17 @@ def insert_users_matches(matches):
         cursor.close()
         db_conn.close()
 
+
+def update_user_matches(user_uid, match_id):
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        cursor.execute('UPDATE users SET matches_list = matches_list || %s WHERE usteamid = %s', ([match_id], user_uid))
+
+        db_conn.commit()
+
+    finally:
+        cursor.close()
+        db_conn.close()
+
+
