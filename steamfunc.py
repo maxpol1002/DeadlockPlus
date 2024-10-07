@@ -4,15 +4,12 @@ import requests
 
 
 def usteamid_to_commid(account_id):
-    usteamid = f'[U:1:{account_id}]'
-    for ch in ['[', ']']:
-        if ch in usteamid:
-            usteamid = usteamid.replace(ch, '')
-
-    usteamid_split = usteamid.split(':')
-    commid = int(usteamid_split[2]) + 76561197960265728
-
+    commid = int(account_id) + 76561197960265728
     return str(commid)
+
+
+def commid_to_usteamid(commid):
+    return int(commid) - 76561197960265728
 
 
 def get_user_playtime(account_id):
