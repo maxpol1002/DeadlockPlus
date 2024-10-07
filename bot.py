@@ -194,7 +194,7 @@ async def registration_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         user_menu = [
             ["Search LIVE game by id"], ["Registration(BETA)"]
         ]
-        await update.message.reply_text("You can register any time.",
+        await update.message.reply_text("You can register anytime later.",
                                         reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
         return ConversationHandler.END
