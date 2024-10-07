@@ -18,10 +18,11 @@ async def parse_matches_job(context: CallbackContext):
     active_matches = get_active_matches()
     users_uids = get_users_uids()
     users_matches = parse_users_matches(users_uids, active_matches)
-    insert_users_matches(users_matches)
-    await context.bot.send_message(648380859, "Jobs done")
+    if users_matches:
+        insert_users_matches(users_matches)
+    await context.bot.send_message(648380859, f"Jobs done: {users_uids}")
 
 
-def start_job(context: CallbackContext):
+async def start_job(context: CallbackContext):
     context.job_queue.run_repeating(parse_matches_job, interval=60, first=0)
 
