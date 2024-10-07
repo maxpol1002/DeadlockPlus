@@ -1,3 +1,4 @@
+import json
 import os
 
 import psycopg2
@@ -58,8 +59,9 @@ def insert_users_matches(matches):
         db_conn = psycopg2.connect(DB_URL, sslmode="require")
         cursor = db_conn.cursor()
         for match in matches:
+            match_data = json.dumps(match)
             cursor.execute('INSERT INTO games (match_id, data) VALUES (%s, %s) ON CONFLICT (match_id) DO NOTHING',
-                           (match.get('match_id'), match))
+                           (match.get('match_id'), match_data))
 
         db_conn.commit()
 
