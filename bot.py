@@ -1,9 +1,12 @@
 import logging
+import re
 
 from telegram import Update, ReplyKeyboardMarkup, constants, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, ConversationHandler
 
 from dlfunc import get_active_matches, filter_match_data
+from steamfunc import get_user_commid, commid_to_usteamid
+from dbfunc import users_table_insert
 
 
 # logging.basicConfig(
@@ -13,12 +16,11 @@ from dlfunc import get_active_matches, filter_match_data
 # )
 
 MATCH_ID = 1
+REG = 2
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_menu = [
-        ["Search LIVE game by id"]
-    ]
+    user_menu = [["Search LIVE game by id"], ["Registration(BETA)"]] if update.effective_user.id == 648380859 else [["Search LIVE game by id"]]
     user_menu_markup = ReplyKeyboardMarkup(user_menu, resize_keyboard=True)
     user = update.effective_user
     user_id = user.id
@@ -170,6 +172,22 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("You can search your live game by pressing the button below.",
                                         reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
+    elif user_input == "Registration(BETA)":
+        await update.message.reply_text("Send your steam link so we can track your matches.")
+
+
+async def registration_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = update.effective_user
+    user_link_input = update.message.text
+    if not is_steam_valid(user_link_input):
+        await context.bot.send_message(update.effective_user.id, "Wrong steam link, try again.")
+        return REG
+    else:
+        user_commid = get_user_commid(user_link_input)
+        if user_commid is not None:
+            users_table_insert(user.id, user.first_name, user.username, user_link_input, commid_to_usteamid(user_commid), user_commid)
+            await context.bot.send_message(update.effective_user.id, "Thanks for registation! Matches tracking will be added soon =)")
+
 
 async def match_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     match_id_input = update.message.text
@@ -202,3 +220,13 @@ async def end_conv(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Conver
                                     "You can start over with /start or ask for help with /faq.")
     context.user_data.clear()
     return ConversationHandler.END
+
+
+def is_steam_valid(link):
+    steam_link_regex = r"^https://steamcommunity\.com/(id|profiles)/.*$"
+    if not re.match(steam_link_regex, link):
+        return False
+
+    return True
+
+

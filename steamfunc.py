@@ -12,6 +12,25 @@ def commid_to_usteamid(commid):
     return int(commid) - 76561197960265728
 
 
+def get_user_commid(steam_link):
+    commid = None
+    if "/id/" in steam_link:
+        custom_name = steam_link.split('/id/')[1].replace('/', '')
+        url = f"http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={os.getenv('skey')}&vanityurl={custom_name}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            if data['response']['success'] == 1:
+                commid = data['response']['steamid']
+
+    elif "/profiles/" in steam_link:
+        commid = steam_link.split('/profiles/')[1].replace('/', '')
+
+    return commid
+
+
+
+
 def get_user_playtime(account_id):
     commid = usteamid_to_commid(account_id)
     url = f"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={os.getenv('skey')}&steamid={commid}&format=json"

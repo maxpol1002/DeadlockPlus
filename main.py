@@ -8,17 +8,20 @@ from telegram.ext import (
     ConversationHandler
 )
 
-from bot import start, message_handler, match_id_handler, faq, end_conv, ua_tg
+from bot import start, message_handler, match_id_handler, faq, end_conv, ua_tg, registration_handler
 
 MATCH_ID = 1
+REG = 2
 
 if __name__ == '__main__':
     conv_handler = ConversationHandler(
         entry_points=[
-            MessageHandler(filters.Regex(r"^Search LIVE game by id$"), message_handler)
+            MessageHandler(filters.Regex(r"^Search LIVE game by id$"), message_handler),
+            MessageHandler(filters.Regex(r"^Registration(BETA)$"), message_handler)
         ],
         states={
-            MATCH_ID: [MessageHandler(filters.TEXT & ~filters.COMMAND, match_id_handler)]
+            MATCH_ID: [MessageHandler(filters.TEXT & ~filters.COMMAND, match_id_handler)],
+            REG: [MessageHandler(filters.TEXT & ~filters.COMMAND, registration_handler)]
         },
         fallbacks=[
             MessageHandler(filters.Command("start") | filters.Command("faq") | filters.Command("ua_tg"), end_conv)
