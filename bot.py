@@ -20,7 +20,9 @@ REG = 2
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_menu = [["Search LIVE game by id"], ["Registration(BETA)"]] if update.effective_user.id == 648380859 else [["Search LIVE game by id"]]
+    user_menu = [
+        ["Search LIVE game by id"], ["Registration(BETA)"]
+    ]
     user_menu_markup = ReplyKeyboardMarkup(user_menu, resize_keyboard=True)
     user = update.effective_user
     user_id = user.id
@@ -35,7 +37,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_menu = [
-        ["Search LIVE game by id"]
+        ["Search LIVE game by id"], ["Registration(BETA)"]
     ]
     markup = ReplyKeyboardMarkup(user_menu, resize_keyboard=True)
     await update.message.reply_text("1. <b>How to use this bot?</b> Just follow bot instuctions and let the magic do its work :)\n"
@@ -51,7 +53,7 @@ async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def ua_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_menu = [
-        ["Search LIVE game by id"]
+        ["Search LIVE game by id"], ["Registration(BETA)"]
     ]
     await update.message.reply_text("Join ukrainian channel! t.me/Deadlock_UA_News",
                                     reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
@@ -147,7 +149,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"Searching match {context.user_data['match_id']}...",
                                         reply_markup=ReplyKeyboardRemove())
         user_menu = [
-            ["Search LIVE game by id"]
+            ["Search LIVE game by id"], ["Registration(BETA)"]
         ]
         await context.bot.send_message(648380859, f"{user_name} searched match {context.user_data['match_id']}")
         active_matches = get_active_matches()
@@ -167,7 +169,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif user_input == "◀️ Go back":
         user_menu = [
-            ["Search LIVE game by id"]
+            ["Search LIVE game by id"], ["Registration(BETA)"]
         ]
         await update.message.reply_text("You can search your live game by pressing the button below.",
                                         reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
@@ -205,8 +207,8 @@ async def registration_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         user_commid = get_user_commid(user_link_input)
         if user_commid is not None:
             user_menu = [
-                ["Search LIVE game by id"]
-                ]
+                ["Search LIVE game by id"], ["Registration(BETA)"]
+            ]
             users_table_insert(user.id, user.first_name, user.username, user_link_input, commid_to_usteamid(user_commid), user_commid)
             await context.bot.send_message(update.effective_user.id, "Thanks for registation! Matches tracking will be added soon =)",
                                            reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
@@ -219,7 +221,7 @@ async def match_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if "match_id" not in context.user_data:
         if match_id_input == "◀️ Go back":
             user_menu = [
-                ["Search LIVE game by id"]
+                ["Search LIVE game by id"], ["Registration(BETA)"]
             ]
             await update.message.reply_text("You can search your live game by pressing button below.",
                                             reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
