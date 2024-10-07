@@ -174,6 +174,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif user_input == "Registration(BETA)":
         await update.message.reply_text("Send your steam link so we can track your matches.")
+        return REG
 
 
 async def registration_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
