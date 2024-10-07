@@ -88,7 +88,7 @@ async def format_match_data(filtered_data) -> str:
     message = f"<b>Match ID:</b> {filtered_data['match_id']}\n"
     message += "===========================\n"
     message += f"<b>Match Elo:</b> {filtered_data['match_elo']}\n"
-    message += f"TopL {round(100 - float(filtered_data['percentile'].rstrip('%')), 2)}% lobby\n"
+    message += f"Top: {round(100 - float(filtered_data['percentile']), 2)}%\n"
     message += f"<b>Percentile:</b> {filtered_data['percentile']}\n"
     message += f"<b>Match No:</b> {filtered_data['match No.']}\n"
     message += f"<b>Page No:</b> {filtered_data['page No.']}\n"

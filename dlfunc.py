@@ -99,7 +99,7 @@ def filter_match_data(match_id, active_matches):
         filtered_data = {
             "match_id": data["match_id"],
             "match_elo": data["match_score"],
-            "percentile": f"{round(((matches_count - match_number)/matches_count) * 100, 2)}%",
+            "percentile": round(((matches_count - match_number)/matches_count) * 100, 2),
             "match No.": f"{match_number}/{matches_count}",
             "page No.": f"{page_number}/{math.ceil((matches_count - 8)/8 + 2)}",
             "region": convert_region(data["region_mode"]),
