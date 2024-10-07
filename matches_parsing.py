@@ -20,7 +20,6 @@ async def parse_matches_job(context: CallbackContext):
     users_matches = parse_users_matches(users_uids, active_matches)
     if users_matches:
         insert_users_matches(users_matches)
-    await context.bot.send_message(648380859, f"Jobs done: {users_uids}")
 
 
 async def start_job(context: CallbackContext):
