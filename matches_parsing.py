@@ -41,6 +41,7 @@ def filter_data(match_data, active_matches):
         "players": [
             {
                 "hero": get_hero_by_id(heroes, player["hero_id"]),
+                "account_id": player["account_id"],
                 "player_name": players_data[usteamid_to_commid(player["account_id"])]["username"],
                 "account_link": players_data[usteamid_to_commid(player["account_id"])]["user_link"],
                 "playtime": {
