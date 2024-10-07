@@ -189,6 +189,8 @@ async def registration_handler(update: Update, context: ContextTypes.DEFAULT_TYP
             users_table_insert(user.id, user.first_name, user.username, user_link_input, commid_to_usteamid(user_commid), user_commid)
             await context.bot.send_message(update.effective_user.id, "Thanks for registation! Matches tracking will be added soon =)")
 
+            return ConversationHandler.END
+
 
 async def match_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     match_id_input = update.message.text
