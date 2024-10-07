@@ -74,7 +74,9 @@ def update_user_matches(user_uid, match_id):
     try:
         db_conn = psycopg2.connect(DB_URL, sslmode="require")
         cursor = db_conn.cursor()
-        cursor.execute('UPDATE users SET matches_list = matches_list || %s WHERE usteamid = %s', ([match_id], user_uid))
+        cursor.execute('UPDATE users SET matches_list = matches_list || %s '
+                       'WHERE usteamid = %s AND array_position(matches_list, %s) IS NULL',
+                       ([match_id], user_uid, match_id))
 
         db_conn.commit()
 
