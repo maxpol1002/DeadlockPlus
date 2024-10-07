@@ -6,7 +6,7 @@ from telegram.ext import ContextTypes, ConversationHandler
 
 from dlfunc import get_active_matches, filter_match_data
 from steamfunc import get_user_commid, commid_to_usteamid
-from dbfunc import users_table_insert, is_user_registered
+from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data
 
 
 # logging.basicConfig(
@@ -185,6 +185,13 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         else:
             await update.message.reply_text("You are already registered. Thanks!")
+
+    elif user_input == "Stats & Matches":
+        user_matchids = get_matchids_foruser(update.effective_user.id)
+        if user_matchids:
+            user_matches = [get_match_data(match_id) for match_id in user_matchids]
+        else:
+            await update.message.reply_text("You have no observed matches at this moment.")
 
 
 async def registration_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):

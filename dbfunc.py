@@ -85,3 +85,34 @@ def update_user_matches(user_uid, match_id):
         db_conn.close()
 
 
+def get_matchids_foruser(user_id):
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT matches_list FROM users WHERE user_id = %s', (user_id,))
+        matchids = cursor.fetchone()
+        if matchids:
+            return matchids[0]
+
+        return None
+
+    finally:
+        cursor.close()
+        db_conn.close()
+
+
+def get_match_data(match_id):
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT data from matches WHERE match_id = %s', (match_id,))
+        match_data = cursor.fetchone()
+        if match_data:
+            return match_data[0]
+
+        return None
+
+    finally:
+        cursor.close()
+        db_conn.close()
+
