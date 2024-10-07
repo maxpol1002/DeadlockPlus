@@ -10,6 +10,8 @@ from telegram.ext import (
 
 from bot import start, message_handler, match_id_handler, faq, end_conv, ua_tg, registration_handler
 
+from matches_parsing import start_job
+
 MATCH_ID = 1
 REG = 2
 
@@ -34,6 +36,7 @@ if __name__ == '__main__':
     application.add_handler(CommandHandler("faq", faq))
     application.add_handler(CommandHandler("ua_tg", ua_tg))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
+    application.job_queue.run_once(start_job, when=0)
     application.run_webhook(
         listen="0.0.0.0",
         port=int(os.getenv('PORT', '8443')),

@@ -29,8 +29,6 @@ def get_user_commid(steam_link):
     return commid
 
 
-
-
 def get_user_playtime(account_id):
     commid = usteamid_to_commid(account_id)
     url = f"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={os.getenv('skey')}&steamid={commid}&format=json"

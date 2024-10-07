@@ -31,8 +31,39 @@ def is_user_registered(user_id: int):
         cursor.execute('SELECT EXISTS(SELECT 1 FROM users WHERE user_id = %s)', (user_id,))
         exists = cursor.fetchone()[0]
 
+        return exists
+
     finally:
         cursor.close()
         db_conn.close()
 
-    return exists
+
+def get_users_uids():
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT usteamid FROM users')
+        rows = cursor.fetchall()
+        users_uids = [row[0] for row in rows]
+
+        return users_uids
+
+    finally:
+        cursor.close()
+        db_conn.close()
+
+
+def insert_users_matches(matches):
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        for match in matches:
+            cursor.execute('INSERT INTO games (match_id, data) VALUES (%s, %s) ON CONFLICT (match_id) DO NOTHING',
+                           (match.get('match_id'), match))
+
+        db_conn.commit()
+
+    finally:
+        cursor.close()
+        db_conn.close()
+
