@@ -60,7 +60,7 @@ def insert_users_matches(matches):
         cursor = db_conn.cursor()
         for match in matches:
             match_data = json.dumps(match)
-            cursor.execute('INSERT INTO games (match_id, data) VALUES (%s, %s) ON CONFLICT (match_id) DO NOTHING',
+            cursor.execute('INSERT INTO matches (match_id, data) VALUES (%s, %s) ON CONFLICT (match_id) DO NOTHING',
                            (match.get('match_id'), match_data))
 
         db_conn.commit()
