@@ -22,3 +22,17 @@ def users_table_insert(user_id: int, name: str, username: str, steam_link: str, 
     finally:
         cursor.close()
         db_conn.close()
+
+
+def is_user_registered(user_id: int):
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT EXISTS(SELECT 1 FROM users WHERE user_id = %s)', (user_id,))
+        exists = cursor.fetchone()[0]
+
+    finally:
+        cursor.close()
+        db_conn.close()
+
+    return exists

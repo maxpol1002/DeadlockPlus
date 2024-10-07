@@ -6,7 +6,7 @@ from telegram.ext import ContextTypes, ConversationHandler
 
 from dlfunc import get_active_matches, filter_match_data
 from steamfunc import get_user_commid, commid_to_usteamid
-from dbfunc import users_table_insert
+from dbfunc import users_table_insert, is_user_registered
 
 
 # logging.basicConfig(
@@ -173,21 +173,43 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                         reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
     elif user_input == "Registration(BETA)":
-        await update.message.reply_text("Send your steam link so we can track your matches.")
-        return REG
+        if not is_user_registered(user.id):
+            user_menu = [
+                ["◀️ Go back"]
+            ]
+            await update.message.reply_text("Send your steam link so we can track your matches.",
+                                            reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+            return REG
+
+        else:
+            await update.message.reply_text("You are already registered. Thanks!")
 
 
 async def registration_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     user_link_input = update.message.text
+    if user_link_input == "◀️ Go back":
+        user_menu = [
+            ["Search LIVE game by id"], ["Registration(BETA)"]
+        ]
+        await update.message.reply_text("You can register any time.",
+                                        reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+
+        return ConversationHandler.END
+
     if not is_steam_valid(user_link_input):
         await context.bot.send_message(update.effective_user.id, "Wrong steam link, try again.")
         return REG
+
     else:
         user_commid = get_user_commid(user_link_input)
         if user_commid is not None:
+            user_menu = [
+                ["Search LIVE game by id"]
+                ]
             users_table_insert(user.id, user.first_name, user.username, user_link_input, commid_to_usteamid(user_commid), user_commid)
-            await context.bot.send_message(update.effective_user.id, "Thanks for registation! Matches tracking will be added soon =)")
+            await context.bot.send_message(update.effective_user.id, "Thanks for registation! Matches tracking will be added soon =)",
+                                           reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
             return ConversationHandler.END
 
