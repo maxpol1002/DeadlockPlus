@@ -268,14 +268,14 @@ def get_user_stats(user_matches, user_uid):
             if player['account_id'] == user_uid:
                 heroes_list.append(player['hero'])
 
-    user_avgelo = round(user_elo/user_matches_count, 0)
+    user_avgelo = round(user_elo/user_matches_count)
     avg_percentile = round(total_percentile/user_matches_count, 2)
     avg_top = str(round(100 - avg_percentile, 2))
     fav_hero = Counter(heroes_list).most_common(1)[0][0]
-    avg_page = round(avg_page / user_matches_count, 1)
-    avg_total_pages = round(avg_total_pages / user_matches_count, 1)
-    avg_match_pos = round(avg_match_pos / user_matches_count, 1)
-    avg_total_matches = round(avg_total_matches / user_matches_count, 1)
+    avg_page = round(avg_page / user_matches_count)
+    avg_total_pages = round(avg_total_pages / user_matches_count)
+    avg_match_pos = round(avg_match_pos / user_matches_count)
+    avg_total_matches = round(avg_total_matches / user_matches_count)
     page_stat = f"{avg_page}/{avg_total_pages}"
     matchpos_stat = f"{avg_match_pos}/{avg_total_matches}"
 
@@ -290,8 +290,8 @@ def create_match_stats(match_data, user_uid, match_number):
     message += "————————————————\n"
     message += f"<b>Hero</b>: {get_hero_icon(player_hero)} <b>{player_hero}</b>\n"
     message += "————————————————\n"
-    message += f"<b>ELO</b>: {match_data['match_elo']} (<b>nekoscore</b>: {round(match_data['match_elo'] * 2.5, 0)})\n"
-    message += f"<b>Top</b>: {round((100 - float(match_data['percentile'])), 1)}% (<b>Percentile</b>: {match_data['percentile']}%)\n"
+    message += f"<b>ELO</b>: {match_data['match_elo']} (<b>nekoscore</b>: {round(match_data['match_elo'] * 2.5)})\n"
+    message += f"<b>Top</b>: {round((100 - float(match_data['percentile'])), 2)}% (<b>Percentile</b>: {match_data['percentile']}%)\n"
     message += f"<b>Match №</b>: {match_data['match No.']} (<b>Page №</b>: {match_data['page No.']})\n"
     message += "===========================\n"
 
