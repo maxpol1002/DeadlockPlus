@@ -4,10 +4,9 @@ import math
 import pytz
 from telegram.ext import CallbackContext
 
-from dlfunc import get_active_matches, get_all_heroes, parse_match_time, convert_region, find_match_position, \
-    get_hero_by_id
+from dlfunc import get_active_matches, get_all_heroes, convert_region, find_match_position, get_hero_by_id
 
-from dbfunc import get_users_uids, insert_users_matches, update_user_matches
+from dbfunc import get_users_uids, insert_users_matches, update_user_matches, get_user_matchcount, remove_user_fmatch
 
 from steamfunc import get_users_data, get_user_playtime, usteamid_to_commid
 
@@ -19,6 +18,9 @@ def parse_users_matches(user_uids: list, active_matches):
         for player in match['players']:
             if player['account_id'] in user_uids_set:
                 found_matches.append(match)
+                if get_user_matchcount(player['account_id']) == 10:
+                    remove_user_fmatch(player['account_id'])
+
                 update_user_matches(player['account_id'], match['match_id'])
 
     return found_matches

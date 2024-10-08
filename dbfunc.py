@@ -131,3 +131,38 @@ def get_match_data(match_id):
     finally:
         cursor.close()
         db_conn.close()
+
+
+def get_user_matchcount(useruid):
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT matches_list FROM users WHERE usteamid = %s', (useruid,))
+        matches_list = cursor.fetchone()
+        if matches_list:
+            matches_count = len(matches_list[0])
+            return matches_count
+
+        return 0
+
+    finally:
+        cursor.close()
+        db_conn.close()
+
+
+def remove_user_fmatch(useruid):
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT matches_list FROM users WHERE usteamid = %s', (useruid,))
+        matches_list = cursor.fetchone()
+        if matches_list and matches_list[0]:
+            first_match_id = matches_list[0][0]
+
+            cursor.execute('UPDATE users SET matches_list = array_remove(matches_list, %s) WHERE usteamid = %s',
+                           (first_match_id, useruid))
+            db_conn.commit()
+
+    finally:
+        cursor.close()
+        db_conn.close()
