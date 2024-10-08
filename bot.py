@@ -309,7 +309,7 @@ async def registration_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         if user_commid is not None:
             user_menu = [["My Matches", "My Stats"], ["Search LIVE game by id"]]
             users_table_insert(user.id, user.first_name, user.username, user_link_input, commid_to_usteamid(user_commid), user_commid)
-            await context.bot.send_message(update.effective_user.id, "Thanks for registation! Matches tracking will be added soon =)",
+            await context.bot.send_message(update.effective_user.id, "Thanks for registation! Now we are tracking your matches.",
                                            reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
             return ConversationHandler.END
@@ -356,5 +356,3 @@ def is_steam_valid(link):
         return False
 
     return True
-
-
