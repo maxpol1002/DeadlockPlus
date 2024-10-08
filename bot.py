@@ -207,8 +207,8 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             sorted_matchids = sorted(user_matchids, reverse=True)
             user_matches = [get_match_data(match_id) for match_id in sorted_matchids]
             user_uid = get_user_uid(user_id)
+            match_number = 1
             for match_data in user_matches:
-                match_number = 1
                 msg = create_match_stats(match_data, user_uid, match_number)
                 await update.message.reply_text(msg, reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
                                                 parse_mode=constants.ParseMode.HTML)
