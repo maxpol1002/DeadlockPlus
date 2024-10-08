@@ -195,4 +195,3 @@ def delete_match(match_id):
     finally:
         cursor.close()
         db_conn.close()
-

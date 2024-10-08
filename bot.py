@@ -32,7 +32,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_menu_markup = ReplyKeyboardMarkup(user_menu, resize_keyboard=True)
 
     await update.message.reply_text(f"Hello, <b>{user_name}</b>, with this bot you can search live game's data such as <b>official lobby MMR</b>, <b>players</b>, "
-                                    f"<b>page number</b> and many other useful things.\nPress the button below to start.\n"
+                                    f"<b>page number</b> and many other useful things.\nPress the button below to start. "
+                                    f"Register so we can track your matches.\n"
                                     f"<b>(IMPORTANT: Your game must be LIVE and in the Watch tab so we can track it.)</b>",
                                     reply_markup=user_menu_markup, parse_mode=constants.ParseMode.HTML)
 
