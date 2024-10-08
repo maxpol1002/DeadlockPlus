@@ -219,8 +219,9 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_matchids = get_matchids_foruser(user_id)
         if user_matchids:
             user_matches = [get_match_data(match_id) for match_id in user_matchids]
-            user_avgelo, avg_percentile, avg_top, fav_hero = get_user_stats(user_matches, get_user_uid(user_id))
-            await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero),
+            user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches, get_user_uid(user_id))
+            await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile,
+                                                                 avg_top, fav_hero, avg_page, avg_pos),
                                             reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
                                             parse_mode=constants.ParseMode.HTML)
 
@@ -229,13 +230,17 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                             reply_markup=ReplyKeyboardMarkup(user_menu))
 
 
-def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero):
+def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos):
     msg = "————————————————\n"
     msg += f"<b>{user_name} Stats</b>\n"
     msg += "————————————————\n"
     msg += f"<b>ELO</b>: {user_avgelo} (<b>nekoscore</b>: {round(user_avgelo * 2.5, 0)})\n"
     msg += f"<b>Top</b>: {avg_top}%\n"
+    msg += "————————————————\n"
     msg += f"<b>Percentile</b>: {avg_percentile}%\n"
+    msg += f"<b>Average match position</b>: {avg_pos}\n"
+    msg += f"<b>Average match page</b>: {avg_page}\n"
+    msg += "————————————————\n"
     msg += f"<b>Favorite hero</b>: {get_hero_icon(fav_hero)} <b>{fav_hero}</b>"
 
     return msg
@@ -244,20 +249,37 @@ def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_he
 def get_user_stats(user_matches, user_uid):
     user_elo = 0
     total_percentile = 0
+    avg_page = 0
+    avg_total_pages = 0
+    avg_match_pos = 0
+    avg_total_matches = 0
+    user_matches_count = len(user_matches)
     heroes_list = []
     for match in user_matches:
         user_elo += match['match_elo']
         total_percentile += float(match['percentile'])
+        match_position, total_matches = map(int, match['match No.'].split('/'))
+        page_num, total_pages = map(int, match['page No.'].split('/'))
+        avg_page += page_num
+        avg_total_pages += total_pages
+        avg_total_matches += total_matches
+        avg_match_pos += match_position
         for player in match['players']:
             if player['account_id'] == user_uid:
                 heroes_list.append(player['hero'])
 
-    user_avgelo = round(user_elo/len(user_matches), 0)
-    avg_percentile = round(total_percentile/len(user_matches), 2)
+    user_avgelo = round(user_elo/user_matches_count, 0)
+    avg_percentile = round(total_percentile/user_matches_count, 2)
     avg_top = str(round(100 - avg_percentile, 2))
     fav_hero = Counter(heroes_list).most_common(1)[0][0]
+    avg_page = round(avg_page / user_matches_count, 1)
+    avg_total_pages = round(avg_total_pages / user_matches_count, 1)
+    avg_match_pos = round(avg_match_pos / user_matches_count, 1)
+    avg_total_matches = round(avg_total_matches / user_matches_count, 1)
+    page_stat = f"{avg_page}/{avg_total_pages}"
+    matchpos_stat = f"{avg_match_pos}/{avg_total_matches}"
 
-    return user_avgelo, avg_percentile, avg_top, fav_hero
+    return user_avgelo, avg_percentile, avg_top, fav_hero, page_stat, matchpos_stat
 
 
 def create_match_stats(match_data, user_uid, match_number):
