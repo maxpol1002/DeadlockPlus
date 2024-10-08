@@ -21,13 +21,16 @@ REG = 2
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_menu = [
-        ["Search LIVE game by id"], ["Registration(BETA)"]
-    ]
-    user_menu_markup = ReplyKeyboardMarkup(user_menu, resize_keyboard=True)
     user = update.effective_user
     user_id = user.id
     user_name = user.first_name
+    if is_user_registered(user_id):
+        user_menu = [["My Matches", "My Stats"], ["Search LIVE game by id"]]
+    else:
+        user_menu = [["Search LIVE game by id"], ["Registration"]]
+
+    user_menu_markup = ReplyKeyboardMarkup(user_menu, resize_keyboard=True)
+
     await update.message.reply_text(f"Hello, <b>{user_name}</b>, with this bot you can search live game's data such as <b>official lobby MMR</b>, <b>players</b>, "
                                     f"<b>page number</b> and many other useful things.\nPress the button below to start.\n"
                                     f"<b>(IMPORTANT: Your game must be LIVE and in the Watch tab so we can track it.)</b>",
@@ -37,9 +40,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_menu = [
-        ["Search LIVE game by id"], ["Registration(BETA)"]
-    ]
+    if is_user_registered(update.effective_user.id):
+        user_menu = [["My Matches", "My Stats"], ["Search LIVE game by id"]]
+    else:
+        user_menu = [["Search LIVE game by id"], ["Registration"]]
+
     markup = ReplyKeyboardMarkup(user_menu, resize_keyboard=True)
     await update.message.reply_text("1. <b>How to use this bot?</b> Just follow bot instuctions and let the magic do its work :)\n"
                                     "2. <b>Why can't I find my match?</b> If you can't find your match there can be 3 reasons: "
@@ -53,9 +58,10 @@ async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def ua_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_menu = [
-        ["Search LIVE game by id"], ["Registration(BETA)"]
-    ]
+    if is_user_registered(update.effective_user.id):
+        user_menu = [["My Matches", "My Stats"], ["Search LIVE game by id"]]
+    else:
+        user_menu = [["Search LIVE game by id"], ["Registration"]]
     await update.message.reply_text("Join ukrainian channel! t.me/Deadlock_UA_News",
                                     reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
@@ -149,9 +155,11 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif user_input.startswith("🔍 Search match"):
         await update.message.reply_text(f"Searching match {context.user_data['match_id']}...",
                                         reply_markup=ReplyKeyboardRemove())
-        user_menu = [
-            ["Search LIVE game by id"], ["Registration(BETA)"]
-        ]
+        if is_user_registered(user.id):
+            user_menu = [["My Matches", "My Stats"], ["Search LIVE game by id"]]
+        else:
+            user_menu = [["Search LIVE game by id"], ["Registration"]]
+
         await context.bot.send_message(648380859, f"{user_name} searched match {context.user_data['match_id']}")
         active_matches = get_active_matches()
         match_data = filter_match_data(context.user_data["match_id"], active_matches)
@@ -169,13 +177,15 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.user_data.clear()
 
     elif user_input == "◀️ Go back":
-        user_menu = [
-            ["Search LIVE game by id"], ["Registration(BETA)"]
-        ]
+        if is_user_registered(user.id):
+            user_menu = [["My Matches", "My Stats"], ["Search LIVE game by id"]]
+        else:
+            user_menu = [["Search LIVE game by id"], ["Registration"]]
+
         await update.message.reply_text("You can search your live game by pressing the button below.",
                                         reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
-    elif user_input == "Registration(BETA)":
+    elif user_input == "Registration":
         if not is_user_registered(user.id):
             user_menu = [
                 ["◀️ Go back"]
@@ -185,43 +195,44 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return REG
 
         else:
-            await update.message.reply_text("You are already registered. Thanks!")
+            user_menu = [["My Matches", "My Stats"], ["Search LIVE game by id"]]
+            await update.message.reply_text("You are already registered. We are tracking your matches.",
+                                            reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
     elif user_input == "My Matches":
         user_menu = [["My Matches", "My Stats"], ["Search LIVE game by id"]]
         user_id = update.effective_user.id
-        if user_id == 648380859:
-            user_matchids = get_matchids_foruser(user_id)
-            if user_matchids:
-                sorted_matchids = sorted(user_matchids, reverse=True)
-                user_matches = [get_match_data(match_id) for match_id in sorted_matchids]
-                user_uid = get_user_uid(user_id)
-                for match_data in user_matches:
-                    match_number = 1
-                    msg = create_match_stats(match_data, user_uid, match_number)
-                    await update.message.reply_text(msg, reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
-                                                    parse_mode=constants.ParseMode.HTML)
-                    match_number += 1
-            else:
-                await update.message.reply_text("You have no observed matches at this moment.",
-                                                reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+        user_matchids = get_matchids_foruser(user_id)
+        if user_matchids:
+            sorted_matchids = sorted(user_matchids, reverse=True)
+            user_matches = [get_match_data(match_id) for match_id in sorted_matchids]
+            user_uid = get_user_uid(user_id)
+            for match_data in user_matches:
+                match_number = 1
+                msg = create_match_stats(match_data, user_uid, match_number)
+                await update.message.reply_text(msg, reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
+                                                parse_mode=constants.ParseMode.HTML)
+                match_number += 1
+        else:
+            await update.message.reply_text("You have no observed matches at this moment.",
+                                            reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
     elif user_input == "My Stats":
         user_menu = [["My Matches", "My Stats"], ["Search LIVE game by id"]]
         user = update.effective_user
         user_id = user.id
-        if user_id == 648380859:
-            user_name = user.first_name
-            user_matchids = get_matchids_foruser(user_id)
-            if user_matchids:
-                user_matches = [get_match_data(match_id) for match_id in user_matchids]
-                user_avgelo, avg_percentile, avg_top, fav_hero = get_user_stats(user_matches, get_user_uid(user_id))
-                await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero),
-                                                reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
-                                                parse_mode=constants.ParseMode.HTML)
+        user_name = user.first_name
+        user_matchids = get_matchids_foruser(user_id)
+        if user_matchids:
+            user_matches = [get_match_data(match_id) for match_id in user_matchids]
+            user_avgelo, avg_percentile, avg_top, fav_hero = get_user_stats(user_matches, get_user_uid(user_id))
+            await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero),
+                                            reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
+                                            parse_mode=constants.ParseMode.HTML)
 
-            else:
-                await update.message.reply_text("You have no observed matches at this moment.")
+        else:
+            await update.message.reply_text("You have no observed matches at this moment.",
+                                            reply_markup=ReplyKeyboardMarkup(user_menu))
 
 
 def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero):
@@ -282,9 +293,9 @@ async def registration_handler(update: Update, context: ContextTypes.DEFAULT_TYP
     user_link_input = update.message.text
     if user_link_input == "◀️ Go back":
         user_menu = [
-            ["Search LIVE game by id"], ["Registration(BETA)"]
+            ["Search LIVE game by id"], ["Registration"]
         ]
-        await update.message.reply_text("You can register anytime later.",
+        await update.message.reply_text("You should register so we can track your matches.",
                                         reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
         return ConversationHandler.END
@@ -296,9 +307,7 @@ async def registration_handler(update: Update, context: ContextTypes.DEFAULT_TYP
     else:
         user_commid = get_user_commid(user_link_input)
         if user_commid is not None:
-            user_menu = [
-                ["Search LIVE game by id"], ["Registration(BETA)"]
-            ]
+            user_menu = [["My Matches", "My Stats"], ["Search LIVE game by id"]]
             users_table_insert(user.id, user.first_name, user.username, user_link_input, commid_to_usteamid(user_commid), user_commid)
             await context.bot.send_message(update.effective_user.id, "Thanks for registation! Matches tracking will be added soon =)",
                                            reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
@@ -310,9 +319,11 @@ async def match_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     match_id_input = update.message.text
     if "match_id" not in context.user_data:
         if match_id_input == "◀️ Go back":
-            user_menu = [
-                ["Search LIVE game by id"], ["Registration(BETA)"]
-            ]
+            if is_user_registered(update.effective_user.id):
+                user_menu = [["My Matches", "My Stats"], ["Search LIVE game by id"]]
+            else:
+                user_menu = [["Search LIVE game by id"], ["Registration"]]
+
             await update.message.reply_text("You can search your live game by pressing button below.",
                                             reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
