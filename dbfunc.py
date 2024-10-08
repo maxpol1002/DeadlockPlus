@@ -139,7 +139,7 @@ def get_user_matchcount(useruid):
         cursor = db_conn.cursor()
         cursor.execute('SELECT matches_list FROM users WHERE usteamid = %s', (useruid,))
         matches_list = cursor.fetchone()
-        if matches_list:
+        if matches_list and matches_list[0]:
             matches_count = len(matches_list[0])
             return matches_count
 
