@@ -198,7 +198,8 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 user_uid = get_user_uid(user_id)
                 for match_data in user_matches:
                     msg = create_match_stats(match_data, user_uid)
-                    await update.message.reply_text(msg)
+                    await update.message.reply_text(msg, reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
+                                                    parse_mode=constants.ParseMode.HTML)
             else:
                 await update.message.reply_text("You have no observed matches at this moment.",
                                                 reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
@@ -214,7 +215,8 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 user_matches = [get_match_data(match_id) for match_id in user_matchids]
                 user_avgelo, avg_percentile, avg_top, fav_hero = get_user_stats(user_matches, get_user_uid(user_id))
                 await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero),
-                                                reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+                                                reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
+                                                parse_mode=constants.ParseMode.HTML)
 
             else:
                 await update.message.reply_text("You have no observed matches at this moment.")
