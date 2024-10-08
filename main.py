@@ -19,7 +19,7 @@ if __name__ == '__main__':
     conv_handler = ConversationHandler(
         entry_points=[
             MessageHandler(filters.Regex(r"^Search LIVE game by id$"), message_handler),
-            MessageHandler(filters.Regex(r"^Registration\(BETA\)$"), message_handler)
+            MessageHandler(filters.Regex(r"^Registration$"), message_handler)
         ],
         states={
             MATCH_ID: [MessageHandler(filters.TEXT & ~filters.COMMAND, match_id_handler)],
