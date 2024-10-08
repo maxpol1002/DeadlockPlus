@@ -197,9 +197,11 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 user_matches = [get_match_data(match_id) for match_id in sorted_matchids]
                 user_uid = get_user_uid(user_id)
                 for match_data in user_matches:
-                    msg = create_match_stats(match_data, user_uid)
+                    match_number = 1
+                    msg = create_match_stats(match_data, user_uid, match_number)
                     await update.message.reply_text(msg, reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
                                                     parse_mode=constants.ParseMode.HTML)
+                    match_number += 1
             else:
                 await update.message.reply_text("You have no observed matches at this moment.",
                                                 reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
@@ -223,9 +225,9 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero):
-    msg = "===========================\n"
+    msg = "————————————————\n"
     msg += f"<b>{user_name} Stats</b>\n"
-    msg += "===========================\n"
+    msg += "————————————————\n"
     msg += f"<b>ELO</b>: {user_avgelo}\n"
     msg += f"<b>Top</b>: {avg_top}%\n"
     msg += f"<b>Percentile</b>: {avg_percentile}%\n"
@@ -253,16 +255,16 @@ def get_user_stats(user_matches, user_uid):
     return user_avgelo, avg_percentile, avg_top, fav_hero
 
 
-def create_match_stats(match_data, user_uid):
+def create_match_stats(match_data, user_uid, match_number):
     player_hero = get_user_hero(match_data, user_uid)
     message = "===========================\n"
-    message += f"<b>Match</b> - {match_data['match_id']} - {match_data['start_time']} - {match_data['region']}\n"
+    message += f"{match_number}.<b>Match</b> - {match_data['match_id']} - {match_data['start_time']} - {match_data['region']}\n"
     message += "————————————————\n"
     message += f"<b>Hero</b>: {get_hero_icon(player_hero)} {player_hero}\n"
     message += "————————————————\n"
     message += f"<b>ELO</b>: {match_data['match_elo']}\n"
     message += f"<b>Top</b>: {round((100 - float(match_data['percentile'])), 1)}% (<b>Percentile</b>: {match_data['percentile']})\n"
-    message += f"<b>Match No.</b>: {match_data['match No.']} (<b>Page No</b>: {match_data['page No.']})\n"
+    message += f"<b>Match No</b>: {match_data['match No.']} (<b>Page No</b>: {match_data['page No.']})\n"
     message += "===========================\n"
 
     return message
