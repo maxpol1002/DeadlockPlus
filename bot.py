@@ -229,6 +229,15 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("You have no observed matches at this moment.",
                                             reply_markup=ReplyKeyboardMarkup(user_menu))
 
+    elif user_input == "My Stats" or user_input == "My Matches" or user_input == "Search LIVE game by id":
+        if is_user_registered(user.id):
+            user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
+        else:
+            user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
+
+        await update.message.reply_text("We have updated buttons now!",
+                                        reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+
 
 def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos):
     msg = f"<b>{user_name} Stats</b>\n"
