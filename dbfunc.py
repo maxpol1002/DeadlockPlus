@@ -195,3 +195,17 @@ def delete_match(match_id):
     finally:
         cursor.close()
         db_conn.close()
+
+
+def get_users_ids():
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT user_id FROM users;')
+        user_ids = cursor.fetchall()
+        return [user_id[0] for user_id in user_ids]
+
+    finally:
+        cursor.close()
+        db_conn.close()
+

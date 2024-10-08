@@ -1,7 +1,9 @@
+import time
 from datetime import datetime
 import math
 import pytz
 
+from telegram import Update
 from telegram.ext import CallbackContext
 
 from dlfunc import (
@@ -101,3 +103,14 @@ def get_match_datetime(timestamp):
     formatted_time = kyiv_time.strftime('%d-%m:%H:%M')
 
     return formatted_time
+
+
+async def send_msg_to_all_users(context: CallbackContext):
+    user_ids = get_users_uids()
+    for user_id in user_ids:
+        await context.bot.send_message(chat_id=user_id, text="Hello, press /start to update bot's buttons. Thanks!")
+        time.sleep(1)
+
+
+async def start_job_send(context: CallbackContext):
+    context.job_queue.run_once(send_msg_to_all_users, when=0)
