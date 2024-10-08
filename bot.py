@@ -1,4 +1,3 @@
-import logging
 import re
 from collections import Counter
 
@@ -9,12 +8,6 @@ from dlfunc import get_active_matches, filter_match_data
 from steamfunc import get_user_commid, commid_to_usteamid
 from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid
 
-
-# logging.basicConfig(
-#     filename='bot.logs',
-#     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-#     level=logging.INFO
-# )
 
 MATCH_ID = 1
 REG = 2

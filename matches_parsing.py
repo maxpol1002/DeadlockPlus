@@ -1,15 +1,32 @@
 from datetime import datetime
 import math
-
 import pytz
+
 from telegram.ext import CallbackContext
 
-from dlfunc import get_active_matches, get_all_heroes, convert_region, find_match_position, get_hero_by_id
+from dlfunc import (
+    get_active_matches,
+    get_all_heroes,
+    convert_region,
+    find_match_position,
+    get_hero_by_id
+)
 
-from dbfunc import get_users_uids, insert_users_matches, update_user_matches, get_user_matchcount, remove_user_fmatch, \
-    if_user_has_match, delete_match
+from dbfunc import (
+    get_users_uids,
+    insert_users_matches,
+    update_user_matches,
+    get_user_matchcount,
+    remove_user_fmatch,
+    if_user_has_match,
+    delete_match
+)
 
-from steamfunc import get_users_data, get_user_playtime, usteamid_to_commid
+from steamfunc import (
+    get_users_data,
+    get_user_playtime,
+    usteamid_to_commid
+)
 
 
 def parse_users_matches(user_uids: list, active_matches):
