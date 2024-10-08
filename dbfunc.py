@@ -163,6 +163,36 @@ def remove_user_fmatch(useruid):
                            (first_match_id, useruid))
             db_conn.commit()
 
+            return first_match_id
+
     finally:
         cursor.close()
         db_conn.close()
+
+
+def if_user_has_match(match_id):
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT 1 FROM users WHERE %s = ANY(matches_list)', (match_id,))
+        result = cursor.fetchone()
+        if result:
+            return True
+        return False
+
+    finally:
+        cursor.close()
+        db_conn.close()
+
+
+def delete_match(match_id):
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        cursor.execute('DELETE FROM matches WHERE match_id = %s', (match_id,))
+        db_conn.commit()
+
+    finally:
+        cursor.close()
+        db_conn.close()
+
