@@ -236,7 +236,7 @@ def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_he
     msg += f"<b>ELO</b>: {user_avgelo} (<b>neko</b>: {round(user_avgelo * 2.5, 0)})\n"
     msg += f"<b>Top</b>: {avg_top}%\n"
     msg += f"<b>Percentile</b>: {avg_percentile}%\n"
-    msg += f"<b>Favorite hero</b>: {get_hero_icon(fav_hero)} {fav_hero}"
+    msg += f"<b>Favorite hero</b>: {get_hero_icon(fav_hero)} <b>{fav_hero}</b>"
 
     return msg
 
