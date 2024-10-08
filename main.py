@@ -10,7 +10,7 @@ from telegram.ext import (
 
 from bot import start, message_handler, match_id_handler, faq, end_conv, ua_tg, registration_handler
 
-from matches_parsing import start_job, start_job_send
+from matches_parsing import start_job
 
 MATCH_ID = 1
 REG = 2

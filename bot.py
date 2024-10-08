@@ -6,7 +6,7 @@ from telegram.ext import ContextTypes, ConversationHandler
 
 from dlfunc import get_active_matches, filter_match_data
 from steamfunc import get_user_commid, commid_to_usteamid
-from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid, get_users_ids
+from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid
 
 
 MATCH_ID = 1
