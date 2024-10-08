@@ -1,12 +1,13 @@
 import logging
 import re
+from collections import Counter
 
 from telegram import Update, ReplyKeyboardMarkup, constants, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, ConversationHandler
 
 from dlfunc import get_active_matches, filter_match_data
 from steamfunc import get_user_commid, commid_to_usteamid
-from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data
+from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid
 
 
 # logging.basicConfig(
@@ -186,12 +187,89 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             await update.message.reply_text("You are already registered. Thanks!")
 
-    elif user_input == "Stats & Matches":
-        user_matchids = get_matchids_foruser(update.effective_user.id)
-        if user_matchids:
-            user_matches = [get_match_data(match_id) for match_id in user_matchids]
-        else:
-            await update.message.reply_text("You have no observed matches at this moment.")
+    elif user_input == "My Matches":
+        user_menu = [["My Matches", "My Stats"], ["Search LIVE game by id"]]
+        user_id = update.effective_user.id
+        if user_id == 648380859:
+            user_matchids = get_matchids_foruser(user_id)
+            if user_matchids:
+                sorted_matchids = sorted(user_matchids, reverse=True)
+                user_matches = [get_match_data(match_id) for match_id in sorted_matchids]
+                user_uid = get_user_uid(user_id)
+                for match_data in user_matches:
+                    msg = create_match_stats(match_data, user_uid)
+                    await update.message.reply_text(msg)
+            else:
+                await update.message.reply_text("You have no observed matches at this moment.",
+                                                reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+
+    elif user_input == "My Stats":
+        user_menu = [["My Matches", "My Stats"], ["Search LIVE game by id"]]
+        user = update.effective_user
+        user_id = user.id
+        if user_id == 648380859:
+            user_name = user.first_name
+            user_matchids = get_matchids_foruser(user_id)
+            if user_matchids:
+                user_matches = [get_match_data(match_id) for match_id in user_matchids]
+                user_avgelo, avg_percentile, avg_top, fav_hero = get_user_stats(user_matches, get_user_uid(user_id))
+                await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero),
+                                                reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+
+            else:
+                await update.message.reply_text("You have no observed matches at this moment.")
+
+
+def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero):
+    msg = "===========================\n"
+    msg += f"<b>{user_name} Stats</b>\n"
+    msg += "===========================\n"
+    msg += f"<b>ELO</b>: {user_avgelo}\n"
+    msg += f"<b>Top</b>: {avg_top}%\n"
+    msg += f"<b>Percentile</b>: {avg_percentile}%\n"
+    msg += f"<b>Favorite hero</b>: {get_hero_icon(fav_hero)} {fav_hero}"
+
+    return msg
+
+
+def get_user_stats(user_matches, user_uid):
+    user_elo = 0
+    total_percentile = 0
+    heroes_list = []
+    for match in user_matches:
+        user_elo += match['match_elo']
+        total_percentile += float(match['percentile'])
+        for player in match['players']:
+            if player['account_id'] == user_uid:
+                heroes_list.append(player['hero'])
+
+    user_avgelo = round(user_elo/len(user_matches), 0)
+    avg_percentile = round(total_percentile/len(user_matches), 2)
+    avg_top = str(round(100 - avg_percentile, 2))
+    fav_hero = Counter(heroes_list).most_common(1)[0][0]
+
+    return user_avgelo, avg_percentile, avg_top, fav_hero
+
+
+def create_match_stats(match_data, user_uid):
+    player_hero = get_user_hero(match_data, user_uid)
+    message = "===========================\n"
+    message += f"<b>Match</b> - {match_data['match_id']} - {match_data['start_time']} - {match_data['region']}\n"
+    message += "————————————————\n"
+    message += f"<b>Hero</b>: {get_hero_icon(player_hero)} {player_hero}\n"
+    message += "————————————————\n"
+    message += f"<b>ELO</b>: {match_data['match_elo']}\n"
+    message += f"<b>Top</b>: {round((100 - float(match_data['percentile'])), 1)}% (<b>Percentile</b>: {match_data['percentile']})\n"
+    message += f"<b>Match No.</b>: {match_data['match No.']} (<b>Page No</b>: {match_data['page No.']})\n"
+    message += "===========================\n"
+
+    return message
+
+
+def get_user_hero(match_data, user_uid):
+    for player in match_data['players']:
+        if player['account_id'] == user_uid:
+            return player['hero']
 
 
 async def registration_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
