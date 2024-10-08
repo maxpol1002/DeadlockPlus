@@ -266,7 +266,7 @@ def create_match_stats(match_data, user_uid, match_number):
     message += f"{match_number}. <b>Match</b> - <b>{match_data['match_id']}</b> - <b>{match_data['start_time']}</b>\n"
     message += f"<b>Region</b>: {match_data['region']}\n"
     message += "————————————————\n"
-    message += f"<b>Hero</b>: {get_hero_icon(player_hero)} {player_hero}\n"
+    message += f"<b>Hero</b>: {get_hero_icon(player_hero)} <b>{player_hero}</b>\n"
     message += "————————————————\n"
     message += f"<b>ELO</b>: {match_data['match_elo']} (<b>NekoScore</b>: {round(match_data['match_elo'] * 2.5, 0)})\n"
     message += f"<b>Top</b>: {round((100 - float(match_data['percentile'])), 1)}% (<b>Percentile</b>: {match_data['percentile']}%)\n"
