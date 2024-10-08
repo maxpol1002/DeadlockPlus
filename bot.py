@@ -268,9 +268,9 @@ def create_match_stats(match_data, user_uid, match_number):
     message += "————————————————\n"
     message += f"<b>Hero</b>: {get_hero_icon(player_hero)} {player_hero}\n"
     message += "————————————————\n"
-    message += f"<b>ELO</b>: {match_data['match_elo']} (<b>neko</b>: {round(match_data['match_elo'] * 2.5, 0)})\n"
-    message += f"<b>Top</b>: {round((100 - float(match_data['percentile'])), 1)}% (<b>Percentile</b>: {match_data['percentile']})\n"
-    message += f"<b>Match No</b>: {match_data['match No.']} (<b>Page No</b>: {match_data['page No.']})\n"
+    message += f"<b>ELO</b>: {match_data['match_elo']} (<b>NekoScore</b>: {round(match_data['match_elo'] * 2.5, 0)})\n"
+    message += f"<b>Top</b>: {round((100 - float(match_data['percentile'])), 1)}% (<b>Percentile</b>: {match_data['percentile']}%)\n"
+    message += f"<b>Match №</b>: {match_data['match No.']} (<b>Page №</b>: {match_data['page No.']})\n"
     message += "===========================\n"
 
     return message
