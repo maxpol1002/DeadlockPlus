@@ -231,8 +231,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos):
-    msg = "————————————————\n"
-    msg += f"<b>{user_name} Stats</b>\n"
+    msg = f"<b>{user_name} Stats</b>\n"
     msg += "————————————————\n"
     msg += f"<b>ELO</b>: {user_avgelo} (<b>nekoscore</b>: {round(user_avgelo * 2.5)})\n"
     msg += f"<b>Top</b>: {avg_top}%\n"
