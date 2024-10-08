@@ -258,7 +258,8 @@ def get_user_stats(user_matches, user_uid):
 def create_match_stats(match_data, user_uid, match_number):
     player_hero = get_user_hero(match_data, user_uid)
     message = "===========================\n"
-    message += f"{match_number}.<b>Match</b> - {match_data['match_id']} - {match_data['start_time']} - {match_data['region']}\n"
+    message += f"{match_number}. <b>Match</b> - <b>{match_data['match_id']}</b> - <b>{match_data['start_time']}</b>\n"
+    message += f"<b>Region</b>: {match_data['region']}"
     message += "————————————————\n"
     message += f"<b>Hero</b>: {get_hero_icon(player_hero)} {player_hero}\n"
     message += "————————————————\n"
