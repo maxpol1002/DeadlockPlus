@@ -148,7 +148,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return MATCH_ID
 
     elif user_input.startswith("🔍 Search match"):
-        if context.user_data['match_id']:
+        if context.user_data.get('match_id'):
             await update.message.reply_text(f"Searching match {context.user_data['match_id']}...",
                                             reply_markup=ReplyKeyboardRemove())
             if is_user_registered(user.id):
