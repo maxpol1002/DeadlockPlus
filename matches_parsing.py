@@ -18,6 +18,7 @@ from dbfunc import (
     update_user_matches,
     get_user_matchcount,
     remove_user_fmatch,
+    if_any_user_has_match,
     if_user_has_match,
     delete_match
 )
@@ -34,11 +35,11 @@ def parse_users_matches(user_uids: list, active_matches: list):
     user_uids_set = set(user_uids)
     for match in active_matches:
         for player in match['players']:
-            if player['account_id'] in user_uids_set:
+            if player['account_id'] in user_uids_set and not if_user_has_match(player['account_id'], match['match_id']):
                 found_matches.append(match)
                 if get_user_matchcount(player['account_id']) == 10:
                     removed_match_id = remove_user_fmatch(player['account_id'])
-                    if not if_user_has_match(removed_match_id):
+                    if not if_any_user_has_match(removed_match_id):
                         delete_match(match['match_id'])
 
                 update_user_matches(player['account_id'], match['match_id'])
