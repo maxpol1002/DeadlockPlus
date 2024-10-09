@@ -148,28 +148,32 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return MATCH_ID
 
     elif user_input.startswith("🔍 Search match"):
-        await update.message.reply_text(f"Searching match {context.user_data['match_id']}...",
-                                        reply_markup=ReplyKeyboardRemove())
-        if is_user_registered(user.id):
-            user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
-        else:
-            user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
+        if context.user_data['match_id']:
+            await update.message.reply_text(f"Searching match {context.user_data['match_id']}...",
+                                            reply_markup=ReplyKeyboardRemove())
+            if is_user_registered(user.id):
+                user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
+            else:
+                user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
 
-        await context.bot.send_message(648380859, f"{user_name} searched match {context.user_data['match_id']}")
-        active_matches = get_active_matches()
-        match_data = filter_match_data(context.user_data["match_id"], active_matches)
-        if match_data == "Match is not available":
-            msg = "Sorry, we couldn't find your match. There can be 4 reasons that explain why your match isn't appearing:\n" \
-                  "1. Your match just started. Wait 3 minutes and try again.\n" \
-                  "2. You entered wrong match id.\n" \
-                  "3. Your match is already finished.\n" \
-                  "4. Your match didn't reach 'watch' tab in game."
-        else:
-            msg = await format_match_data(match_data)
+            await context.bot.send_message(648380859, f"{user_name} searched match {context.user_data['match_id']}")
+            active_matches = get_active_matches()
+            match_data = filter_match_data(context.user_data["match_id"], active_matches)
+            if match_data == "Match is not available":
+                msg = "Sorry, we couldn't find your match. There can be 4 reasons that explain why your match isn't appearing:\n" \
+                      "1. Your match just started. Wait 3 minutes and try again.\n" \
+                      "2. You entered wrong match id.\n" \
+                      "3. Your match is already finished.\n" \
+                      "4. Your match didn't reach 'watch' tab in game."
+            else:
+                msg = await format_match_data(match_data)
 
-        await update.message.reply_text(msg, reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
-                                        disable_web_page_preview=True, parse_mode=constants.ParseMode.HTML)
-        context.user_data.clear()
+            await update.message.reply_text(msg, reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
+                                            disable_web_page_preview=True, parse_mode=constants.ParseMode.HTML)
+            context.user_data.clear()
+
+        else:
+            await update.message.reply_text("Try again. Use button to search a match.")
 
     elif user_input == "◀️ Go back":
         if is_user_registered(user.id):
