@@ -98,7 +98,7 @@ def get_match_datetime(timestamp):
     utc_time = datetime.utcfromtimestamp(timestamp)
     kyiv_time = pytz.utc.localize(utc_time).astimezone(tz)
 
-    formatted_time = kyiv_time.strftime('%d-%m:%H:%M')
+    formatted_time = kyiv_time.strftime('%d/%m %H:%M')
 
     return formatted_time
 
