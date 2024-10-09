@@ -90,7 +90,7 @@ async def parse_matches_job(context: CallbackContext):
 
 
 async def start_job(context: CallbackContext):
-    context.job_queue.run_repeating(parse_matches_job, interval=120, first=0)
+    context.job_queue.run_repeating(parse_matches_job, interval=180, first=0)
 
 
 def get_match_datetime(timestamp):
