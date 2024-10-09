@@ -209,9 +209,9 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     await update.message.reply_text(msg, reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
                                                     parse_mode=constants.ParseMode.HTML)
                     match_number += 1
-            else:
-                await update.message.reply_text("You have no observed matches at this moment.",
-                                                reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+        else:
+            await update.message.reply_text("You have no observed matches at this moment.",
+                                            reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
     elif user_input == "📊 My Stats":
         user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
