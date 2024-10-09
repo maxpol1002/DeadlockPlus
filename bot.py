@@ -327,7 +327,7 @@ async def registration_handler(update: Update, context: ContextTypes.DEFAULT_TYP
 
         return ConversationHandler.END
 
-    if not is_steam_valid(user_link_input):
+    if not is_steam_valid(user_link_input) or get_user_commid(user_link_input) is None:
         await context.bot.send_message(update.effective_user.id, "Wrong steam link, try again.")
         return REG
 
