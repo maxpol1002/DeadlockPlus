@@ -1,10 +1,7 @@
-import time
 from datetime import datetime
 import math
 import pytz
-import telegram.error
 
-from telegram import Update
 from telegram.ext import CallbackContext
 
 from dlfunc import (
@@ -32,7 +29,7 @@ from steamfunc import (
 )
 
 
-def parse_users_matches(user_uids: list, active_matches):
+def parse_users_matches(user_uids: list, active_matches: list):
     found_matches = []
     user_uids_set = set(user_uids)
     for match in active_matches:

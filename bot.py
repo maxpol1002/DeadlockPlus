@@ -1,3 +1,4 @@
+import math
 import re
 from collections import Counter
 
@@ -242,7 +243,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos):
     msg = f"<b>{user_name} Stats</b>\n"
     msg += "————————————————\n"
-    msg += f"<b>ELO</b>: {user_avgelo} (<b>nekoscore</b>: {round(user_avgelo * 2.5)})\n"
+    msg += f"<b>ELO</b>: {user_avgelo} (<b>nekoscore</b>: {math.ceil(user_avgelo * 2.5)})\n"
     msg += f"<b>Top</b>: {avg_top}%\n"
     msg += f"<b>Percentile</b>: {avg_percentile}%\n"
     msg += "————————————————\n"
@@ -299,7 +300,7 @@ def create_match_stats(match_data, user_uid, match_number):
     message += "————————————————\n"
     message += f"<b>Hero</b>: {get_hero_icon(player_hero)} <b>{player_hero}</b>\n"
     message += "————————————————\n"
-    message += f"<b>ELO</b>: {match_data['match_elo']} (<b>nekoscore</b>: {round(match_data['match_elo'] * 2.5)})\n"
+    message += f"<b>ELO</b>: {match_data['match_elo']} (<b>nekoscore</b>: {math.ceil(match_data['match_elo'] * 2.5)})\n"
     message += f"<b>Top</b>: {round((100 - float(match_data['percentile'])), 2)}% (<b>Percentile</b>: {match_data['percentile']}%)\n"
     message += f"<b>Match №</b> {match_data['match No.']} (<b>Page №</b> {match_data['page No.']})\n"
     message += "===========================\n"
