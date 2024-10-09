@@ -342,31 +342,32 @@ async def registration_handler(update: Update, context: ContextTypes.DEFAULT_TYP
 
 
 async def match_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    match_id_input = update.message.text
-    if "match_id" not in context.user_data:
-        if match_id_input == "◀️ Go back":
-            if is_user_registered(update.effective_user.id):
-                user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
-            else:
-                user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
+    if update.message:
+        match_id_input = update.message.text
+        if "match_id" not in context.user_data:
+            if match_id_input == "◀️ Go back":
+                if is_user_registered(update.effective_user.id):
+                    user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
+                else:
+                    user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
 
-            await update.message.reply_text("You can search your live game by pressing button below.",
-                                            reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+                await update.message.reply_text("You can search your live game by pressing button below.",
+                                                reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
-            return ConversationHandler.END
+                return ConversationHandler.END
 
-        elif not match_id_input.isdigit() or len(match_id_input) != 8:
-            await context.bot.send_message(update.effective_user.id, "Wrong match id, try again.")
-            return MATCH_ID
+            elif not match_id_input.isdigit() or len(match_id_input) != 8:
+                await context.bot.send_message(update.effective_user.id, "Wrong match id, try again.")
+                return MATCH_ID
 
-    context.user_data["match_id"] = int(match_id_input)
-    user_menu = [
-        ["◀️ Go back", f"🔍 Search match {match_id_input}"]
-    ]
-    await context.bot.send_message(update.effective_user.id, "Press the button below to search.",
-                                   reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+        context.user_data["match_id"] = int(match_id_input)
+        user_menu = [
+            ["◀️ Go back", f"🔍 Search match {match_id_input}"]
+        ]
+        await context.bot.send_message(update.effective_user.id, "Press the button below to search.",
+                                       reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
-    return ConversationHandler.END
+        return ConversationHandler.END
 
 
 async def end_conv(update: Update, context: ContextTypes.DEFAULT_TYPE) -> ConversationHandler.END:
