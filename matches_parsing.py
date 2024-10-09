@@ -59,7 +59,7 @@ def filter_data(match_data, active_matches):
         "match No.": f"{match_number}/{matches_count}",
         "page No.": f"{page_number}/{math.ceil((matches_count - 8)/8 + 2)}",
         "region": convert_region(match_data["region_mode"]),
-        "start_time": f"{get_match_datetime(match_data['start_time'])} (EEST)",
+        "start_time": f"{get_match_datetime(match_data['start_time'])}",
         "players": [
             {
                 "hero": get_hero_by_id(heroes, player["hero_id"]),
