@@ -67,13 +67,8 @@ def filter_data(match_data, active_matches):
                 "account_id": player["account_id"],
                 "player_name": players_data[usteamid_to_commid(player["account_id"])]["username"],
                 "account_link": players_data[usteamid_to_commid(player["account_id"])]["user_link"],
-                "playtime": {
-                    "total": game_data[0] if game_data else "N/A",
-                    "2weeks": game_data[1] if game_data else "N/A"
-                }
             }
             for player in match_data["players"]
-            for game_data in [get_user_playtime(player["account_id"])]
         ]
 
     }
