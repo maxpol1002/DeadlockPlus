@@ -32,6 +32,35 @@ def get_hero_by_id(all_heroes, hero_id: int):
     return None
 
 
+def get_hero_icon(hero_name: str) -> str:
+    hero_icons = {
+        "Abrams": "😈",
+        "Bebop": "🤖",
+        "Dynamo": "❎",
+        "Grey Talon": "🏹",
+        "Haze": "😶‍🌫️",
+        "Infernus": "🔥",
+        "Ivy": "🗿",
+        "Kelvin": "🥶",
+        "Lady Geist": "🔫",
+        "Lash": "👨‍🦰",
+        "McGinnis": "🚀",
+        "Mirage": "🌪",
+        "Mo & Krill": "🐽",
+        "Paradox": "🔄",
+        "Pocket": "💼",
+        "Seven": "⚡️",
+        "Shiv": "🩸",
+        "Vindicta": "🎯",
+        "Viscous": "🟢",
+        "Warden": "👮‍♂️",
+        "Wraith": "🃏",
+        "Yamato": "⛩"
+    }
+
+    return hero_icons.get(hero_name, "")
+
+
 def get_active_matches():
     url = "https://data.deadlock-api.com/active-matches"
     response = requests.get(url)

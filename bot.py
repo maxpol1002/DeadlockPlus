@@ -5,7 +5,7 @@ from collections import Counter
 from telegram import Update, ReplyKeyboardMarkup, constants, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, ConversationHandler
 
-from dlfunc import get_active_matches, filter_match_data
+from dlfunc import get_active_matches, filter_match_data, get_hero_icon
 from steamfunc import get_user_commid, commid_to_usteamid
 from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid
 
@@ -59,35 +59,6 @@ async def ua_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
     await update.message.reply_text("Join ukrainian channel! t.me/Deadlock_UA_News",
                                     reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
-
-
-def get_hero_icon(hero_name: str) -> str:
-    hero_icons = {
-        "Abrams": "😈",
-        "Bebop": "🤖",
-        "Dynamo": "❎",
-        "Grey Talon": "🏹",
-        "Haze": "😶‍🌫️",
-        "Infernus": "🔥",
-        "Ivy": "🗿",
-        "Kelvin": "🥶",
-        "Lady Geist": "🔫",
-        "Lash": "👨‍🦰",
-        "McGinnis": "🚀",
-        "Mirage": "🌪",
-        "Mo & Krill": "🐽",
-        "Paradox": "🔄",
-        "Pocket": "💼",
-        "Seven": "⚡️",
-        "Shiv": "🩸",
-        "Vindicta": "🎯",
-        "Viscous": "🟢",
-        "Warden": "👮‍♂️",
-        "Wraith": "🃏",
-        "Yamato": "⛩"
-    }
-
-    return hero_icons.get(hero_name, "")
 
 
 async def format_match_data(filtered_data) -> str:
@@ -248,7 +219,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos):
     msg = f"<b>{user_name} Stats</b>\n"
     msg += "————————————————\n"
-    msg += f"<b>ELO</b>: {user_avgelo} (<b>nekoscore</b>: {math.ceil(user_avgelo * 2.5)})\n"
+    msg += f"<b>ELO</b>: {user_avgelo}\n"
     msg += f"<b>Top</b>: {avg_top}%\n"
     msg += f"<b>Percentile</b>: {avg_percentile}%\n"
     msg += "————————————————\n"
@@ -305,7 +276,7 @@ def create_match_stats(match_data, user_uid, match_number):
     message += "————————————————\n"
     message += f"<b>Hero</b>: {get_hero_icon(player_hero)} <b>{player_hero}</b>\n"
     message += "————————————————\n"
-    message += f"<b>ELO</b>: {match_data['match_elo']} (<b>nekoscore</b>: {math.ceil(match_data['match_elo'] * 2.5)})\n"
+    message += f"<b>ELO</b>: {match_data['match_elo']}\n"
     message += f"<b>Top</b>: {round((100 - float(match_data['percentile'])), 2)}% (<b>Percentile</b>: {match_data['percentile']}%)\n"
     message += f"<b>Match №</b> {match_data['match No.']} (<b>Page №</b> {match_data['page No.']})\n"
     message += "===========================\n"
@@ -373,6 +344,11 @@ async def match_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                        reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
         return ConversationHandler.END
+
+
+def notify_user(user_id, hero_emoji, hero_name, match_id, context: ContextTypes.DEFAULT_TYPE):
+    context.bot.send_message(user_id, f"Hey, we found you in a match <b>{match_id}</b> as {hero_emoji}<b>{hero_name}</b>. "
+                                      f"You can check this match info by pressing My Matches button.")
 
 
 async def end_conv(update: Update, context: ContextTypes.DEFAULT_TYPE) -> ConversationHandler.END:
