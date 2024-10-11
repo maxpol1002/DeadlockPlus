@@ -64,7 +64,7 @@ async def ua_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def format_match_data(filtered_data) -> str:
     message = f"<b>Match ID:</b> {filtered_data['match_id']}\n"
     message += "===========================\n"
-    message += f"<b>Match Elo:</b> {filtered_data['match_elo']} (<b>nekoscore</b>:{math.ceil(filtered_data['match_elo'] * 2.5)})\n"
+    message += f"<b>Match Elo:</b> {filtered_data['match_elo']}\n"
     message += f"<b>Top</b>: {round(100 - float(filtered_data['percentile']), 2)}%\n"
     message += f"<b>Percentile:</b> {filtered_data['percentile']}%\n"
     message += f"<b>Match No:</b> {filtered_data['match No.']}\n"
