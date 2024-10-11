@@ -5,7 +5,7 @@ from collections import Counter
 from telegram import Update, ReplyKeyboardMarkup, constants, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, ConversationHandler
 
-from dlfunc import get_active_matches, filter_match_data, get_hero_icon
+from dlfunc import get_active_matches, filter_match_data, get_hero_icon, get_current_minmaxelo
 from steamfunc import get_user_commid, commid_to_usteamid
 from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid
 
@@ -214,6 +214,9 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await update.message.reply_text("We have updated buttons now!",
                                         reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+
+    elif user_input == "asdasdasd" and user.id == 648380859:
+        await context.bot.send_message(648380859, get_current_minmaxelo())
 
 
 def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos):
