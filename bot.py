@@ -69,6 +69,7 @@ async def format_match_data(filtered_data) -> str:
     message += f"<b>Percentile:</b> {filtered_data['percentile']}%\n"
     message += f"<b>Match No:</b> {filtered_data['match No.']}\n"
     message += f"<b>Page No:</b> {filtered_data['page No.']}\n"
+    message += f"<b>Spectators</b> {filtered_data.get('spectators', 0)}"
     message += f"<b>Region:</b> {filtered_data['region']}\n"
     message += "===========================\n"
     message += f"<b>Start Time:</b> {filtered_data['start_time']}\n"

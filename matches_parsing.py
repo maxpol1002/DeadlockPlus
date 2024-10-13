@@ -9,7 +9,7 @@ from dlfunc import (
     get_all_heroes,
     convert_region,
     find_match_position,
-    get_hero_by_id
+    get_hero_by_id,
 )
 
 from dbfunc import (
@@ -20,12 +20,11 @@ from dbfunc import (
     remove_user_fmatch,
     if_any_user_has_match,
     if_user_has_match,
-    delete_match
+    delete_match,
 )
 
 from steamfunc import (
     get_users_data,
-    get_user_playtime,
     usteamid_to_commid
 )
 
@@ -61,6 +60,7 @@ def filter_data(match_data, active_matches):
         "page No.": f"{page_number}/{math.ceil((matches_count - 8)/8 + 2)}",
         "region": convert_region(match_data["region_mode"]),
         "start_time": f"{get_match_datetime(match_data['start_time'])}",
+        "spectators:": match_data.get('spectators'),
         "players": [
             {
                 "hero": get_hero_by_id(heroes, player["hero_id"]),

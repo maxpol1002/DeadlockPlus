@@ -136,6 +136,7 @@ def filter_match_data(match_id, active_matches):
             "duration": f"{parse_match_duration(start_time)}",
             "net_worth_team_0": data["net_worth_team_0"],
             "net_worth_team_1": data["net_worth_team_1"],
+            "spectators": data["spectators"],
             "players": [
                 {
                     "hero": get_hero_by_id(heroes, player["hero_id"]),
