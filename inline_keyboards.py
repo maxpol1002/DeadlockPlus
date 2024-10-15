@@ -1,10 +1,8 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from bot import get_user_hero
-
 from dbfunc import get_user_uid
 
-from dlfunc import get_hero_icon
+from dlfunc import get_hero_icon, get_user_hero
 
 
 def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:

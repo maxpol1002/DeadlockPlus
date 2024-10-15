@@ -61,6 +61,12 @@ def get_hero_icon(hero_name: str) -> str:
     return hero_icons.get(hero_name, "")
 
 
+def get_user_hero(match_data, user_uid):
+    for player in match_data['players']:
+        if player['account_id'] == user_uid:
+            return player['hero']
+
+
 def get_active_matches():
     url = "https://data.deadlock-api.com/active-matches"
     response = requests.get(url)

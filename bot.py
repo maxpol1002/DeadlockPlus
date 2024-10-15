@@ -1,4 +1,3 @@
-import math
 import re
 from collections import Counter
 
@@ -6,7 +5,7 @@ import telegram.error
 from telegram import Update, ReplyKeyboardMarkup, constants, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, ConversationHandler
 
-from dlfunc import get_active_matches, filter_match_data, get_hero_icon, get_current_minmaxelo
+from dlfunc import get_active_matches, filter_match_data, get_hero_icon, get_current_minmaxelo, get_user_hero
 from steamfunc import get_user_commid, commid_to_usteamid
 from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid
 
@@ -297,12 +296,6 @@ def create_match_stats(match_data, user_uid, match_number):
     message += "===========================\n"
 
     return message
-
-
-def get_user_hero(match_data, user_uid):
-    for player in match_data['players']:
-        if player['account_id'] == user_uid:
-            return player['hero']
 
 
 async def registration_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
