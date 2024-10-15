@@ -180,7 +180,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             sorted_matchids = sorted(user_matchids, reverse=True)
             user_matches = [get_match_data(match_id) for match_id in sorted_matchids]
             if user_matches:
-                await update.message.reply_text("<b>Your 10 last matches</b> ⬇️",
+                await update.message.reply_text(f"<b>Your {len(user_matches)} last matches</b> ⬇️",
                                                 reply_markup=create_inline_matches(user_matches, user.id),
                                                 parse_mode=constants.ParseMode.HTML)
             else:
