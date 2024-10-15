@@ -180,11 +180,13 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             sorted_matchids = sorted(user_matchids, reverse=True)
             user_matches = [get_match_data(match_id) for match_id in sorted_matchids]
             if user_matches:
-                user_uid = get_user_uid(user_id)
-                for match_data in user_matches:
-                    msg = create_match_stats(match_data, user_uid)
-                    await update.message.reply_text(msg, reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
-                                                    parse_mode=constants.ParseMode.HTML)
+                await update.message.reply_text("⬇️<b>Your 10 last matches</b>⬇️",
+                                                reply_markup=create_inline_matches(user_matches, user.id),
+                                                parse_mode=constants.ParseMode.HTML)
+            else:
+                await update.message.reply_text("You have no observed matches at this moment.",
+                                                reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+
         else:
             await update.message.reply_text("You have no observed matches at this moment.",
                                             reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
@@ -218,14 +220,6 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif user_input == "asdasdasd" and user.id == 648380859:
         await context.bot.send_message(648380859, get_current_minmaxelo())
-
-    elif user_input == "lol" and user.id == 648380859:
-        user_matchids = get_matchids_foruser(user.id)
-        if user_matchids:
-            sorted_matchids = sorted(user_matchids, reverse=True)
-            user_matches = [get_match_data(match_id) for match_id in sorted_matchids]
-
-            await update.message.reply_text("parasha", reply_markup=create_inline_matches(user_matches, user.id))
 
 
 async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
