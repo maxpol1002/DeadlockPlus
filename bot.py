@@ -236,7 +236,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         match_data = get_match_data(match_id)
         match_stats = create_match_stats(match_data, get_user_uid(user_id))
 
-        await context.bot.send_message(user_id, match_stats)
+        await context.bot.send_message(user_id, match_stats, parse_mode=constants.ParseMode.HTML)
         await query.answer()
 
 
