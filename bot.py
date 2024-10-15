@@ -2,6 +2,7 @@ import math
 import re
 from collections import Counter
 
+import telegram.error
 from telegram import Update, ReplyKeyboardMarkup, constants, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, ConversationHandler
 
@@ -350,9 +351,13 @@ async def match_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ConversationHandler.END
 
 
-def notify_user(user_id, hero_emoji, hero_name, match_id, context: ContextTypes.DEFAULT_TYPE):
-    context.bot.send_message(user_id, f"Hey, we found you in a match <b>{match_id}</b> as {hero_emoji}<b>{hero_name}</b>. "
-                                      f"You can check this match info by pressing My Matches button.")
+def notify_user(user_id, match_id, context: ContextTypes.DEFAULT_TYPE):
+    try:
+        context.bot.send_message(user_id, f"Hey, we found you in a match <b>{match_id}</b>. "
+                                          f"You can check this match info by pressing My Matches button.",
+                                 parse_mode=constants.ParseMode.HTML)
+    except telegram.error.BadRequest as e:
+        context.bot.send_message(648380859, f"{e} for user_id: {user_id}")
 
 
 async def end_conv(update: Update, context: ContextTypes.DEFAULT_TYPE) -> ConversationHandler.END:

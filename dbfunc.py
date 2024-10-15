@@ -70,6 +70,22 @@ def get_user_uid(user_id):
         db_conn.close()
 
 
+def get_user_id(usteamid):
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT user_id FROM users WHERE usteamid = %s', (usteamid,))
+        user_id = cursor.fetchone()
+        if user_id:
+            return user_id[0]
+
+        return None
+
+    finally:
+        cursor.close()
+        db_conn.close()
+
+
 def insert_users_matches(matches):
     try:
         db_conn = psycopg2.connect(DB_URL, sslmode="require")
