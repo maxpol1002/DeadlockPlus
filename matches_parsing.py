@@ -32,14 +32,14 @@ from steamfunc import (
 from bot import notify_user
 
 
-def parse_users_matches(user_uids: list, active_matches: list, context: ContextTypes.DEFAULT_TYPE):
+async def parse_users_matches(user_uids: list, active_matches: list, context: ContextTypes.DEFAULT_TYPE):
     found_matches = []
     user_uids_set = set(user_uids)
     for match in active_matches:
         for player in match['players']:
             if player['account_id'] in user_uids_set and not if_user_has_match(player['account_id'], match['match_id']):
                 found_matches.append(match)
-                notify_user(get_user_id(player['account_id']), match['match_id'], context)
+                await notify_user(get_user_id(player['account_id']), match['match_id'], context)
 
                 if get_user_matchcount(player['account_id']) == 10:
                     removed_match_id = remove_user_fmatch(player['account_id'])
@@ -84,7 +84,7 @@ def filter_data(match_data, active_matches):
 async def parse_matches_job(context: ContextTypes.DEFAULT_TYPE):
     active_matches = get_active_matches()
     users_uids = get_users_uids()
-    users_matches = parse_users_matches(users_uids, active_matches, context)
+    users_matches = await parse_users_matches(users_uids, active_matches, context)
     if users_matches:
         filtered_match_data = [filter_data(match, active_matches) for match in users_matches]
         insert_users_matches(filtered_match_data)
