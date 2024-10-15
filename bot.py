@@ -181,12 +181,10 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             user_matches = [get_match_data(match_id) for match_id in sorted_matchids]
             if user_matches:
                 user_uid = get_user_uid(user_id)
-                match_number = 1
                 for match_data in user_matches:
-                    msg = create_match_stats(match_data, user_uid, match_number)
+                    msg = create_match_stats(match_data, user_uid)
                     await update.message.reply_text(msg, reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
                                                     parse_mode=constants.ParseMode.HTML)
-                    match_number += 1
         else:
             await update.message.reply_text("You have no observed matches at this moment.",
                                             reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
@@ -228,6 +226,18 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             user_matches = [get_match_data(match_id) for match_id in sorted_matchids]
 
             await update.message.reply_text("parasha", reply_markup=create_inline_matches(user_matches, user.id))
+
+
+async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    if query.data.startswith("match"):
+        user_id = query.message.chat.id
+        match_id = int(query.data.split('_')[1])
+        match_data = get_match_data(match_id)
+        match_stats = create_match_stats(match_data, get_user_uid(user_id))
+
+        await context.bot.send_message(user_id, match_stats)
+        await query.answer()
 
 
 def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos):
@@ -282,10 +292,10 @@ def get_user_stats(user_matches, user_uid):
     return user_avgelo, avg_percentile, avg_top, fav_hero, page_stat, matchpos_stat
 
 
-def create_match_stats(match_data, user_uid, match_number):
+def create_match_stats(match_data, user_uid):
     player_hero = get_user_hero(match_data, user_uid)
     message = "===========================\n"
-    message += f"{match_number}. <b>Match</b> | <b>{match_data['match_id']}</b> | <b>{match_data['start_time']}</b>\n"
+    message += f"<b>Match</b> | <b>{match_data['match_id']}</b> | <b>{match_data['start_time']}</b>\n"
     message += f"<b>Region</b>: {match_data['region']}\n"
     message += "————————————————\n"
     message += f"<b>Hero</b>: {get_hero_icon(player_hero)} <b>{player_hero}</b>\n"
