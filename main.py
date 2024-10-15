@@ -5,10 +5,11 @@ from telegram.ext import (
     CommandHandler,
     MessageHandler,
     filters,
-    ConversationHandler
+    ConversationHandler,
+    CallbackQueryHandler
 )
 
-from bot import start, message_handler, match_id_handler, faq, end_conv, ua_tg, registration_handler
+from bot import start, message_handler, match_id_handler, faq, end_conv, ua_tg, registration_handler, callback_data_handler
 
 from matches_parsing import start_job
 
@@ -36,6 +37,7 @@ if __name__ == '__main__':
     application.add_handler(CommandHandler("faq", faq))
     application.add_handler(CommandHandler("ua_tg", ua_tg))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
+    application.add_handler(CallbackQueryHandler(callback_data_handler))
     application.job_queue.run_once(start_job, when=0)
     application.run_webhook(
         listen="0.0.0.0",
