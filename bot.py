@@ -351,13 +351,13 @@ async def match_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ConversationHandler.END
 
 
-def notify_user(user_id, match_id, context: ContextTypes.DEFAULT_TYPE):
+async def notify_user(user_id, match_id, context: ContextTypes.DEFAULT_TYPE):
     try:
-        context.bot.send_message(user_id, f"Hey, we found you in a match <b>{match_id}</b>. "
-                                          f"You can check this match info by pressing My Matches button.",
-                                 parse_mode=constants.ParseMode.HTML)
+        await context.bot.send_message(user_id, f"Hey, we found you in a match <b>{match_id}</b>. "
+                                                f"You can check this match info by pressing My Matches button.",
+                                                parse_mode=constants.ParseMode.HTML)
     except telegram.error.BadRequest as e:
-        context.bot.send_message(648380859, f"{e} for user_id: {user_id}")
+        await context.bot.send_message(648380859, f"{e} for user_id: {user_id}")
 
 
 async def end_conv(update: Update, context: ContextTypes.DEFAULT_TYPE) -> ConversationHandler.END:
