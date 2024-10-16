@@ -1,4 +1,3 @@
-import re
 from collections import Counter
 
 import telegram.error
@@ -6,7 +5,7 @@ from telegram import Update, ReplyKeyboardMarkup, constants, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, ConversationHandler
 
 from dlfunc import get_active_matches, filter_match_data, get_hero_icon, get_current_minmaxelo, get_user_hero
-from steamfunc import get_user_commid, commid_to_usteamid
+from steamfunc import get_user_commid, commid_to_usteamid, is_steam_valid
 from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid
 
 from inline_keyboards import create_inline_matches
@@ -108,7 +107,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     username = user.username
     user_name = user.first_name
-    await context.bot.send_message(648380859, f"{user_name} typed {user_input}")
+    await context.bot.send_message(648380859, f"{user_name}({username}) typed {user_input}")
 
     if user_input == "🔍 Search LIVE game by id":
         context.user_data.clear()
@@ -372,11 +371,3 @@ async def end_conv(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Conver
                                     "You can start over with /start or ask for help with /faq.")
     context.user_data.clear()
     return ConversationHandler.END
-
-
-def is_steam_valid(link):
-    steam_link_regex = r"^https://steamcommunity\.com/(id|profiles)/.*$"
-    if not re.match(steam_link_regex, link):
-        return False
-
-    return True

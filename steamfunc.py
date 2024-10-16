@@ -1,5 +1,5 @@
 import os
-
+import re
 import requests
 
 
@@ -10,6 +10,14 @@ def usteamid_to_commid(account_id):
 
 def commid_to_usteamid(commid):
     return int(commid) - 76561197960265728
+
+
+def is_steam_valid(link):
+    steam_link_regex = r"^https://steamcommunity\.com/(id|profiles)/.*$"
+    if not re.match(steam_link_regex, link):
+        return False
+
+    return True
 
 
 def get_user_commid(steam_link):
