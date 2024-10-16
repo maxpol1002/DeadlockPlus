@@ -173,8 +173,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif user_input == "⚔️ My Matches":
         user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
-        user_id = update.effective_user.id
-        user_matchids = get_matchids_foruser(user_id)
+        user_matchids = get_matchids_foruser(user.id)
         if user_matchids:
             sorted_matchids = sorted(user_matchids, reverse=True)
             user_matches = [get_match_data(match_id) for match_id in sorted_matchids]
@@ -192,13 +191,10 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif user_input == "📊 My Stats":
         user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
-        user = update.effective_user
-        user_id = user.id
-        user_name = user.first_name
-        user_matchids = get_matchids_foruser(user_id)
+        user_matchids = get_matchids_foruser(user.id)
         if user_matchids:
             user_matches = [get_match_data(match_id) for match_id in user_matchids]
-            user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches, get_user_uid(user_id))
+            user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches, get_user_uid(user.id))
             await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile,
                                                                  avg_top, fav_hero, avg_page, avg_pos),
                                             reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
