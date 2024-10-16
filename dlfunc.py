@@ -24,7 +24,7 @@ def get_all_heroes():
     return all_heroes
 
 
-def get_hero_by_id(all_heroes, hero_id: int):
+def get_hero_by_id(all_heroes, hero_id: int) -> str or None:
     for hero in all_heroes:
         if hero['id'] == hero_id:
             return hero['name']
@@ -61,13 +61,13 @@ def get_hero_icon(hero_name: str) -> str:
     return hero_icons.get(hero_name, "")
 
 
-def get_user_hero(match_data, user_uid):
+def get_user_hero(match_data, user_uid) -> str:
     for player in match_data['players']:
         if player['account_id'] == user_uid:
             return player['hero']
 
 
-def get_active_matches():
+def get_active_matches() -> list:
     url = "https://data.deadlock-api.com/active-matches"
     response = requests.get(url)
     active_matches = response.json()
@@ -89,7 +89,7 @@ def get_top_matches(active_matches, count: int):
     return top_matches
 
 
-def get_current_minmaxelo():
+def get_current_minmaxelo() -> tuple[int, int]:
     active_matches = get_active_matches()
     sorted_matches = sort_matches_byelo(active_matches, reverse=True)
     max_elo = sorted_matches[0].get("match_score")
@@ -97,7 +97,7 @@ def get_current_minmaxelo():
     return max_elo, min_elo
 
 
-def parse_match_time(timestamp):
+def parse_match_time(timestamp) -> datetime:
     tz = pytz.timezone('Europe/Kyiv')
     utc_time = datetime.utcfromtimestamp(timestamp)
     kyiv_time = pytz.utc.localize(utc_time).astimezone(tz)
@@ -105,7 +105,7 @@ def parse_match_time(timestamp):
     return kyiv_time
 
 
-def find_match_byid(match_id, active_matches):
+def find_match_byid(match_id, active_matches) -> dict or None:
     for match in active_matches:
         if match.get("match_id") == match_id:
             return match
@@ -122,7 +122,7 @@ def parse_match_duration(start_time) -> str:
     return duration
 
 
-def filter_match_data(match_id, active_matches):
+def filter_match_data(match_id, active_matches) -> dict or str:
     data = find_match_byid(match_id, active_matches)
     if data:
         heroes = get_all_heroes()
@@ -164,7 +164,7 @@ def filter_match_data(match_id, active_matches):
     return "Match is not available"
 
 
-def find_match_position(match_id, active_matches):
+def find_match_position(match_id, active_matches) -> tuple[int, int]:
     match_to_search = find_match_byid(match_id, active_matches)['match_score']
     if match_to_search:
         sorted_matches = sort_matches_byelo(active_matches, reverse=True)
