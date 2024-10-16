@@ -66,6 +66,7 @@ def filter_data(match_data, active_matches):
         "region": convert_region(match_data["region_mode"]),
         "start_time": f"{get_match_datetime(match_data['start_time'])}",
         "spectators:": match_data.get('spectators'),
+        "match_mode": match_data.get('match_mode'),
         "players": [
             {
                 "hero": get_hero_by_id(heroes, player["hero_id"]),
