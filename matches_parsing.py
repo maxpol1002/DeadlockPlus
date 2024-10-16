@@ -102,4 +102,3 @@ def get_match_datetime(timestamp):
     formatted_time = kyiv_time.strftime('%d/%m %H:%M')
 
     return formatted_time
-
