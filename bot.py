@@ -257,7 +257,7 @@ def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_he
     return msg
 
 
-async def test_st(user_matches):
+def test_st(user_matches):
     perc = []
     elo = []
     ids = []
