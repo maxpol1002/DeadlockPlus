@@ -270,7 +270,7 @@ def test_st(user_matches):
 
 def get_user_stats(user_matches, user_uid):
     user_elo = 0
-    total_percentile = 0
+    total_percentile = 0.0
     avg_page = 0
     avg_total_pages = 0
     avg_match_pos = 0
@@ -280,7 +280,7 @@ def get_user_stats(user_matches, user_uid):
     for match in user_matches:
         if match is not None:
             user_elo += match['match_elo']
-            total_percentile += float(match['percentile'])
+            total_percentile += match['percentile']
             match_position, total_matches = map(int, match['match No.'].split('/'))
             page_num, total_pages = map(int, match['page No.'].split('/'))
             avg_page += page_num
