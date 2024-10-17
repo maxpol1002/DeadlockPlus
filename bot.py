@@ -216,18 +216,6 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif user_input == "asdasdasd" and user.id == 648380859:
         await context.bot.send_message(648380859, get_current_minmaxelo())
 
-    elif user_input == "hui" and user.id == 648380859:
-        user_matchids = get_matchids_foruser(5160729145)
-
-        user_matches = [get_match_data(match_id) for match_id in user_matchids]
-        matches_ids, meatches_perc, matches_elo = test_st(user_matches)
-        await update.message.reply_text(f"total matches:{len(user_matches)}, perc: {meatches_perc}, elo: {matches_elo}, ids: {matches_ids}")
-        user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches,
-                                                                                           get_user_uid(5160729145))
-        await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile,
-                                                             avg_top, fav_hero, avg_page, avg_pos),
-                                        parse_mode=constants.ParseMode.HTML)
-
 
 async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -255,19 +243,6 @@ def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_he
     msg += "————————————————\n"
 
     return msg
-
-
-def test_st(user_matches):
-    perc = []
-    elo = []
-    ids = []
-    for match in user_matches:
-        if match is not None:
-            elo.append(match['match_elo'])
-            perc.append(match['percentile'])
-            ids.append(match['match_id'])
-
-    return ids, perc, elo
 
 
 def get_user_stats(user_matches, user_uid):
