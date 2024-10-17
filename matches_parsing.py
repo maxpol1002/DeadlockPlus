@@ -21,7 +21,8 @@ from dbfunc import (
     if_any_user_has_match,
     if_user_has_match,
     delete_match,
-    get_user_id
+    get_user_id,
+    get_match_data
 )
 
 from steamfunc import (
@@ -38,7 +39,6 @@ async def parse_users_matches(user_uids: list, active_matches: list, context: Co
     for match in active_matches:
         for player in match['players']:
             if player['account_id'] in user_uids_set and not if_user_has_match(player['account_id'], match['match_id']):
-                found_matches.append(match)
                 await notify_user(get_user_id(player['account_id']), match['match_id'], match['match_score'], context)
 
                 if get_user_matchcount(player['account_id']) == 10:
@@ -47,6 +47,9 @@ async def parse_users_matches(user_uids: list, active_matches: list, context: Co
                         delete_match(match['match_id'])
 
                 update_user_matches(player['account_id'], match['match_id'])
+
+            if player['account_id'] in user_uids_set and get_match_data(match['match_id']) is None:
+                found_matches.append(match)
 
     return found_matches
 
