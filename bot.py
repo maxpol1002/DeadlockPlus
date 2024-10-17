@@ -362,6 +362,9 @@ async def notify_user(user_id, match_id, match_elo, context: ContextTypes.DEFAUL
     except telegram.error.BadRequest as e:
         await context.bot.send_message(648380859, f"{e} for user_id: {user_id}")
 
+    except telegram.error.Forbidden as e:
+        await context.bot.send_message(648380859, f"{e} for user_id: {user_id}")
+
 
 async def end_conv(update: Update, context: ContextTypes.DEFAULT_TYPE) -> ConversationHandler.END:
     await update.message.reply_text("The current operation has been canceled. "
