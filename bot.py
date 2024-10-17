@@ -263,7 +263,7 @@ def test_st(user_matches):
     for match in user_matches:
         if match is not None:
             elo.append(match['match_elo'])
-            perc.append(float(match['percentile']))
+            perc.append(match['percentile'])
 
     return len(user_matches), perc, elo
 
@@ -278,18 +278,17 @@ def get_user_stats(user_matches, user_uid):
     user_matches_count = len(user_matches)
     heroes_list = []
     for match in user_matches:
-        if match is not None:
-            user_elo += match['match_elo']
-            total_percentile += match['percentile']
-            match_position, total_matches = map(int, match['match No.'].split('/'))
-            page_num, total_pages = map(int, match['page No.'].split('/'))
-            avg_page += page_num
-            avg_total_pages += total_pages
-            avg_total_matches += total_matches
-            avg_match_pos += match_position
-            for player in match['players']:
-                if player['account_id'] == user_uid:
-                    heroes_list.append(player['hero'])
+        user_elo += match['match_elo']
+        total_percentile += match['percentile']
+        match_position, total_matches = map(int, match['match No.'].split('/'))
+        page_num, total_pages = map(int, match['page No.'].split('/'))
+        avg_page += page_num
+        avg_total_pages += total_pages
+        avg_total_matches += total_matches
+        avg_match_pos += match_position
+        for player in match['players']:
+            if player['account_id'] == user_uid:
+                heroes_list.append(player['hero'])
 
     user_avgelo = round(user_elo/user_matches_count)
     avg_percentile = round(total_percentile/user_matches_count, 2)
