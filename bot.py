@@ -220,8 +220,8 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_matchids = get_matchids_foruser(5160729145)
 
         user_matches = [get_match_data(match_id) for match_id in user_matchids]
-        matches_len, meatches_perc, matches_elo = test_st(user_matches)
-        await update.message.reply_text(f"total matches:{matches_len}, perc: {meatches_perc}, elo: {matches_elo}")
+        matches_ids, meatches_perc, matches_elo = test_st(user_matches)
+        await update.message.reply_text(f"total matches:{len(user_matches)}, perc: {meatches_perc}, elo: {matches_elo}, ids: {matches_ids}")
         user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches,
                                                                                            get_user_uid(5160729145))
         await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile,
@@ -267,7 +267,7 @@ async def test_st(user_matches):
             perc.append(match['percentile'])
             ids.append(match['match_id'])
 
-    return len(user_matches), perc, elo
+    return ids, perc, elo
 
 
 def get_user_stats(user_matches, user_uid):
@@ -277,7 +277,7 @@ def get_user_stats(user_matches, user_uid):
     avg_total_pages = 0
     avg_match_pos = 0
     avg_total_matches = 0
-    user_matches_count = len(user_matches)
+    user_matches_count = 0
     heroes_list = []
     for match in user_matches:
         if match is not None:
@@ -289,6 +289,7 @@ def get_user_stats(user_matches, user_uid):
             avg_total_pages += total_pages
             avg_total_matches += total_matches
             avg_match_pos += match_position
+            user_matches_count += 1
             for player in match['players']:
                 if player['account_id'] == user_uid:
                     heroes_list.append(player['hero'])
