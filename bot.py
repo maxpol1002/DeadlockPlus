@@ -194,7 +194,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_matchids = get_matchids_foruser(user.id)
         if user_matchids:
             user_matches = [get_match_data(match_id) for match_id in user_matchids]
-            user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches, get_user_uid(user.id), context)
+            user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches, get_user_uid(user.id))
             await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile,
                                                                  avg_top, fav_hero, avg_page, avg_pos),
                                             reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
@@ -223,7 +223,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         matches_len, meatches_perc, matches_elo = test_st(user_matches)
         await update.message.reply_text(f"total matches:{matches_len}, perc: {meatches_perc}, elo: {matches_elo}")
         user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches,
-                                                                                           get_user_uid(5160729145), context)
+                                                                                           get_user_uid(5160729145))
         await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile,
                                                              avg_top, fav_hero, avg_page, avg_pos),
                                         parse_mode=constants.ParseMode.HTML)
@@ -268,7 +268,7 @@ def test_st(user_matches):
     return len(user_matches), perc, elo
 
 
-def get_user_stats(user_matches, user_uid, context: ContextTypes.DEFAULT_TYPE):
+def get_user_stats(user_matches, user_uid):
     i = 0
     user_elo = 0
     total_percentile = 0.0
@@ -292,9 +292,6 @@ def get_user_stats(user_matches, user_uid, context: ContextTypes.DEFAULT_TYPE):
             for player in match['players']:
                 if player['account_id'] == user_uid:
                     heroes_list.append(player['hero'])
-
-        else:
-            await context.bot.send_message(648380859, f"match is none: {i}")
 
     user_avgelo = round(user_elo/user_matches_count)
     avg_percentile = round(total_percentile/user_matches_count, 2)
