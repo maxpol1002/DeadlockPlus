@@ -188,3 +188,18 @@ def convert_region(region: int) -> str:
     }
 
     return regions[region]
+
+
+def convert_match_mode(match_mode: int) -> str:
+    match_modes = {
+        -1: "",
+        0: "Invalid",
+        1: "Unranked",
+        2: "PrivateLobby",
+        3: "CoopBot",
+        4: "Ranked",
+        5: "ServerTest",
+        6: "Tutorial"
+    }
+
+    return match_modes[match_mode]
