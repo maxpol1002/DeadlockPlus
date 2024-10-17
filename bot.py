@@ -216,6 +216,16 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif user_input == "asdasdasd" and user.id == 648380859:
         await context.bot.send_message(648380859, get_current_minmaxelo())
 
+    elif user_input == "hui" and user.id == 648380859:
+        user_matchids = get_matchids_foruser(5160729145)
+
+        user_matches = [get_match_data(match_id) for match_id in user_matchids]
+        user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches,
+                                                                                           get_user_uid(user.id))
+        await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile,
+                                                             avg_top, fav_hero, avg_page, avg_pos),
+                                        parse_mode=constants.ParseMode.HTML)
+
 
 async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
