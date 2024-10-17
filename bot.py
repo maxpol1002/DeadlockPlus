@@ -4,7 +4,7 @@ import telegram.error
 from telegram import Update, ReplyKeyboardMarkup, constants, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, ConversationHandler
 
-from dlfunc import get_active_matches, filter_match_data, get_hero_icon, get_current_minmaxelo, get_user_hero
+from dlfunc import get_active_matches, filter_match_data, get_hero_icon, get_current_minmaxelo, get_user_hero, convert_match_mode
 from steamfunc import get_user_commid, commid_to_usteamid, is_steam_valid
 from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid
 
@@ -287,6 +287,11 @@ def create_match_stats(match_data, user_uid):
     player_hero = get_user_hero(match_data, user_uid)
     message = "===========================\n"
     message += f"<b>Match</b> | <b>{match_data['match_id']}</b> | <b>{match_data['start_time']}</b>\n"
+
+    if match_data.get('match_mode') is not None:
+        message += "————————————————\n"
+        message += f"<b>Mode</b>: {convert_match_mode(match_data['match_mode'])}\n"
+
     message += f"<b>Region</b>: {match_data['region']}\n"
     message += "————————————————\n"
     message += f"<b>Hero</b>: {get_hero_icon(player_hero)} <b>{player_hero}</b>\n"
