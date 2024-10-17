@@ -194,7 +194,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_matchids = get_matchids_foruser(user.id)
         if user_matchids:
             user_matches = [get_match_data(match_id) for match_id in user_matchids]
-            user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches, get_user_uid(user.id))
+            user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches, get_user_uid(user.id), context)
             await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile,
                                                                  avg_top, fav_hero, avg_page, avg_pos),
                                             reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
@@ -223,7 +223,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         matches_len, meatches_perc, matches_elo = test_st(user_matches)
         await update.message.reply_text(f"total matches:{matches_len}, perc: {meatches_perc}, elo: {matches_elo}")
         user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches,
-                                                                                           get_user_uid(5160729145))
+                                                                                           get_user_uid(5160729145), context)
         await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile,
                                                              avg_top, fav_hero, avg_page, avg_pos),
                                         parse_mode=constants.ParseMode.HTML)
