@@ -257,19 +257,20 @@ def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_he
     return msg
 
 
-def test_st(user_matches):
+async def test_st(user_matches):
     perc = []
     elo = []
+    ids = []
     for match in user_matches:
         if match is not None:
             elo.append(match['match_elo'])
             perc.append(match['percentile'])
+            ids.append(match['match_id'])
 
     return len(user_matches), perc, elo
 
 
 def get_user_stats(user_matches, user_uid):
-    i = 0
     user_elo = 0
     total_percentile = 0.0
     avg_page = 0
@@ -288,7 +289,6 @@ def get_user_stats(user_matches, user_uid):
             avg_total_pages += total_pages
             avg_total_matches += total_matches
             avg_match_pos += match_position
-            i += 1
             for player in match['players']:
                 if player['account_id'] == user_uid:
                     heroes_list.append(player['hero'])
