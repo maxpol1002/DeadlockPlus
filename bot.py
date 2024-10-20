@@ -116,7 +116,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             ["◀️ Go back"]
         ]
         await update.message.reply_text("Sure, send me your match id (you can see find in the bottom-right corner). "
-                                        "Match duration must be <b>at least 3 minutes</b> for it to be searchable.",
+                                        "Match duration must be <b>at least 1 minute</b> for it to be searchable.",
                                         reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
                                         parse_mode=constants.ParseMode.HTML)
         return MATCH_ID
@@ -135,7 +135,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             match_data = filter_match_data(context.user_data["match_id"], active_matches)
             if match_data == "Match is not available":
                 msg = "Sorry, we couldn't find your match. There can be 4 reasons that explain why your match isn't appearing:\n" \
-                      "1. Your match just started. Wait 3 minutes and try again.\n" \
+                      "1. Your match just started. Wait 1 minute and try again.\n" \
                       "2. You entered wrong match id.\n" \
                       "3. Your match is already finished.\n" \
                       "4. Your match didn't reach 'watch' tab in game."
