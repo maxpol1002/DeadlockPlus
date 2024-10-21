@@ -224,8 +224,8 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                                   f"Unranked: {get_user_match_count(get_matchids_foruser(user.id), 1)}")
 
     elif user_input == "call" and user.id == 648380859:
-        first_ranked = remove_user_first_match(get_matchids_foruser(user.id), 4)
-        first_un = remove_user_first_match(get_matchids_foruser(user.id), 1)
+        first_ranked = remove_user_first_match(get_matchids_foruser(595861684), 4)
+        first_un = remove_user_first_match(get_matchids_foruser(595861684), 1)
         await context.bot.send_message(648380859, f"First ranked: {first_ranked}\nFirst unranked: {first_un}")
 
 
