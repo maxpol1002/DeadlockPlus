@@ -176,7 +176,7 @@ def get_user_match_count(user_matchids: list, match_type: int) -> int:
         query = """
             SELECT COUNT(*) FROM matches WHERE match_id = ANY(%s) AND (data ->> 'match_mode') = %s
         """
-        cursor.execute(query, (user_matchids, str(match_type)))
+        cursor.execute(query, (user_matchids, match_type))
         match_count = cursor.fetchone()[0]
 
         return match_count
