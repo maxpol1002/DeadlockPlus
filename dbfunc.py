@@ -166,6 +166,29 @@ def get_user_matchcount(useruid):
         db_conn.close()
 
 
+def get_user_matchcount_r(useruid, match_mode_value):
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+
+        query = """
+            SELECT COUNT(*)
+            FROM users, jsonb_array_elements(matches_list) AS match
+            WHERE usteamid = %s
+            AND match ? 'match_mode'
+            AND match->>'match_mode' = %s
+        """
+        cursor.execute(query, (useruid, match_mode_value))
+        matches_count = cursor.fetchone()[0]
+
+        return matches_count
+
+    finally:
+        cursor.close()
+        db_conn.close()
+
+
+
 def remove_user_fmatch(useruid):
     try:
         db_conn = psycopg2.connect(DB_URL, sslmode="require")

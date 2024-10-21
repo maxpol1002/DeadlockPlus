@@ -6,7 +6,7 @@ from telegram.ext import ContextTypes, ConversationHandler
 
 from dlfunc import get_active_matches, filter_match_data, get_hero_icon, get_current_minmaxelo, get_user_hero, convert_match_mode
 from steamfunc import get_user_commid, commid_to_usteamid, is_steam_valid
-from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid
+from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid, get_user_matchcount_r
 
 from inline_keyboards import create_inline_matches
 
@@ -216,6 +216,9 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif user_input == "asdasdasd" and user.id == 648380859:
         await context.bot.send_message(648380859, get_current_minmaxelo())
+
+    elif user_input == "kall" and user.id == 648380859:
+        await context.bot.send_message(648380859, get_user_matchcount_r(get_user_uid(648380859), 4))
 
 
 async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
