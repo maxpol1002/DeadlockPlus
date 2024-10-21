@@ -22,7 +22,7 @@ from dbfunc import (
     if_user_has_match,
     delete_match,
     get_user_id,
-    get_match_data
+    get_match_data,
 )
 
 from steamfunc import (
@@ -43,8 +43,10 @@ async def parse_users_matches(user_uids: list, active_matches: list, context: Co
 
                 if get_user_matchcount(player['account_id']) == 10:
                     removed_match_id = remove_user_fmatch(player['account_id'])
+                    await context.bot.send_message(648380859, f"Removed match {removed_match_id} for user {player['account_id']}")
                     if not if_any_user_has_match(removed_match_id):
                         delete_match(match['match_id'])
+                        await context.bot.send_message(648380859, f"Deleted match {match['match_id']}")
 
                 update_user_matches(player['account_id'], match['match_id'])
 
