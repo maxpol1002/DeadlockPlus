@@ -166,7 +166,7 @@ def get_user_matchcount(useruid):
         db_conn.close()
 
 
-def get_user_match_count(user_matchids: list, match_type: int) -> int:
+def get_user_match_count(user_matchids: list, match_mode: int) -> int:
     if not user_matchids:
         return 0
 
@@ -176,7 +176,7 @@ def get_user_match_count(user_matchids: list, match_type: int) -> int:
         query = """
             SELECT COUNT(*) FROM matches WHERE match_id = ANY(%s) AND (data ->> 'match_mode') = %s
         """
-        cursor.execute(query, (user_matchids, str(match_type)))
+        cursor.execute(query, (user_matchids, str(match_mode)))
         match_count = cursor.fetchone()[0]
 
         return match_count
@@ -204,6 +204,26 @@ def remove_user_fmatch(useruid):
     finally:
         cursor.close()
         db_conn.close()
+
+
+def remove_user_first_match(user_matchids: list, match_mode: int):
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        query = """
+            SELECT match_id FROM matches WHERE match_id = ANY(%s) AND (data ->> 'match_mode') = %s 
+        """
+        cursor.execute(query, (user_matchids, str(match_mode)))
+        match_id = cursor.fetchone()
+        if match_id:
+            return match_id[0]
+
+        return None
+
+    finally:
+        cursor.close()
+        db_conn.close()
+
 
 
 def if_any_user_has_match(match_id):
