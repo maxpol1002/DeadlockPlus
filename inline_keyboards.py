@@ -19,9 +19,16 @@ def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
                 elif match_mode == "Unranked":
                     match_mode = 'U'
 
-                button_match_text.append([InlineKeyboardButton(f"[{match_mode}] {match_data['start_time']} "
-                                                               f"| {hero_icon} {user_hero} | ELO: {match_data['match_elo']}",
-                                                               callback_data=f"match_{match_data['match_id']}")])
+                if user_id == 648380859:
+                    button_match_text.append([InlineKeyboardButton(f"[{match_mode}] {match_data['start_time']} "
+                                                                   f"| {hero_icon} {user_hero} | ELO: {match_data['match_elo']}",
+                                                                   callback_data=f"match_{match_data['match_id']}"),
+                                              InlineKeyboardButton("123123123123123123123", callback_data="s")])
+                else:
+                    button_match_text.append([InlineKeyboardButton(f"[{match_mode}] {match_data['start_time']} "
+                                                                   f"| {hero_icon} {user_hero} | ELO: {match_data['match_elo']}",
+                                                                   callback_data=f"match_{match_data['match_id']}")])
+
             else:
                 button_match_text.append([InlineKeyboardButton(f"{match_data['start_time']} | {hero_icon} {user_hero} "
                                                                f"| ELO: {match_data['match_elo']}",
