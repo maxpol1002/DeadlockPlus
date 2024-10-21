@@ -166,7 +166,7 @@ def get_user_matchcount(useruid):
         db_conn.close()
 
 
-def get_user_r_match_count(user_matchids: list) -> int:
+def get_user_match_count(user_matchids: list, match_type: int) -> int:
     if not user_matchids:
         return 0
 
@@ -174,9 +174,9 @@ def get_user_r_match_count(user_matchids: list) -> int:
         db_conn = psycopg2.connect(DB_URL, sslmode="require")
         cursor = db_conn.cursor()
         query = """
-            SELECT COUNT(*) FROM matches WHERE match_id = ANY(%s) AND (data ->> 'match_mode') = '4'
+            SELECT COUNT(*) FROM matches WHERE match_id = ANY(%s) AND (data ->> 'match_mode') = %s
         """
-        cursor.execute(query, (user_matchids,))
+        cursor.execute(query, (user_matchids, match_type))
         match_count = cursor.fetchone()[0]
 
         return match_count
