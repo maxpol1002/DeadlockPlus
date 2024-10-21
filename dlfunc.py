@@ -193,7 +193,6 @@ def convert_region(region: int) -> str:
 
 def convert_match_mode(match_mode: int) -> str:
     match_modes = {
-        -1: "",
         0: "Invalid",
         1: "Unranked",
         2: "PrivateLobby",
