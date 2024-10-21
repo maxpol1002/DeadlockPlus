@@ -16,13 +16,14 @@ from dbfunc import (
     get_users_uids,
     insert_users_matches,
     update_user_matches,
-    get_user_matchcount,
-    remove_user_fmatch,
     if_any_user_has_match,
     if_user_has_match,
     delete_match,
     get_user_id,
     get_match_data,
+    get_user_match_count,
+    get_matchids_foruser,
+    remove_user_first_match
 )
 
 from steamfunc import (
@@ -39,11 +40,15 @@ async def parse_users_matches(user_uids: list, active_matches: list, context: Co
     for match in active_matches:
         for player in match['players']:
             if player['account_id'] in user_uids_set and not if_user_has_match(player['account_id'], match['match_id']):
+
                 await notify_user(get_user_id(player['account_id']), match['match_id'], match['match_score'], context)
 
-                if get_user_matchcount(player['account_id']) == 10:
-                    removed_match_id = remove_user_fmatch(player['account_id'])
+                user_matchids = get_matchids_foruser(get_user_id(player['account_id']))
+                if get_user_match_count(user_matchids, match['match_mode']) == 10:
+                    removed_match_id = remove_user_first_match(user_matchids, match['match_mode'], player['account_id'])
+
                     await context.bot.send_message(648380859, f"Removed match {removed_match_id} for user {player['account_id']}")
+
                     if not if_any_user_has_match(removed_match_id):
                         delete_match(removed_match_id)
                         await context.bot.send_message(648380859, f"Deleted match {removed_match_id}")

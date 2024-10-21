@@ -6,9 +6,7 @@ from telegram.ext import ContextTypes, ConversationHandler
 
 from dlfunc import get_active_matches, filter_match_data, get_hero_icon, get_current_minmaxelo, get_user_hero, convert_match_mode
 from steamfunc import get_user_commid, commid_to_usteamid, is_steam_valid
-from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid, \
-    get_user_match_count, remove_user_first_match
-
+from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid
 
 from inline_keyboards import create_inline_matches
 
@@ -218,15 +216,6 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif user_input == "asdasdasd" and user.id == 648380859:
         await context.bot.send_message(648380859, get_current_minmaxelo())
-
-    elif user_input == "kall" and user.id == 648380859:
-        await context.bot.send_message(648380859, f"Ranked: {get_user_match_count(get_matchids_foruser(user.id), 4)},"
-                                                  f"Unranked: {get_user_match_count(get_matchids_foruser(user.id), 1)}")
-
-    elif user_input == "call" and user.id == 648380859:
-        first_ranked = remove_user_first_match(get_matchids_foruser(595861684), 4)
-        first_un = remove_user_first_match(get_matchids_foruser(595861684), 1)
-        await context.bot.send_message(648380859, f"First ranked: {first_ranked}\nFirst unranked: {first_un}")
 
 
 async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
