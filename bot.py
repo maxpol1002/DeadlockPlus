@@ -218,7 +218,8 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(648380859, get_current_minmaxelo())
 
     elif user_input == "kall" and user.id == 648380859:
-        await context.bot.send_message(648380859, get_user_match_count(get_matchids_foruser(user.id), 4))
+        await context.bot.send_message(648380859, f"Ranked: {get_user_match_count(get_matchids_foruser(user.id), 4)},"
+                                                  f"Unranked: {get_user_match_count(get_matchids_foruser(user.id), 1)}")
 
 
 async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
