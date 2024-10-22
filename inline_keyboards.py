@@ -16,16 +16,11 @@ def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
                 elo_int = match_data['match_elo'] - matches[match_pos + 1]['match_elo']
                 elo_gain = f"+{elo_int}" if elo_int > 0 else str(elo_int)
 
-            match_mode = convert_match_mode(match_data['match_mode'])
             user_hero = get_user_hero(match_data, get_user_uid(user_id))
             hero_icon = get_hero_icon(user_hero)
-            if match_mode == "Ranked":
-                match_mode = 'R'
-            elif match_mode == "Unranked":
-                match_mode = 'U'
 
-            button_match_text.append([InlineKeyboardButton(f"[{match_mode}] {match_data['start_time']} "
-                                                           f"| {hero_icon} {user_hero} | ELO: {match_data['match_elo']} ({elo_gain})",
+            button_match_text.append([InlineKeyboardButton(f"{match_data['start_time']} | {hero_icon} {user_hero} | "
+                                                           f"ELO: {match_data['match_elo']} ({elo_gain})",
                                                            callback_data=f"match_{match_data['match_id']}")])
 
             match_pos += 1
