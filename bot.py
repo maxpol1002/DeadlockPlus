@@ -237,16 +237,18 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
     elif query.data == "get_ranked_matches":
         all_matchids = sorted(get_matchids_foruser(user_id), reverse=True)
         ranked_matches = get_user_matches_bymode(all_matchids, 4)
-        await context.bot.send_message(user_id, "<b>Ranked matches</b>:",
+        await context.bot.send_message(user_id, "<b>Ranked matches</b> ⬇️",
                                        reply_markup=create_inline_matches(ranked_matches, user_id),
                                        parse_mode=constants.ParseMode.HTML)
+        await query.answer()
 
     elif query.data == "get_unranked_matches":
         all_matchids = sorted(get_matchids_foruser(user_id), reverse=True)
         unranked_matches = get_user_matches_bymode(all_matchids, 1)
-        await context.bot.send_message(user_id, "<b>Unranked matches</b>:",
+        await context.bot.send_message(user_id, "<b>Unranked matches</b> ⬇️",
                                        reply_markup=create_inline_matches(unranked_matches, user_id),
                                        parse_mode=constants.ParseMode.HTML)
+        await query.answer()
 
 
 def get_user_matches_bymode(all_matchids, match_mode):
