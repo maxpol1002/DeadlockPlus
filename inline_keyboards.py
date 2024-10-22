@@ -6,12 +6,11 @@ from dlfunc import get_hero_icon, get_user_hero, convert_match_mode
 
 
 def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
-    user_uid = get_user_uid(user_id)
     button_match_text = []
     for match_data in matches:
         if match_data is not None:
             match_mode = convert_match_mode(match_data['match_mode'])
-            user_hero = get_user_hero(match_data, user_uid)
+            user_hero = get_user_hero(match_data, get_user_uid(user_id))
             hero_icon = get_hero_icon(user_hero)
             if match_mode == "Ranked":
                 match_mode = 'R'
@@ -23,3 +22,10 @@ def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
                                                            callback_data=f"match_{match_data['match_id']}")])
 
     return InlineKeyboardMarkup(button_match_text)
+
+
+def match_mode_choice() -> InlineKeyboardMarkup:
+    modes = [[InlineKeyboardButton("Ranked", callback_data="get_ranked_matches"),
+              InlineKeyboardButton("Unranked", callback_data="get_unranked_matches")]]
+
+    return InlineKeyboardMarkup(modes)

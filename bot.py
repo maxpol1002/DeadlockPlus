@@ -8,7 +8,7 @@ from dlfunc import get_active_matches, filter_match_data, get_hero_icon, get_cur
 from steamfunc import get_user_commid, commid_to_usteamid, is_steam_valid
 from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid
 
-from inline_keyboards import create_inline_matches
+from inline_keyboards import create_inline_matches, match_mode_choice
 
 
 MATCH_ID = 1
@@ -195,7 +195,8 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_matchids = get_matchids_foruser(user.id)
         if user_matchids:
             user_matches = [get_match_data(match_id) for match_id in user_matchids]
-            user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches, get_user_uid(user.id))
+            user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches,
+                                                                                               get_user_uid(user.id))
             await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile,
                                                                  avg_top, fav_hero, avg_page, avg_pos),
                                             reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
@@ -216,6 +217,9 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif user_input == "asdasdasd" and user.id == 648380859:
         await context.bot.send_message(648380859, get_current_minmaxelo())
+
+    elif user_input == "hz" and user.id == 648380859:
+        await context.bot.send_message(648380859, "⬇️ Choose match mode ⬇️", reply_markup=match_mode_choice())
 
 
 async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
