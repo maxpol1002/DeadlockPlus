@@ -98,7 +98,7 @@ async def parse_matches_job(context: ContextTypes.DEFAULT_TYPE):
 
 
 async def start_job(context: ContextTypes.DEFAULT_TYPE):
-    context.job_queue.run_repeating(parse_matches_job, interval=120, first=0)
+    context.job_queue.run_repeating(parse_matches_job, interval=60, first=0)
 
 
 def get_match_datetime(timestamp):
