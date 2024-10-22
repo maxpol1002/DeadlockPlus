@@ -219,13 +219,14 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(648380859, get_current_minmaxelo())
 
     elif user_input == "hz" and user.id == 648380859:
-        await context.bot.send_message(648380859, "⬇️ Choose match mode ⬇️", reply_markup=match_mode_choice())
+        await context.bot.send_message(648380859, "⬇️ <b>Choose match mode</b> ⬇️", reply_markup=match_mode_choice(),
+                                       parse_mode=constants.ParseMode.HTML)
 
 
 async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
+    user_id = query.message.chat.id
     if query.data.startswith("match"):
-        user_id = query.message.chat.id
         match_id = int(query.data.split('_')[1])
         match_data = get_match_data(match_id)
         match_stats = create_match_stats(match_data, get_user_uid(user_id))
@@ -233,6 +234,29 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         await context.bot.send_message(user_id, match_stats, parse_mode=constants.ParseMode.HTML)
         await query.answer()
 
+    elif query.data == "get_ranked_matches":
+        all_matchids = sorted(get_matchids_foruser(user_id), reverse=True)
+        ranked_matches = get_user_matches_bymode(all_matchids, 4)
+        await context.bot.send_message(user_id, "<b>Ranked matches</b>:",
+                                       reply_markup=create_inline_matches(ranked_matches, user_id),
+                                       parse_mode=constants.ParseMode.HTML)
+
+    elif query.data == "get_unranked_matches":
+        all_matchids = sorted(get_matchids_foruser(user_id), reverse=True)
+        unranked_matches = get_user_matches_bymode(all_matchids, 1)
+        await context.bot.send_message(user_id, "<b>Unranked matches</b>:",
+                                       reply_markup=create_inline_matches(unranked_matches, user_id),
+                                       parse_mode=constants.ParseMode.HTML)
+
+
+def get_user_matches_bymode(all_matchids, match_mode):
+    user_matches = []
+    for match_id in all_matchids:
+        match_data = get_match_data(match_id)
+        if match_data['match_mode'] == match_mode:
+            user_matches.append(match_data)
+
+    return user_matches
 
 def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos):
     msg = f"<b>{user_name} Stats</b>\n"
