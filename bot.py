@@ -176,15 +176,8 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
         user_matchids = get_matchids_foruser(user.id)
         if user_matchids:
-            sorted_matchids = sorted(user_matchids, reverse=True)
-            user_matches = [get_match_data(match_id) for match_id in sorted_matchids]
-            if user_matches:
-                await update.message.reply_text(f"<b>Your {len(user_matches)} last matches</b> ⬇️",
-                                                reply_markup=create_inline_matches(user_matches, user.id),
-                                                parse_mode=constants.ParseMode.HTML)
-            else:
-                await update.message.reply_text("You have no observed matches at this moment.",
-                                                reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+            await context.bot.send_message(user.id, "⬇️ <b>Choose match mode</b> ⬇️", reply_markup=match_mode_choice(),
+                                           parse_mode=constants.ParseMode.HTML)
 
         else:
             await update.message.reply_text("You have no observed matches at this moment.",
@@ -192,15 +185,25 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif user_input == "📊 My Stats":
         user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
-        user_matchids = get_matchids_foruser(user.id)
-        if user_matchids:
-            user_matches = [get_match_data(match_id) for match_id in user_matchids]
-            user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(user_matches,
-                                                                                               get_user_uid(user.id))
-            await update.message.reply_text(construct_user_stats(user_name, user_avgelo, avg_percentile,
-                                                                 avg_top, fav_hero, avg_page, avg_pos),
-                                            reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
-                                            parse_mode=constants.ParseMode.HTML)
+        all_matchids = sorted(get_matchids_foruser(user.id), reverse=True)
+        if all_matchids:
+            ranked_matches = get_user_matches_bymode(all_matchids, 4)
+            unranked_matches = get_user_matches_bymode(all_matchids, 1)
+            if ranked_matches:
+                user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(ranked_matches,
+                                                                                                   get_user_uid(user.id))
+                await update.message.reply_text(construct_user_stats("Ranked", user_avgelo, avg_percentile,
+                                                                     avg_top, fav_hero, avg_page, avg_pos),
+                                                reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
+                                                parse_mode=constants.ParseMode.HTML)
+
+            if unranked_matches:
+                user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(unranked_matches,
+                                                                                                   get_user_uid(user.id))
+                await update.message.reply_text(construct_user_stats("Unranked", user_avgelo, avg_percentile,
+                                                                     avg_top, fav_hero, avg_page, avg_pos),
+                                                reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
+                                                parse_mode=constants.ParseMode.HTML)
 
         else:
             await update.message.reply_text("You have no observed matches at this moment.",
@@ -217,10 +220,6 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif user_input == "asdasdasd" and user.id == 648380859:
         await context.bot.send_message(648380859, get_current_minmaxelo())
-
-    elif user_input == "hz" and user.id == 648380859:
-        await context.bot.send_message(648380859, "⬇️ <b>Choose match mode</b> ⬇️", reply_markup=match_mode_choice(),
-                                       parse_mode=constants.ParseMode.HTML)
 
 
 async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -260,8 +259,9 @@ def get_user_matches_bymode(all_matchids, match_mode):
 
     return user_matches
 
-def construct_user_stats(user_name, user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos):
-    msg = f"<b>{user_name} Stats</b>\n"
+
+def construct_user_stats(match_mode, user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos):
+    msg = f"<b>{match_mode} Stats</b>\n"
     msg += "————————————————\n"
     msg += f"<b>ELO</b>: {user_avgelo}\n"
     msg += f"<b>Top</b>: {avg_top}%\n"
