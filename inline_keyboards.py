@@ -7,15 +7,15 @@ from dlfunc import get_hero_icon, get_user_hero, convert_match_mode
 
 def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
     button_match_text = []
-    tmp_elo = None
+    match_pos = 0
     for match_data in matches:
         if match_data is not None:
-            if tmp_elo is None:
+            if match_pos == len(matches) - 1:
                 elo_gain = '-'
             else:
-                elo_gain = str(match_data['match_elo'] - tmp_elo)
+                elo_int = match_data['match_elo'] - matches[match_pos + 1]['match_elo']
+                elo_gain = f"+{elo_int}" if elo_int > 0 else str(elo_int)
 
-            tmp_elo = match_data['match_elo']
             match_mode = convert_match_mode(match_data['match_mode'])
             user_hero = get_user_hero(match_data, get_user_uid(user_id))
             hero_icon = get_hero_icon(user_hero)
@@ -25,8 +25,10 @@ def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
                 match_mode = 'U'
 
             button_match_text.append([InlineKeyboardButton(f"[{match_mode}] {match_data['start_time']} "
-                                                           f"| {hero_icon} {user_hero} | ELO: {match_data['match_elo']}",
+                                                           f"| {hero_icon} {user_hero} | ELO: {match_data['match_elo']} ({elo_gain})",
                                                            callback_data=f"match_{match_data['match_id']}")])
+
+            match_pos += 1
 
     return InlineKeyboardMarkup(button_match_text)
 
