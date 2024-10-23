@@ -1,7 +1,6 @@
 from datetime import datetime
 import math
 import pytz
-import time
 
 from telegram.ext import ContextTypes
 
@@ -90,7 +89,6 @@ def filter_data(match_data, active_matches):
 
 
 async def parse_matches_job(context: ContextTypes.DEFAULT_TYPE):
-    start_time = time.time()
     active_matches = get_active_matches()
     users_uids = get_users_uids()
     users_matches = await parse_users_matches(users_uids, active_matches, context)
@@ -98,13 +96,9 @@ async def parse_matches_job(context: ContextTypes.DEFAULT_TYPE):
         filtered_match_data = [filter_data(match, active_matches) for match in users_matches]
         insert_users_matches(filtered_match_data)
 
-    end_time = time.time()
-    elapsed_time = end_time - start_time
-    await context.bot.send_message(648380859, f"Elapsed time: {elapsed_time:.2f} secs")
-
 
 async def start_job(context: ContextTypes.DEFAULT_TYPE):
-    context.job_queue.run_repeating(parse_matches_job, interval=40, first=0)
+    context.job_queue.run_repeating(parse_matches_job, interval=20, first=0)
 
 
 def get_match_datetime(timestamp):
