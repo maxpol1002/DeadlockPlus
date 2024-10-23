@@ -185,10 +185,11 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif user_input == "📊 My Stats":
         user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
-        all_matchids = sorted(get_matchids_foruser(user.id), reverse=True)
+        all_matchids = get_matchids_foruser(user.id)
         if all_matchids:
-            ranked_matches = get_user_matches_bymode(all_matchids, 4)
-            unranked_matches = get_user_matches_bymode(all_matchids, 1)
+            all_matchids_s = sorted(all_matchids, reverse=True)
+            ranked_matches = get_user_matches_bymode(all_matchids_s, 4)
+            unranked_matches = get_user_matches_bymode(all_matchids_s, 1)
             if ranked_matches:
                 user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(ranked_matches,
                                                                                                    get_user_uid(user.id))
