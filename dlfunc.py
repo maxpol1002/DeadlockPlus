@@ -70,8 +70,11 @@ def get_user_hero(match_data, user_uid) -> str:
 def get_active_matches() -> list:
     url = "https://data.deadlock-api.com/active-matches"
     response = requests.get(url)
-    active_matches = response.json()
-    return active_matches
+    if response.status_code == 200:
+        active_matches = response.json()
+        return active_matches
+
+    return []
 
 
 def sort_matches_byelo(matches, reverse: bool):
