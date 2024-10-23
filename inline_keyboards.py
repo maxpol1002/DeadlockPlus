@@ -2,7 +2,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from dbfunc import get_user_uid
 
-from dlfunc import get_hero_icon, get_user_hero, convert_match_mode
+from dlfunc import get_hero_icon, get_user_hero
 
 
 def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
@@ -14,7 +14,12 @@ def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
                 elo_gain = '-'
             else:
                 elo_int = match_data['match_elo'] - matches[match_pos + 1]['match_elo']
-                elo_gain = f"+{elo_int}" if elo_int > 0 else str(elo_int)
+                if elo_int < -250:
+                    elo_gain = '-'
+                elif elo_int > 0:
+                    elo_gain = f"+{elo_int}"
+                else:
+                    elo_gain = str(elo_int)
 
             user_hero = get_user_hero(match_data, get_user_uid(user_id))
             hero_icon = get_hero_icon(user_hero)

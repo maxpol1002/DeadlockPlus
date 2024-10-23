@@ -278,6 +278,7 @@ def construct_user_stats(match_mode, user_avgelo, avg_percentile, avg_top, fav_h
 
 
 def get_user_stats(user_matches, user_uid):
+    max_elo = max(match['match_elo'] for match in user_matches if match is not None)
     user_elo = 0
     total_percentile = 0.0
     avg_page = 0
@@ -287,7 +288,7 @@ def get_user_stats(user_matches, user_uid):
     user_matches_count = 0
     heroes_list = []
     for match in user_matches:
-        if match is not None:
+        if match is not None and max_elo - match['match_elo'] <= 300:
             user_elo += match['match_elo']
             total_percentile += match['percentile']
             match_position, total_matches = map(int, match['match No.'].split('/'))
