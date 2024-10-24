@@ -279,7 +279,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
             "2300": "TOP 1%",
             "1500": "TOP 5%",
             "1": "All matches",
-            "elo": "Your elo"
+            "elo": "Your ELO"
         }
 
         if elo_max_q.isdigit() and elo_min_q.isdigit():
@@ -308,6 +308,9 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
             await context.bot.send_message(user_id, "You have no tracked games so we can't use your elo. "
                                                     "Choose different option.")
 
+        await query.answer()
+
+    elif query.data == "do_nothing":
         await query.answer()
 
 
