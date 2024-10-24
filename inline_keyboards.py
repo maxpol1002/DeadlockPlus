@@ -49,8 +49,8 @@ def create_hero_winrates(heroes_wr) -> InlineKeyboardMarkup:
         hero["wr"] = round((hero["wins"] / (hero["wins"] + hero["losses"])) * 100, 2)
 
     heroes_wr.sort(key=lambda h: h["wr"], reverse=True)
-    tmp = []
     heroes_len = len(heroes_wr)
+
     for i in range(int(heroes_len / 2)):
         hero_1_name = get_hero_by_id(all_heroes, heroes_wr[i]["hero_id"])
         hero_1_icon = get_hero_icon(hero_1_name)
@@ -61,5 +61,20 @@ def create_hero_winrates(heroes_wr) -> InlineKeyboardMarkup:
                              InlineKeyboardButton(f"{hero_2_icon} {hero_2_name} - {heroes_wr[i + int(heroes_len/2)]['wr']}%",
                                                   callback_data="do_nothing")])
 
+    if heroes_len % 2 != 0:
+        hero_name = get_hero_by_id(all_heroes, heroes_wr[-1])
+        hero_icon = get_hero_icon(hero_name)
+        hero_wr_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {heroes_wr[-1]['wr']}%",
+                                                  callback_data="do_nothing")])
+
     return InlineKeyboardMarkup(hero_wr_text)
+
+
+def lobby_rank_choice() -> InlineKeyboardMarkup:
+    ranks = [[InlineKeyboardButton("TOP 1%", callback_data="lobby_2800_2300"),
+              InlineKeyboardButton("TOP 5%", callback_data="lobby_2800_1500")],
+             [InlineKeyboardButton("All", callback_data="lobby_2800_0"),
+              InlineKeyboardButton("Your ELO", callback_data=f"lobby_user_elo")]]
+
+    return InlineKeyboardMarkup(ranks)
 

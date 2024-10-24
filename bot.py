@@ -1,5 +1,8 @@
 from collections import Counter
 
+from datetime import datetime, timedelta
+import pytz
+
 import telegram.error
 from telegram import Update, ReplyKeyboardMarkup, constants, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, ConversationHandler
@@ -8,7 +11,7 @@ from dlfunc import get_active_matches, filter_match_data, get_hero_icon, get_cur
 from steamfunc import get_user_commid, commid_to_usteamid, is_steam_valid
 from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid
 
-from inline_keyboards import create_inline_matches, match_mode_choice, create_hero_winrates
+from inline_keyboards import create_inline_matches, match_mode_choice, create_hero_winrates, lobby_rank_choice
 
 
 MATCH_ID = 1
@@ -64,9 +67,21 @@ async def ua_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def hero_winrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id == 648380859:
-        heroes_wr = get_hero_winrates(1000, 2000, 1729672108, 1729769495)
-        if heroes_wr:
-            await update.message.reply_text("Winrates:", reply_markup=create_hero_winrates(heroes_wr))
+        await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice())
+
+
+def get_user_avg_elo(user_id):
+    all_matchids = get_matchids_foruser(user_id)
+    if all_matchids:
+        user_matches = [get_match_data(match_id) for match_id in all_matchids]
+        if user_matches:
+            total_elo = 0
+            for match_data in user_matches:
+                total_elo += match_data["match_elo"]
+
+            return int(total_elo / len(user_matches))
+
+    return None
 
 
 async def format_match_data(filtered_data) -> str:
@@ -255,6 +270,33 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         await context.bot.send_message(user_id, "<b>Unranked matches</b> ⬇️",
                                        reply_markup=create_inline_matches(unranked_matches, user_id),
                                        parse_mode=constants.ParseMode.HTML)
+        await query.answer()
+
+    elif query.data.startswith("lobby"):
+        elo_max_q = query.data.split('_')[1]
+        elo_min_q = query.data.split('_')[2]
+
+        if elo_max_q.isdigit() and elo_min_q.isdigit():
+            elo_max, elo_min = int(elo_max_q), int(elo_min_q)
+        else:
+            user_avg_elo = get_user_avg_elo(user_id)
+
+            elo_max = user_avg_elo + 200 if user_avg_elo else 0
+            elo_min = user_avg_elo - 200 if user_avg_elo else 0
+
+        current_timestamp = int(datetime.utcnow().timestamp())
+        week_ago_timestamp = int((datetime.utcnow() - timedelta(weeks=1)).timestamp())
+
+        kyiv_tz = pytz.timezone('Europe/Kyiv')
+        current_time_eest = datetime.fromtimestamp(current_timestamp, kyiv_tz).strftime("%d/%m")
+        week_ago_time_eest = datetime.fromtimestamp(week_ago_timestamp, kyiv_tz).strftime("%d/%m")
+
+        if elo_max != 0 and elo_min != 0:
+            hero_wrs = get_hero_winrates(elo_min, elo_max, week_ago_timestamp, current_timestamp)
+            if hero_wrs:
+                await context.bot.send_message(user_id, f"Heroes winrates ({week_ago_time_eest} - {current_time_eest})",
+                                               reply_markup=create_hero_winrates(hero_wrs))
+
         await query.answer()
 
 
