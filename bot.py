@@ -65,7 +65,8 @@ async def ua_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def hero_winrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id == 648380859:
         heroes_wr = get_hero_winrates(1000, 2000, 1729672108, 1729769495)
-        await update.message.reply_text("Winrates:", reply_markup=create_hero_winrates(heroes_wr))
+        if heroes_wr:
+            await update.message.reply_text("Winrates:", reply_markup=create_hero_winrates(heroes_wr))
 
 
 async def format_match_data(filtered_data) -> str:
