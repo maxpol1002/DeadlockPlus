@@ -1,3 +1,5 @@
+import math
+
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from dbfunc import get_user_uid
@@ -48,12 +50,17 @@ def create_hero_winrates(heroes_wr) -> InlineKeyboardMarkup:
 
     heroes_wr.sort(key=lambda h: h["wr"], reverse=True)
     tmp = []
-
-    for i in range(len(heroes_wr)):
+    heroes_len = len(heroes_wr)
+    for i in range(heroes_len):
         hero_name = get_hero_by_id(all_heroes, heroes_wr[i]["hero_id"])
         hero_icon = get_hero_icon(hero_name)
-        tmp.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {heroes_wr[i]['wr']}%", callback_data="do_nothing"))
-        if i == 0 or i == 2 or i % 3 == 0:
+        if i % 2 == 0:
+            tmp.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {heroes_wr[i]['wr']}%",
+                                            callback_data="do_nothing"))
+        else:
+            tmp.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {heroes_wr[math.floor(heroes_len/2 + i)]['wr']}%",
+                                            callback_data="do_nothing"))
+        if i % 2 == 0 and i != 0:
             hero_wr_text.append(tmp)
             tmp = []
 
