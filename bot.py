@@ -66,8 +66,8 @@ async def ua_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def hero_winrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id == 648380859:
-        await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice())
+    await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice())
+    await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened winrates")
 
 
 def get_user_avg_elo(user_id):
