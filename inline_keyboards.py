@@ -53,7 +53,7 @@ def create_hero_winrates(heroes_wr) -> InlineKeyboardMarkup:
         hero_name = get_hero_by_id(all_heroes, heroes_wr[i]["hero_id"])
         hero_icon = get_hero_icon(hero_name)
         tmp.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {heroes_wr[i]['wr']}%", callback_data="do_nothing"))
-        if i == 0 or i % 2 == 0 or i % 3 == 0:
+        if i == 0 or i == 2 or i % 3 == 0:
             hero_wr_text.append(tmp)
             tmp = []
 
