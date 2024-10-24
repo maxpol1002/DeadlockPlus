@@ -275,6 +275,12 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
     elif query.data.startswith("lobby"):
         elo_max_q = query.data.split('_')[1]
         elo_min_q = query.data.split('_')[2]
+        lobby_type = {
+            "2300": "TOP 1%",
+            "1500": "TOP 5%",
+            "1": "All matches",
+            "elo": "Your elo"
+        }
 
         if elo_max_q.isdigit() and elo_min_q.isdigit():
             elo_max, elo_min = int(elo_max_q), int(elo_min_q)
@@ -294,8 +300,13 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         if elo_max != 0 and elo_min != 0:
             hero_wrs = get_hero_winrates(elo_min, elo_max, week_ago_timestamp, current_timestamp)
             if hero_wrs:
-                await context.bot.send_message(user_id, f"Heroes winrates ({week_ago_time_eest} - {current_time_eest})",
-                                               reply_markup=create_hero_winrates(hero_wrs))
+                await context.bot.send_message(user_id, f"Heroes winrates <b>({week_ago_time_eest} - {current_time_eest})</b> "
+                                                        f"- <b>{lobby_type[elo_min_q]}</b>",
+                                                        reply_markup=create_hero_winrates(hero_wrs),
+                                                        parse_mode=constants.ParseMode.HTML)
+        else:
+            await context.bot.send_message(user_id, "You have no tracked games so we can't use your elo. "
+                                                    "Choose different option.")
 
         await query.answer()
 
