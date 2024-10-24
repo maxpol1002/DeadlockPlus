@@ -29,7 +29,7 @@ def get_hero_by_id(all_heroes, hero_id: int) -> str or None:
         if hero['id'] == hero_id:
             return hero['name']
 
-    return None
+    return " "
 
 
 def get_hero_icon(hero_name: str) -> str:
