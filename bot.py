@@ -321,7 +321,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         message = f"————————————————\n"
         message += f"{hero_icon} <b>{hero_name} Stats</b>\n"
         message += f"————————————————\n"
-        message += f"<b>Winrate</b>: {hero_winrate}%"
+        message += f"<b>Winrate</b>: {hero_winrate}%\n"
         message += f"<b>Total games</b>: {hero_wins + hero_losses}\n"
         message += f"<b>Wins</b>: {hero_wins}\n"
         message += f"<b>Losses</b>: {hero_losses}\n"
