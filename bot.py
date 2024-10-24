@@ -313,8 +313,8 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
     elif query.data.startswith("hero"):
         hero_data = query.data.split('_')
         hero_name = hero_data[1]
-        hero_wins = hero_data[2]
-        hero_losses = hero_data[3]
+        hero_wins = int(hero_data[2])
+        hero_losses = int(hero_data[3])
         hero_winrate = hero_data[4]
         hero_icon = get_hero_icon(hero_name)
 
