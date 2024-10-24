@@ -58,7 +58,7 @@ def create_hero_winrates(heroes_wr) -> InlineKeyboardMarkup:
             tmp.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {heroes_wr[i]['wr']}%",
                                             callback_data="do_nothing"))
         else:
-            tmp.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {heroes_wr[math.floor(heroes_len/2 + i)]['wr']}%",
+            tmp.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {heroes_wr[math.floor(heroes_len/2 + math.floor(i))]['wr']}%",
                                             callback_data="do_nothing"))
         if i % 2 == 0 and i != 0:
             hero_wr_text.append(tmp)
