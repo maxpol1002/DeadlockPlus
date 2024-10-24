@@ -77,6 +77,17 @@ def get_active_matches() -> list:
     return []
 
 
+def get_hero_winrates(min_elo, max_elo, min_ts, max_ts):
+    url = f"https://analytics.deadlock-api.com/v1/hero-win-loss-stats?" \
+          f"min_match_score={min_elo}&max_match_score={max_elo}&min_unix_timestamp={min_ts}&max_unix_timestamp={max_ts}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        hero_winrates = response.json()
+        return hero_winrates
+
+    return []
+
+
 def sort_matches_byelo(matches, reverse: bool):
     if reverse:
         sorted_matches = sorted(matches, key=lambda x: x['match_score'], reverse=True)

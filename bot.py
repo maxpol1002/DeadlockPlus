@@ -4,11 +4,11 @@ import telegram.error
 from telegram import Update, ReplyKeyboardMarkup, constants, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, ConversationHandler
 
-from dlfunc import get_active_matches, filter_match_data, get_hero_icon, get_current_minmaxelo, get_user_hero, convert_match_mode
+from dlfunc import get_active_matches, filter_match_data, get_hero_icon, get_current_minmaxelo, get_user_hero, convert_match_mode, get_hero_winrates
 from steamfunc import get_user_commid, commid_to_usteamid, is_steam_valid
 from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid
 
-from inline_keyboards import create_inline_matches, match_mode_choice
+from inline_keyboards import create_inline_matches, match_mode_choice, create_hero_winrates
 
 
 MATCH_ID = 1
@@ -60,6 +60,12 @@ async def ua_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
     await update.message.reply_text("Join ukrainian channel! t.me/Deadlock_UA_News",
                                     reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+
+
+async def hero_winrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.effective_user.id == 648380859:
+        heroes_wr = get_hero_winrates(1000, 2000, 1728548900, 4070908800)
+        await update.message.reply_text("Winrates:", reply_markup=create_hero_winrates(heroes_wr))
 
 
 async def format_match_data(filtered_data) -> str:

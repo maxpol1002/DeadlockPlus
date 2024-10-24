@@ -2,7 +2,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from dbfunc import get_user_uid
 
-from dlfunc import get_hero_icon, get_user_hero
+from dlfunc import get_hero_icon, get_user_hero, get_all_heroes, get_hero_by_id
 
 
 def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
@@ -38,3 +38,16 @@ def match_mode_choice() -> InlineKeyboardMarkup:
               InlineKeyboardButton("Unranked", callback_data="get_unranked_matches")]]
 
     return InlineKeyboardMarkup(modes)
+
+
+def create_hero_winrates(heroes_wr) -> InlineKeyboardMarkup:
+    hero_wr_text = []
+    all_heroes = get_all_heroes()
+    for hero in heroes_wr:
+        hero_name = get_hero_by_id(all_heroes, hero["hero_id"])
+        hero_icon = get_hero_icon(hero_name)
+        hero_wr = round(hero["wins"] / hero["losses"], 2)
+        hero_wr_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {hero_wr}")])
+
+    return InlineKeyboardMarkup(hero_wr_text)
+
