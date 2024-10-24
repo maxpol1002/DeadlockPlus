@@ -9,7 +9,7 @@ from telegram.ext import (
     CallbackQueryHandler
 )
 
-from bot import start, message_handler, match_id_handler, faq, end_conv, ua_tg, registration_handler, callback_data_handler
+from bot import start, message_handler, match_id_handler, faq, end_conv, ua_tg, registration_handler, callback_data_handler, hero_winrates
 
 from matches_parsing import start_job
 
@@ -27,7 +27,11 @@ if __name__ == '__main__':
             REG: [MessageHandler(filters.TEXT & ~filters.COMMAND, registration_handler)]
         },
         fallbacks=[
-            MessageHandler(filters.Command("start") | filters.Command("faq") | filters.Command("ua_tg"), end_conv)
+            MessageHandler(filters.Command("start") |
+                           filters.Command("faq") |
+                           filters.Command("ua_tg") |
+                           filters.Command("hero_winrates"),
+                           end_conv)
         ]
     )
 
@@ -36,6 +40,7 @@ if __name__ == '__main__':
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("faq", faq))
     application.add_handler(CommandHandler("ua_tg", ua_tg))
+    application.add_handler(CommandHandler("hero_winrates", hero_winrates))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
     application.add_handler(CallbackQueryHandler(callback_data_handler))
     application.job_queue.run_once(start_job, when=0)
