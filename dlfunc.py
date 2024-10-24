@@ -29,7 +29,7 @@ def get_hero_by_id(all_heroes, hero_id: int) -> str or None:
         if hero['id'] == hero_id:
             return hero['name']
 
-    return " "
+    return "Unknown"
 
 
 def get_hero_icon(hero_name: str) -> str:
@@ -58,7 +58,7 @@ def get_hero_icon(hero_name: str) -> str:
         "Yamato": "⛩"
     }
 
-    return hero_icons.get(hero_name, "")
+    return hero_icons.get(hero_name, "?")
 
 
 def get_user_hero(match_data, user_uid) -> str:
