@@ -291,14 +291,14 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
             elo_min = user_avg_elo - 200 if user_avg_elo else 0
 
         current_timestamp = int(datetime.utcnow().timestamp())
-        week_ago_timestamp = int((datetime.utcnow() - timedelta(weeks=1)).timestamp())
-
+        # week_ago_timestamp = int((datetime.utcnow() - timedelta(weeks=1)).timestamp())
+        last_patch_timestamp = 1729803087
         kyiv_tz = pytz.timezone('Europe/Kyiv')
         current_time_eest = datetime.fromtimestamp(current_timestamp, kyiv_tz).strftime("%d/%m")
-        week_ago_time_eest = datetime.fromtimestamp(week_ago_timestamp, kyiv_tz).strftime("%d/%m")
+        week_ago_time_eest = datetime.fromtimestamp(last_patch_timestamp, kyiv_tz).strftime("%d/%m")
 
         if elo_max != 0 and elo_min != 0:
-            hero_wrs = get_hero_winrates(elo_min, elo_max, week_ago_timestamp, current_timestamp)
+            hero_wrs = get_hero_winrates(elo_min, elo_max, last_patch_timestamp, current_timestamp)
             if hero_wrs:
                 await context.bot.send_message(user_id, f"Heroes winrates <b>({week_ago_time_eest} - {current_time_eest})</b> "
                                                         f"- <b>{lobby_type[elo_min_q]}</b>",
