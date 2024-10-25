@@ -66,6 +66,13 @@ async def ua_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def hero_winrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if is_user_registered(update.effective_user.id):
+        user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
+    else:
+        user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
+
+    await update.message.reply_text("Here you can check heroes winrates since last update(24/10)",
+                                    reply_markup=ReplyKeyboardMarkup(user_menu))
     await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice())
     await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened winrates")
 
