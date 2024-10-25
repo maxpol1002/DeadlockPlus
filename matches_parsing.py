@@ -66,6 +66,10 @@ def filter_data(match_data, active_matches):
     filtered_data = {
         "match_id": match_data["match_id"],
         "match_elo": match_data["match_score"],
+        "compat_version": match_data.get("compat_version"),
+        "ranked_badge_level": match_data.get("ranked_badge_level"),
+        "ranked_rank": match_data.get("ranked_rank"),
+        "ranked_subrank": match_data.get("ranked_subrank"),
         "percentile": round(((matches_count - match_number)/matches_count) * 100, 2),
         "match No.": f"{match_number}/{matches_count}",
         "page No.": f"{page_number}/{math.ceil((matches_count - 8)/8 + 2)}",
@@ -73,6 +77,7 @@ def filter_data(match_data, active_matches):
         "start_time": f"{get_match_datetime(match_data['start_time'])}",
         "spectators:": match_data.get('spectators'),
         "match_mode": match_data.get('match_mode'),
+        "game_mode": match_data.get('game_mode'),
         "players": [
             {
                 "hero": get_hero_by_id(heroes, player["hero_id"]),
