@@ -514,11 +514,16 @@ async def match_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ConversationHandler.END
 
 
-async def notify_user(user_id, match_id, match_elo, context: ContextTypes.DEFAULT_TYPE):
+async def notify_user(user_id, match_id, match_elo, ranked_badge_level, context: ContextTypes.DEFAULT_TYPE):
     try:
-        await context.bot.send_message(user_id, f"Hey, we found you in a match <b>{match_id}</b>. "
-                                                f"Match ELO: <b>{match_elo}</b>",
-                                                parse_mode=constants.ParseMode.HTML)
+        match_rank = convert_ranked_rank(ranked_badge_level) if ranked_badge_level != 0 else ''
+        msg = f"Hey, we found you in a match <b>{match_id}</b>.\n"
+        if match_rank:
+            msg += f"Match Rank: <b>{match_rank}</b>\n"
+
+        msg += f"Match ELO: <b>{match_elo}</b>"
+        await context.bot.send_message(user_id, msg, parse_mode=constants.ParseMode.HTML)
+
     except telegram.error.BadRequest as e:
         await context.bot.send_message(648380859, f"{e} for user_id: {user_id}")
 
