@@ -7,11 +7,36 @@ import telegram.error
 from telegram import Update, ReplyKeyboardMarkup, constants, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, ConversationHandler
 
-from dlfunc import get_active_matches, filter_match_data, get_hero_icon, get_current_minmaxelo, get_user_hero, convert_match_mode, get_hero_winrates
-from steamfunc import get_user_commid, commid_to_usteamid, is_steam_valid
-from dbfunc import users_table_insert, is_user_registered, get_matchids_foruser, get_match_data, get_user_uid
+from dlfunc import (
+    get_active_matches,
+    filter_match_data,
+    get_hero_icon,
+    get_current_minmaxelo,
+    get_user_hero,
+    convert_match_mode,
+    get_hero_winrates,
+    convert_ranked_rank
+)
 
-from inline_keyboards import create_inline_matches, match_mode_choice, create_hero_winrates, lobby_rank_choice
+from steamfunc import (
+    get_user_commid,
+    commid_to_usteamid,
+    is_steam_valid
+)
+from dbfunc import (
+    users_table_insert,
+    is_user_registered,
+    get_matchids_foruser,
+    get_match_data,
+    get_user_uid
+)
+
+from inline_keyboards import (
+    create_inline_matches,
+    match_mode_choice,
+    create_hero_winrates,
+    lobby_rank_choice
+)
 
 
 MATCH_ID = 1
@@ -92,9 +117,15 @@ def get_user_avg_elo(user_id):
 
 
 async def format_match_data(filtered_data) -> str:
+    ranked_badge_level = filtered_data.get("ranked_badge_level", 0)
+    match_rank = convert_ranked_rank(ranked_badge_level) if ranked_badge_level != 0 else -1
+
     message = f"<b>Match ID:</b> {filtered_data['match_id']}\n"
     message += f"<b>Match Mode:</b> {convert_match_mode(filtered_data['match_mode'])}\n"
     message += "===========================\n"
+    if match_rank != -1:
+        message += f"<b>Match Rank</b>: {match_rank}\n"
+
     message += f"<b>Match Elo:</b> {filtered_data['match_elo']}\n"
     message += f"<b>Top:</b> {round(100 - float(filtered_data['percentile']), 2)}%\n"
     message += f"<b>Percentile:</b> {filtered_data['percentile']}%\n"
@@ -407,6 +438,9 @@ def get_user_stats(user_matches, user_uid):
 
 def create_match_stats(match_data, user_uid):
     player_hero = get_user_hero(match_data, user_uid)
+    ranked_badge_level = match_data.get("ranked_badge_level", 0)
+    match_rank = convert_ranked_rank(ranked_badge_level) if ranked_badge_level != 0 else -1
+
     message = "===========================\n"
     message += f"<b>Match</b> | <b>{match_data['match_id']}</b> | <b>{match_data['start_time']}</b>\n"
     message += f"<b>Mode</b>: {convert_match_mode(match_data['match_mode'])}\n"
@@ -414,6 +448,8 @@ def create_match_stats(match_data, user_uid):
     message += "————————————————\n"
     message += f"<b>Hero</b>: {get_hero_icon(player_hero)} <b>{player_hero}</b>\n"
     message += "————————————————\n"
+    if match_rank != -1:
+        message += f"<b>Rank</b>: {match_rank}\n"
     message += f"<b>ELO</b>: {match_data['match_elo']}\n"
     message += f"<b>Top</b>: {round((100 - float(match_data['percentile'])), 2)}% (<b>Percentile</b>: {match_data['percentile']}%)\n"
     message += f"<b>Match №</b> {match_data['match No.']} (<b>Page №</b> {match_data['page No.']})\n"

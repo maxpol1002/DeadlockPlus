@@ -148,6 +148,7 @@ def filter_match_data(match_id, active_matches) -> dict or str:
         filtered_data = {
             "match_id": data["match_id"],
             "match_mode": data["match_mode"],
+            "ranked_badge_level": data["ranked_badge_level"],
             "match_elo": data["match_score"],
             "percentile": round(((matches_count - match_number)/matches_count) * 100, 2),
             "match No.": f"{match_number}/{matches_count}",
@@ -217,3 +218,34 @@ def convert_match_mode(match_mode: int) -> str:
     }
 
     return match_modes[match_mode]
+
+
+def convert_ranked_rank(ranked_badge_level: int) -> str:
+    level_str = str(ranked_badge_level)
+    rank = int(level_str[:-1])
+    subrank = int(level_str[-1])
+    ranks = {
+        0: "Obscurus",
+        1: "Initiate",
+        2: "Seeker",
+        3: "Alchemist",
+        4: "Arcanist",
+        5: "Ritualist",
+        6: "Emissary",
+        7: "Archon",
+        8: "Oracle",
+        9: "Phantom",
+        10: "Ascendant",
+        11: "Eternus"
+    }
+
+    subranks = {
+        1: "I",
+        2: "II",
+        3: "III",
+        4: "IV",
+        5: "V",
+        6: "VI"
+    }
+
+    return f"{ranks.get(rank, 'Unknown')} {subranks.get(subrank, ' ')}"
