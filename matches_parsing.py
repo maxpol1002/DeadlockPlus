@@ -65,6 +65,7 @@ def filter_data(match_data, active_matches):
     matches_count = len(active_matches)
     filtered_data = {
         "match_id": match_data["match_id"],
+        "lobby_id": match_data.get("lobby_id"),
         "match_elo": match_data["match_score"],
         "compat_version": match_data.get("compat_version"),
         "ranked_badge_level": match_data.get("ranked_badge_level"),
