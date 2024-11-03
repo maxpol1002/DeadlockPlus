@@ -96,7 +96,7 @@ async def hero_winrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
 
-    await update.message.reply_text("Here you can check heroes winrates since last update (24/10)",
+    await update.message.reply_text("Here you can check heroes winrates since last update (28/10)",
                                     reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
     await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice())
     await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened winrates")
