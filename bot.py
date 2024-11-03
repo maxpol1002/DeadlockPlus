@@ -330,7 +330,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
 
         current_timestamp = int(datetime.utcnow().timestamp())
         # week_ago_timestamp = int((datetime.utcnow() - timedelta(weeks=1)).timestamp())
-        last_patch_timestamp = 1729803087
+        last_patch_timestamp = 1730080800
         kyiv_tz = pytz.timezone('Europe/Kyiv')
         current_time_eest = datetime.fromtimestamp(current_timestamp, kyiv_tz).strftime("%d/%m")
         # week_ago_time_eest = datetime.fromtimestamp(week_ago_timestamp, kyiv_tz).strftime("%d/%m")
