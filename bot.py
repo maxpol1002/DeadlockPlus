@@ -268,7 +268,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         else:
             await update.message.reply_text("You have no observed matches at this moment.",
-                                            reply_markup=ReplyKeyboardMarkup(user_menu))
+                                            reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
     elif user_input == "My Stats" or user_input == "My Matches" or user_input == "Search LIVE game by id" or user_input == "Registration(BETA)":
         if is_user_registered(user.id):
