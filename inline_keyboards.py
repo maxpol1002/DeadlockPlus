@@ -71,8 +71,8 @@ def create_hero_winrates(heroes_wr) -> InlineKeyboardMarkup:
 
 
 def lobby_rank_choice() -> InlineKeyboardMarkup:
-    ranks = [[InlineKeyboardButton("TOP 1%", callback_data="lobby_2800_2300"),
-              InlineKeyboardButton("TOP 5%", callback_data="lobby_2800_1500"),
+    ranks = [[InlineKeyboardButton("TOP 1%", callback_data="lobby_2800_2450"),
+              InlineKeyboardButton("TOP 5%", callback_data="lobby_2800_2000"),
               InlineKeyboardButton("All matches", callback_data="lobby_2800_1"),
               InlineKeyboardButton("Your ELO", callback_data=f"lobby_user_elo")]]
 
