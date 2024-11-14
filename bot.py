@@ -338,7 +338,6 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
 
         if elo_max != 0 and elo_min != 0:
             hero_wrs = get_hero_winrates(elo_min, elo_max, last_patch_timestamp, current_timestamp)
-            await context.bot.send_message(648380859, hero_wrs)
             if hero_wrs:
                 await context.bot.send_message(user_id, f"Heroes winrates <b>({last_patch_time_eest} - {current_time_eest})</b> "
                                                         f"- <b>{lobby_type[elo_min_q]}</b>",
