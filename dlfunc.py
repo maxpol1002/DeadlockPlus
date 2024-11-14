@@ -19,7 +19,7 @@ def get_hero_stats(hero_name: str):
 
 
 def get_all_heroes():
-    url = "https://assets.deadlock-api.com/v1/heroes?language=english"
+    url = "https://assets.deadlock-api.com/v2/heroes?language=english"
     all_heroes = requests.get(url).json()
     return all_heroes
 
