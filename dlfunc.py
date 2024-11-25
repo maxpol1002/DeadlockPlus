@@ -148,7 +148,6 @@ def filter_match_data(match_id, active_matches) -> dict or str:
         filtered_data = {
             "match_id": data["match_id"],
             "match_mode": data["match_mode"],
-            "ranked_badge_level": data["ranked_badge_level"],
             "match_elo": data["match_score"],
             "percentile": round(((matches_count - match_number)/matches_count) * 100, 2),
             "match No.": f"{match_number}/{matches_count}",
