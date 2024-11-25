@@ -16,7 +16,7 @@ def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
                 elo_gain = '-'
             else:
                 elo_int = match_data['match_elo'] - matches[match_pos + 1]['match_elo']
-                if elo_int < -250:
+                if elo_int < -200:
                     elo_gain = '-'
                 elif elo_int > 0:
                     elo_gain = f"+{elo_int}"

@@ -237,7 +237,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if user_matchids:
             all_matchids = sorted(get_matchids_foruser(user.id), reverse=True)
             standart_matches = get_user_matches_bymode(all_matchids, 1)
-            await context.bot.send_message(user.id, "<b>Your matches</b> ⬇️",
+            await context.bot.send_message(user.id, "⬇️ <b>Your matches</b> ⬇️",
                                            reply_markup=create_inline_matches(standart_matches, user.id),
                                            parse_mode=constants.ParseMode.HTML)
 
