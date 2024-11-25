@@ -33,7 +33,6 @@ from dbfunc import (
 
 from inline_keyboards import (
     create_inline_matches,
-    match_mode_choice,
     create_hero_winrates,
     lobby_rank_choice
 )
@@ -236,7 +235,10 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
         user_matchids = get_matchids_foruser(user.id)
         if user_matchids:
-            await context.bot.send_message(user.id, "⬇️ <b>Choose match mode</b> ⬇️", reply_markup=match_mode_choice(),
+            all_matchids = sorted(get_matchids_foruser(user.id), reverse=True)
+            standart_matches = get_user_matches_bymode(all_matchids, 1)
+            await context.bot.send_message(user.id, "<b>Your matches</b> ⬇️",
+                                           reply_markup=create_inline_matches(standart_matches, user.id),
                                            parse_mode=constants.ParseMode.HTML)
 
         else:
@@ -248,20 +250,12 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         all_matchids = get_matchids_foruser(user.id)
         if all_matchids:
             all_matchids_s = sorted(all_matchids, reverse=True)
-            ranked_matches = get_user_matches_bymode(all_matchids_s, 4)
-            unranked_matches = get_user_matches_bymode(all_matchids_s, 1)
-            if ranked_matches:
-                user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(ranked_matches,
-                                                                                                   get_user_uid(user.id))
-                await update.message.reply_text(construct_user_stats("Ranked", user_avgelo, avg_percentile,
-                                                                     avg_top, fav_hero, avg_page, avg_pos),
-                                                reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
-                                                parse_mode=constants.ParseMode.HTML)
+            standart_matches = get_user_matches_bymode(all_matchids_s, 1)
 
-            if unranked_matches:
-                user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(unranked_matches,
+            if standart_matches:
+                user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(standart_matches,
                                                                                                    get_user_uid(user.id))
-                await update.message.reply_text(construct_user_stats("Unranked", user_avgelo, avg_percentile,
+                await update.message.reply_text(construct_user_stats("Standart", user_avgelo, avg_percentile,
                                                                      avg_top, fav_hero, avg_page, avg_pos),
                                                 reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
                                                 parse_mode=constants.ParseMode.HTML)
@@ -292,22 +286,6 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         match_stats = create_match_stats(match_data, get_user_uid(user_id))
 
         await context.bot.send_message(user_id, match_stats, parse_mode=constants.ParseMode.HTML)
-        await query.answer()
-
-    elif query.data == "get_ranked_matches":
-        all_matchids = sorted(get_matchids_foruser(user_id), reverse=True)
-        ranked_matches = get_user_matches_bymode(all_matchids, 4)
-        await context.bot.send_message(user_id, "<b>Ranked matches</b> ⬇️",
-                                       reply_markup=create_inline_matches(ranked_matches, user_id),
-                                       parse_mode=constants.ParseMode.HTML)
-        await query.answer()
-
-    elif query.data == "get_unranked_matches":
-        all_matchids = sorted(get_matchids_foruser(user_id), reverse=True)
-        unranked_matches = get_user_matches_bymode(all_matchids, 1)
-        await context.bot.send_message(user_id, "<b>Unranked matches</b> ⬇️",
-                                       reply_markup=create_inline_matches(unranked_matches, user_id),
-                                       parse_mode=constants.ParseMode.HTML)
         await query.answer()
 
     elif query.data.startswith("lobby"):

@@ -35,11 +35,11 @@ def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(button_match_text)
 
 
-def match_mode_choice() -> InlineKeyboardMarkup:
-    modes = [[InlineKeyboardButton("Ranked", callback_data="get_ranked_matches"),
-              InlineKeyboardButton("Unranked", callback_data="get_unranked_matches")]]
-
-    return InlineKeyboardMarkup(modes)
+# def match_mode_choice() -> InlineKeyboardMarkup:
+#     modes = [[InlineKeyboardButton("Ranked", callback_data="get_ranked_matches"),
+#               InlineKeyboardButton("Unranked", callback_data="get_unranked_matches")]]
+#
+#     return InlineKeyboardMarkup(modes)
 
 
 def create_hero_winrates(heroes_wr) -> InlineKeyboardMarkup:
