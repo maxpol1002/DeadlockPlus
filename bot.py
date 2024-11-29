@@ -292,8 +292,8 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         elo_max_q = query.data.split('_')[1]
         elo_min_q = query.data.split('_')[2]
         lobby_type = {
-            "2300": "TOP 1%",
-            "2000": "TOP 5%",
+            "2500": "TOP 1%",
+            "2250": "TOP 5%",
             "1": "All matches",
             "elo": "Your ELO"
         }
