@@ -353,11 +353,19 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         all_matchids = sorted(get_matchids_foruser(query.from_user.id), reverse=True)
         standart_matches = get_user_matches_bymode(all_matchids, 1)
         if page_number == "first":
-            await query.edit_message_reply_markup(create_inline_matches(standart_matches, query.from_user.id,
-                                                                        is_first_page=True))
+            try:
+                await query.edit_message_reply_markup(create_inline_matches(standart_matches, query.from_user.id,
+                                                                            is_first_page=True))
+            except telegram.error.BadRequest:
+                pass
+
         else:
-            await query.edit_message_reply_markup(create_inline_matches(standart_matches, query.from_user.id,
-                                                                        is_first_page=False))
+            try:
+                await query.edit_message_reply_markup(create_inline_matches(standart_matches, query.from_user.id,
+                                                                            is_first_page=False))
+            except telegram.error.BadRequest:
+                pass
+
         await query.answer()
 
 
