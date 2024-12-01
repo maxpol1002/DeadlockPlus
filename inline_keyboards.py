@@ -7,22 +7,22 @@ from dbfunc import get_user_uid
 from dlfunc import get_hero_icon, get_user_hero, get_all_heroes, get_hero_by_id
 
 
-def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
+def create_inline_matches(all_matches, user_id, is_first_page) -> InlineKeyboardMarkup:
     button_match_text = []
+    all_matches_count = len(all_matches)
+    matches = all_matches[:10] if is_first_page else all_matches[10:]
+    page_match_count = len(matches)
     match_pos = 0
-    matches_count = len(matches)
     for match_data in matches:
         if match_data is not None:
-            if match_pos == matches_count - 1:
+            if (match_pos == page_match_count - 1 and not is_first_page) or (match_pos == page_match_count - 1 and is_first_page and all_matches_count <= 10):
                 elo_gain = '-'
+            elif match_pos == page_match_count - 1 and is_first_page and all_matches_count > 10:
+                elo_int = match_data['match_elo'] - all_matches[10]['match_elo']
+                elo_gain = get_elo_gain(elo_int)
             else:
                 elo_int = match_data['match_elo'] - matches[match_pos + 1]['match_elo']
-                if elo_int < -200:
-                    elo_gain = '-'
-                elif elo_int > 0:
-                    elo_gain = f"+{elo_int}"
-                else:
-                    elo_gain = str(elo_int)
+                elo_gain = get_elo_gain(elo_int)
 
             user_hero = get_user_hero(match_data, get_user_uid(user_id))
             hero_icon = get_hero_icon(user_hero)
@@ -33,11 +33,22 @@ def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
 
             match_pos += 1
 
-    if matches_count > 10:
-        button_match_text.append([InlineKeyboardButton("◀️", callback_data="idk"),
-                                  InlineKeyboardButton("▶️", callback_data="idk")])
+    if all_matches_count > 10:
+        button_match_text.append([InlineKeyboardButton("◀️", callback_data="page_first"),
+                                  InlineKeyboardButton("▶️", callback_data="page_second")])
 
     return InlineKeyboardMarkup(button_match_text)
+
+
+def get_elo_gain(elo_int: int) -> str:
+    if elo_int < -200:
+        elo_gain = '-'
+    elif elo_int > 0:
+        elo_gain = f"+{elo_int}"
+    else:
+        elo_gain = str(elo_int)
+
+    return elo_gain
 
 
 # def match_mode_choice() -> InlineKeyboardMarkup:
