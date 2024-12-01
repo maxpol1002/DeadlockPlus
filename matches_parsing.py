@@ -43,7 +43,7 @@ async def parse_users_matches(user_uids: list, active_matches: list, context: Co
                 await notify_user(get_user_id(player['account_id']), match['match_id'], match['match_score'], context)
                 user_matchids = get_matchids_foruser(get_user_id(player['account_id']))
 
-                if get_user_match_count(user_matchids, match['match_mode']) == 10:
+                if get_user_match_count(user_matchids, match['match_mode']) == 20:
                     removed_match_id = remove_user_first_match(user_matchids, match['match_mode'], player['account_id'])
 
                     if not if_any_user_has_match(removed_match_id):

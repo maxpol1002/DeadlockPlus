@@ -10,9 +10,10 @@ from dlfunc import get_hero_icon, get_user_hero, get_all_heroes, get_hero_by_id
 def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
     button_match_text = []
     match_pos = 0
+    matches_count = len(matches)
     for match_data in matches:
         if match_data is not None:
-            if match_pos == len(matches) - 1:
+            if match_pos == matches_count - 1:
                 elo_gain = '-'
             else:
                 elo_int = match_data['match_elo'] - matches[match_pos + 1]['match_elo']
@@ -31,6 +32,10 @@ def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
                                                            callback_data=f"match_{match_data['match_id']}")])
 
             match_pos += 1
+
+    if matches_count > 9:
+        button_match_text.append([[InlineKeyboardButton("◀️", callback_data="idk"),
+                                   InlineKeyboardButton("▶️", callback_data="idk")]])
 
     return InlineKeyboardMarkup(button_match_text)
 
