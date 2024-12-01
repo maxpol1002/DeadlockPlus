@@ -33,7 +33,7 @@ def create_inline_matches(matches, user_id) -> InlineKeyboardMarkup:
 
             match_pos += 1
 
-    if matches_count > 9:
+    if matches_count > 10:
         button_match_text.append([InlineKeyboardButton("◀️", callback_data="idk"),
                                   InlineKeyboardButton("▶️", callback_data="idk")])
 
