@@ -34,7 +34,7 @@ def create_inline_matches(all_matches, user_id, is_first_page) -> InlineKeyboard
             match_pos += 1
 
     if all_matches_count > 10:
-        controls = "◀️" if is_first_page else "▶️"
+        controls = "▶️" if is_first_page else "◀️"
         cb_data = "page_second" if is_first_page else "page_first"
         button_match_text.append([InlineKeyboardButton(controls, callback_data=cb_data)])
 
