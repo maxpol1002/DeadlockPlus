@@ -1,6 +1,7 @@
 from collections import Counter
 
 from datetime import datetime, timedelta
+import html
 import pytz
 
 import telegram.error
@@ -457,7 +458,7 @@ def create_match_stats(match_data, user_uid):
             message += "    ⬇️ <b>Team Sapphire Flame</b> ⬇️\n"
             message += "————————————————\n"
 
-        player_name = player['player_name'] if player['player_name'].isprintable() else "invisible"
+        player_name = html.escape(player['player_name']) if player['player_name'].isprintable() else "invisible"
         if user_uid == player['account_id']:
             message += f"{get_hero_icon(player['hero'])} <b><u>{player['hero']}</u></b> (<a href='{player['account_link']}'><b>{player_name}</b></a>)\n"
         else:
