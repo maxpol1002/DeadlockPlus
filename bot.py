@@ -285,7 +285,8 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         match_data = get_match_data(match_id)
         match_stats = create_match_stats(match_data, get_user_uid(user_id))
 
-        await context.bot.send_message(user_id, match_stats, parse_mode=constants.ParseMode.HTML)
+        await context.bot.send_message(user_id, match_stats, parse_mode=constants.ParseMode.HTML,
+                                       disable_web_page_preview=True)
         await query.answer()
 
     elif query.data.startswith("lobby"):
@@ -344,8 +345,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         message += f"<b>Losses</b>: {hero_losses}\n"
         message += f"————————————————\n"
 
-        await context.bot.send_message(user_id, message, disable_web_page_preview=True,
-                                       parse_mode=constants.ParseMode.HTML)
+        await context.bot.send_message(user_id, message, parse_mode=constants.ParseMode.HTML)
 
         await query.answer()
 
