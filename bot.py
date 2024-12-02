@@ -457,7 +457,8 @@ def create_match_stats(match_data, user_uid):
             message += "⬇️<b>Team Sapphire Flame</b>⬇️\n"
             message = "===========================\n"
 
-        message += f" - {get_hero_icon(player['hero'])} <b>{player['hero']}</b> (<a href='{player['account_link']}'><b>{player['player_name']}</b></a>)\n"
+        player_name = player['player_name'] if player['player_name'] else "hidden name"
+        message += f" - {get_hero_icon(player['hero'])} <b>{player['hero']}</b> (<a href='{player['account_link']}'><b>{player_name}</b></a>)\n"
 
         position += 1
 
