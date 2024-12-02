@@ -438,14 +438,31 @@ def create_match_stats(match_data, user_uid):
     player_hero = get_user_hero(match_data, user_uid)
     message = "===========================\n"
     message += f"<b>Match</b> | <b>{match_data['match_id']}</b> | <b>{match_data['start_time']}</b>\n"
-    message += f"<b>Mode</b>: {convert_match_mode(match_data['match_mode'])}\n"
-    message += f"<b>Region</b>: {match_data['region']}\n"
-    message += "————————————————\n"
-    message += f"<b>Hero</b>: {get_hero_icon(player_hero)} <b>{player_hero}</b>\n"
-    message += "————————————————\n"
     message += f"<b>ELO</b>: {match_data['match_elo']}\n"
     message += f"<b>Top</b>: {round((100 - float(match_data['percentile'])), 2)}% (<b>Percentile</b>: {match_data['percentile']}%)\n"
     message += f"<b>Match №</b> {match_data['match No.']} (<b>Page №</b> {match_data['page No.']})\n"
+    message += "————————————————\n"
+    message += f"<b>Hero</b>: {get_hero_icon(player_hero)} <b>{player_hero}</b>\n"
+    message += "————————————————\n"
+    message += f"<b>Mode</b>: {convert_match_mode(match_data['match_mode'])}\n"
+    message += f"<b>Region</b>: {match_data['region']}\n"
+    message += "————————————————\n"
+    message += "<b>Players</b>"
+    message += "————————————————\n"
+    message += "⬇️<b>Team Amber Hand:</b>⬇️\n"
+    position = 0
+    for player in match_data['players']:
+        if position == 6:
+            message += "⬇️<b>Team Sapphire Flame</b>⬇️\n"
+            message += "————————————————\n"
+
+        message += f" - {get_hero_icon(player['hero'])} <b>{player['hero']}</b> (Player: <b>{player['player_name']}</b>)\n"
+        message += f"Account Link: <a href='{player['account_link']}'>steam link</a>\n"
+
+        message += "————————————————\n"
+
+        position += 1
+
     message += "===========================\n"
 
     return message
