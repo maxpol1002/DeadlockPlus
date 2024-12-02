@@ -448,7 +448,7 @@ def create_match_stats(match_data, user_uid):
     message += f"<b>Mode</b>: {convert_match_mode(match_data['match_mode'])}\n"
     message += f"<b>Region</b>: {match_data['region']}\n"
     message += "————————————————\n"
-    message += "⬇️<b>Team Amber Hand:</b>⬇️\n"
+    message += "⬇️<b>Team Amber Hand</b>⬇️\n"
     message += "————————————————\n"
     position = 0
     for player in match_data['players']:
