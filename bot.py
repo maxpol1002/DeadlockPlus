@@ -447,13 +447,15 @@ def create_match_stats(match_data, user_uid):
     message += "————————————————\n"
     message += f"<b>Mode</b>: {convert_match_mode(match_data['match_mode'])}\n"
     message += f"<b>Region</b>: {match_data['region']}\n"
-    message += "<b>——————Players</b>——————\n"
+    message = "===========================\n"
     message += "⬇️<b>Team Amber Hand:</b>⬇️\n"
+    message = "===========================\n"
     position = 0
     for player in match_data['players']:
         if position == 6:
+            message = "===========================\n"
             message += "⬇️<b>Team Sapphire Flame</b>⬇️\n"
-            message += "————————————————\n"
+            message = "===========================\n"
 
         message += f" - {get_hero_icon(player['hero'])} <b>{player['hero']}</b> (<a href='{player['account_link']}'><b>{player['player_name']}</b></a>)\n"
 
