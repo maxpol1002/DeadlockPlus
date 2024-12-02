@@ -458,7 +458,7 @@ def create_match_stats(match_data, user_uid):
             message += "————————————————\n"
 
         player_name = player['player_name'] if player['player_name'].isprintable() else "invisible"
-        message += f" - {get_hero_icon(player['hero'])} <b>{player['hero']}</b> (<a href='{player['account_link']}'><b>{player_name}</b></a>)\n"
+        message += f"{get_hero_icon(player['hero'])} <b>{player['hero']}</b> (<a href='{player['account_link']}'><b>{player_name}</b></a>)\n"
 
         position += 1
 
