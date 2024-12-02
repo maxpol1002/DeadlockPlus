@@ -455,9 +455,7 @@ def create_match_stats(match_data, user_uid):
             message += "⬇️<b>Team Sapphire Flame</b>⬇️\n"
             message += "————————————————\n"
 
-        message += f" - {get_hero_icon(player['hero'])} <b>{player['hero']}</b> (Player: <b>{player['player_name']}</b>)\n"
-        message += f"Account Link: <a href='{player['account_link']}'>steam link</a>\n"
-        message += "————————————————\n"
+        message += f" - {get_hero_icon(player['hero'])} <b>{player['hero']}</b> (<a href='{player['account_link']}'><b>{player['player_name']}</b></a>)\n"
 
         position += 1
 
