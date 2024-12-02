@@ -344,8 +344,8 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         message += f"<b>Losses</b>: {hero_losses}\n"
         message += f"————————————————\n"
 
-        await context.bot.send_message(user_id, message, parse_mode=constants.ParseMode.HTML,
-                                       disable_web_page_preview=True)
+        await context.bot.send_message(user_id, message, disable_web_page_preview=True,
+                                       parse_mode=constants.ParseMode.HTML)
 
         await query.answer()
 
