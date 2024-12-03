@@ -52,7 +52,7 @@ def create_inline_leaderboard(users_avg_elo: dict):
         user_steam_name = users_data[str(comm_id)]['username']
         pos_emoji = get_position_emoji(index)
         msg = f"{pos_emoji}"
-        for _ in range(len(user_steam_name) - username_chars_delta):
+        for _ in range(len(user_steam_name) - len(username_chars_delta)):
             msg += ' '
         msg += f"{user_steam_name} - {avg_elo}"
         button_user_text.append([InlineKeyboardButton(msg, url=users_data[str(comm_id)]['user_link'])])
