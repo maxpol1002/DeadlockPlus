@@ -47,9 +47,9 @@ def create_inline_leaderboard(users_avg_elo: dict):
     button_user_text = []
     user_uids = [get_user_uid(key) for key in users_avg_elo.keys()]
     users_data = get_users_data(user_uids)
-    for user_info, avg_elo in zip(users_data, users_avg_elo.values()):
-        button_user_text.append([InlineKeyboardButton(f"Username - {user_info['username']}, ELO - {avg_elo}",
-                                                      callback_data="nihuya")])
+    # for user_info, avg_elo in zip(users_data, users_avg_elo.values()):
+    #     button_user_text.append([InlineKeyboardButton(f"Username - {user_info['username']}, ELO - {avg_elo}",
+    #                                                   callback_data="nihuya")])
 
     return users_data
 
