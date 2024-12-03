@@ -9,7 +9,18 @@ from telegram.ext import (
     CallbackQueryHandler
 )
 
-from bot import start, message_handler, match_id_handler, faq, end_conv, ua_tg, registration_handler, callback_data_handler, hero_winrates, users_leaderboard
+from bot import (
+    message_handler,
+    callback_data_handler,
+    registration_handler,
+    match_id_handler,
+    start,
+    faq,
+    end_conv,
+    ua_tg,
+    hero_winrates,
+    users_leaderboard
+)
 
 from matches_parsing import start_job
 
