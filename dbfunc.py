@@ -237,16 +237,25 @@ def delete_match(match_id):
 def get_all_users_avg_elot():
     users_avg_elo = {}
     query = '''
-            SELECT user_id, 
-                   AVG((matches.data->>'match_elo')::float) AS avg_elo
-            FROM users
-            JOIN LATERAL unnest(users.matches_list) AS u_match_id ON TRUE
-            JOIN matches ON matches.match_id = u_match_id
-            WHERE (matches.data->>'match_mode')::int = 1
-              AND (matches.data->>'match_elo')::float >= 
-                  (SELECT MAX((matches.data->>'match_elo')::float) - 100 FROM matches WHERE matches.match_id = u_match_id)
-            GROUP BY user_id
-            HAVING COUNT(CASE WHEN (matches.data->>'match_mode')::int = 1 THEN 1 END) >= 10;
+            WITH max_elo AS (
+                SELECT user_id,
+                       MAX((matches.data->>'match_elo')::float) AS max_elo
+                FROM users
+                JOIN LATERAL unnest(users.matches_list) AS u_match_id ON TRUE
+                JOIN matches ON matches.match_id = u_match_id
+                WHERE (matches.data->>'match_mode')::int = 1
+                GROUP BY user_id
+            )
+            SELECT u.user_id, 
+                   AVG((m.data->>'match_elo')::float) AS avg_elo
+            FROM users u
+            JOIN LATERAL unnest(u.matches_list) AS u_match_id ON TRUE
+            JOIN matches m ON m.match_id = u_match_id
+            JOIN max_elo me ON me.user_id = u.user_id
+            WHERE (m.data->>'match_mode')::int = 1
+              AND (m.data->>'match_elo')::float >= me.max_elo - 300
+            GROUP BY u.user_id
+            HAVING COUNT(CASE WHEN (m.data->>'match_mode')::int = 1 THEN 1 END) >= 10;
         '''
 
     try:
@@ -264,4 +273,5 @@ def get_all_users_avg_elot():
         db_conn.close()
 
     return users_avg_elo
+
 
