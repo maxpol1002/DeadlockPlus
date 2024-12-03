@@ -49,7 +49,7 @@ def create_inline_leaderboard(users_avg_elo: dict):
     users_data = get_users_data_comm(user_comm_ids)
 
     for comm_id, avg_elo in users_avg_elo.items():
-        button_user_text.append([InlineKeyboardButton(f"Username - {users_data[comm_id]['username']}, ELO - {avg_elo}",
+        button_user_text.append([InlineKeyboardButton(f"Username - {users_data[str(comm_id)]['username']}, ELO - {avg_elo}",
                                 callback_data=f"hz")])
 
     return users_data
