@@ -47,10 +47,10 @@ def create_inline_leaderboard(users_avg_elo: dict):
     button_user_text = []
     user_comm_ids = [key for key in users_avg_elo.keys()]
     users_data = get_users_data_comm(user_comm_ids)
-
-    for comm_id, avg_elo in users_avg_elo.items():
-        button_user_text.append([InlineKeyboardButton(f"Username - {users_data[str(comm_id)]['username']}, ELO - {avg_elo}",
-                                callback_data=f"hz")])
+    for index, (comm_id, avg_elo) in enumerate(users_avg_elo.items(), start=0):
+        pos_emoji = get_position_emoji(index)
+        button_user_text.append([InlineKeyboardButton(f"{pos_emoji} {users_data[str(comm_id)]['username']}, ELO - {avg_elo}",
+                                 url=users_data[str(comm_id)]['user_link'])])
 
     return InlineKeyboardMarkup(button_user_text)
 
@@ -108,4 +108,21 @@ def lobby_rank_choice() -> InlineKeyboardMarkup:
               InlineKeyboardButton("Your ELO", callback_data=f"lobby_user_elo")]]
 
     return InlineKeyboardMarkup(ranks)
+
+
+def get_position_emoji(position: int) -> str:
+    positions = {
+        0: '🥇',
+        1: '🥈',
+        2: '🥉',
+        3: '4️⃣',
+        4: '5️⃣',
+        5: '6️⃣',
+        6: '7️⃣',
+        7: '8️⃣',
+        8: '9️⃣',
+        9: '🔟'
+    }
+
+    return positions.get(position, '?')
 
