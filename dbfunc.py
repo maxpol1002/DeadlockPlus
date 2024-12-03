@@ -245,8 +245,6 @@ def get_all_users_avg_elot():
             WHERE (matches.data->>'match_mode')::int = 1
               AND (matches.data->>'match_elo')::float >= 
                   (SELECT MAX((matches.data->>'match_elo')::float) - 100 FROM matches WHERE matches.match_id = u_match_id)
-              AND (matches.data->>'match_elo')::float <= 
-                  (SELECT MAX((matches.data->>'match_elo')::float) FROM matches WHERE matches.match_id = u_match_id)
             GROUP BY user_id
             HAVING COUNT(CASE WHEN (matches.data->>'match_mode')::int = 1 THEN 1 END) >= 10;
         '''
