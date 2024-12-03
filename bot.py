@@ -67,11 +67,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def users_leaderboard(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     if user_id == 648380859:
-        # users_avg_elo = get_all_users_avg_elo()
-        # sorted_users_avg_elo = dict(sorted(users_avg_elo.items(), key=lambda item: item[1], reverse=True))
-        # top_10_by_elo = dict(list(sorted_users_avg_elo.items())[:10])
-        elo = get_all_users_avg_elot()
-        await context.bot.send_message(648380859, elo)
+        users_avg_elo = get_all_users_avg_elot()
+        sorted_users_avg_elo = dict(sorted(users_avg_elo.items(), key=lambda item: item[1], reverse=True))
+        top_10_by_elo = dict(list(sorted_users_avg_elo.items())[:10])
+        await context.bot.send_message(648380859, top_10_by_elo)
 
 
 async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
