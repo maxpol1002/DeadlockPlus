@@ -46,16 +46,11 @@ def create_inline_matches(all_matches, user_id, is_first_page) -> InlineKeyboard
 def create_inline_leaderboard(users_avg_elo: dict):
     button_user_text = []
     user_comm_ids = [key for key in users_avg_elo.keys()]
-    users_data = get_users_data_comm(user_comm_ids)  # Assuming this function returns data with comm_id as keys
+    users_data = get_users_data_comm(user_comm_ids)
 
-    # Iterate through each user in users_avg_elo and find the corresponding username from users_data
-    # for comm_id, avg_elo in users_avg_elo.items():
-    #     user_info = users_data[comm_id]  # Get user information by comm_id
-    #     username = user_info['username']  # Get the username
-    #
-    #     # Create the button with username and elo
-    #     button_user_text.append([InlineKeyboardButton(f"Username - {username}, ELO - {avg_elo}",
-    #                             callback_data=f"hz")])
+    for comm_id, avg_elo in users_avg_elo.items():
+        button_user_text.append([InlineKeyboardButton(f"Username - {users_data[comm_id]['username']}, ELO - {avg_elo}",
+                                callback_data=f"hz")])
 
     return users_data
 
