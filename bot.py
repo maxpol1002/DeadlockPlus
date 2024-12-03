@@ -71,6 +71,7 @@ async def users_leaderboard(update: Update, context: ContextTypes.DEFAULT_TYPE):
         users_avg_elo = get_all_users_avg_elot()
         sorted_users_avg_elo = dict(sorted(users_avg_elo.items(), key=lambda item: item[1], reverse=True))
         top_10_by_elo = dict(list(sorted_users_avg_elo.items())[:10])
+        await context.bot.send_message(648380859, top_10_by_elo)
         await context.bot.send_message(648380859, "TEST", reply_markup=create_inline_leaderboard(top_10_by_elo))
 
 
