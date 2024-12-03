@@ -276,7 +276,7 @@ def get_all_users_avg_elot():
 
         for row in rows:
             user_id, avg_elo = row
-            users_avg_elo[user_id] = avg_elo
+            users_avg_elo[user_id] = int(avg_elo)
 
     finally:
         cursor.close()
