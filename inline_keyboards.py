@@ -49,15 +49,15 @@ def create_inline_leaderboard(users_avg_elo: dict):
     users_data = get_users_data_comm(user_comm_ids)  # Assuming this function returns data with comm_id as keys
 
     # Iterate through each user in users_avg_elo and find the corresponding username from users_data
-    for comm_id, avg_elo in users_avg_elo.items():
-        user_info = users_data[comm_id]  # Get user information by comm_id
-        username = user_info['username']  # Get the username
+    # for comm_id, avg_elo in users_avg_elo.items():
+    #     user_info = users_data[comm_id]  # Get user information by comm_id
+    #     username = user_info['username']  # Get the username
+    #
+    #     # Create the button with username and elo
+    #     button_user_text.append([InlineKeyboardButton(f"Username - {username}, ELO - {avg_elo}",
+    #                             callback_data=f"hz")])
 
-        # Create the button with username and elo
-        button_user_text.append([InlineKeyboardButton(f"Username - {username}, ELO - {avg_elo}",
-                                callback_data=f"hz")])
-
-    return InlineKeyboardMarkup(button_user_text)
+    return users_data
 
 
 def get_elo_gain(elo_int: int) -> str:
