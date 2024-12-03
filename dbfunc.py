@@ -247,3 +247,39 @@ def delete_match(match_id):
     finally:
         cursor.close()
         db_conn.close()
+
+
+def get_all_users_avg_elot():
+    users_avg_elo = {}
+
+    # Step 1: Fetch all user IDs (batch query)
+    all_user_ids = get_all_user_ids()
+
+    # Step 2: Fetch match data for all users in one query
+    # This query gets the match data (match_elo) for each user where match_mode = 1 and at least 10 matches are present
+    query = '''
+        SELECT user_id, 
+               AVG((match_data->>'match_elo')::int) AS avg_elo
+        FROM users
+        JOIN LATERAL jsonb_array_elements(matches_list) AS match_id ON TRUE
+        JOIN matches ON matches.match_id = (match_id->>'match_id')::int
+        WHERE (matches.match_data->>'match_mode')::int = 1
+        GROUP BY user_id
+        HAVING COUNT(matches.match_id) >= 10;
+    '''
+
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+        for row in rows:
+            user_id, avg_elo = row
+            users_avg_elo[user_id] = avg_elo
+
+    finally:
+        cursor.close()
+        db_conn.close()
+
+    return users_avg_elo
