@@ -49,8 +49,9 @@ def create_inline_leaderboard(users_avg_elo: dict):
     users_data = get_users_data_comm(user_comm_ids)
     for index, (comm_id, avg_elo) in enumerate(users_avg_elo.items(), start=0):
         pos_emoji = get_position_emoji(index)
-        button_user_text.append([InlineKeyboardButton(f"{pos_emoji} {users_data[str(comm_id)]['username']}, ELO - {avg_elo}",
-                                 url=users_data[str(comm_id)]['user_link'])])
+        button_user_text.append([InlineKeyboardButton(f"{pos_emoji}", callback_data="nothing"),
+                                 InlineKeyboardButton(f"{users_data[str(comm_id)]['username']}, ELO - {avg_elo}",
+                                                      url=users_data[str(comm_id)]['user_link'])])
 
     return InlineKeyboardMarkup(button_user_text)
 
