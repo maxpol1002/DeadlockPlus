@@ -261,8 +261,8 @@ def get_all_users_avg_elot():
             SELECT user_id, 
                    AVG((matches.match_data->>'match_elo')::int) AS avg_elo
             FROM users
-            JOIN LATERAL unnest(users.matches_list) AS match_id ON TRUE
-            JOIN matches ON matches.match_id = match_id
+            JOIN LATERAL unnest(users.matches_list) AS u_match_id ON TRUE
+            JOIN matches ON matches.match_id = u_match_id
             WHERE (matches.match_data->>'match_mode')::int = 1
             GROUP BY user_id
             HAVING COUNT(CASE WHEN (matches.match_data->>'match_mode')::int = 1 THEN 1 END) >= 10;
