@@ -51,7 +51,7 @@ def create_inline_leaderboard(users_avg_elo: dict):
         button_user_text.append([InlineKeyboardButton(f"Username - {user_info['username']}, ELO - {avg_elo}",
                                                       callback_data="nihuya")])
 
-    return InlineKeyboardMarkup(button_user_text)
+    return users_data
 
 
 def get_elo_gain(elo_int: int) -> str:
