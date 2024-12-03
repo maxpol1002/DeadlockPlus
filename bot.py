@@ -66,17 +66,15 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def users_leaderboard(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.effective_user.id
-    if user_id == 648380859:
-        users_avg_elo = get_all_users_avg_elot()
-        sorted_users_avg_elo = dict(sorted(users_avg_elo.items(), key=lambda item: item[1], reverse=True))
-        top_10_by_elo = dict(list(sorted_users_avg_elo.items())[:10])
+    users_avg_elo = get_all_users_avg_elot()
+    sorted_users_avg_elo = dict(sorted(users_avg_elo.items(), key=lambda item: item[1], reverse=True))
+    top_10_by_elo = dict(list(sorted_users_avg_elo.items())[:10])
 
-        await update.message.reply_text("🏆  <b>TOP 10 users</b>  🏆",
-                                        reply_markup=create_inline_leaderboard(top_10_by_elo),
-                                        parse_mode=constants.ParseMode.HTML)
+    await update.message.reply_text("🏆 <b>TOP 10 users</b> 🏆",
+                                    reply_markup=create_inline_leaderboard(top_10_by_elo),
+                                    parse_mode=constants.ParseMode.HTML)
 
-        await context.bot.send_message(648380859, f"{update.effective_user.username} opened leaderboards")
+    await context.bot.send_message(648380859, f"{update.effective_user.username} opened leaderboards")
 
 
 async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
