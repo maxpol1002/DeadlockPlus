@@ -244,7 +244,7 @@ def get_all_users_avg_elot():
             JOIN matches ON matches.match_id = u_match_id
             WHERE (matches.data->>'match_mode')::int = 1
               AND (matches.data->>'match_elo')::float >= 
-                  (SELECT MAX((matches.data->>'match_elo')::float) - 400 FROM matches WHERE matches.match_id = u_match_id)
+                  (SELECT MAX((matches.data->>'match_elo')::float) - 100 FROM matches WHERE matches.match_id = u_match_id)
               AND (matches.data->>'match_elo')::float <= 
                   (SELECT MAX((matches.data->>'match_elo')::float) FROM matches WHERE matches.match_id = u_match_id)
             GROUP BY user_id
