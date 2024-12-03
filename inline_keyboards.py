@@ -50,7 +50,7 @@ def create_inline_leaderboard(users_avg_elo: dict):
 
     # Iterate through each user in users_avg_elo and find the corresponding username from users_data
     for comm_id, avg_elo in users_avg_elo.items():
-        if comm_id in users_data:  # Ensure the user exists in users_data
+        if comm_id in users_data.keys():  # Ensure the user exists in users_data
             user_info = users_data[comm_id]  # Get user information by comm_id
             username = user_info['username']  # Get the username
 
