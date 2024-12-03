@@ -29,7 +29,8 @@ from dbfunc import (
     is_user_registered,
     get_matchids_foruser,
     get_match_data,
-    get_user_uid
+    get_user_uid,
+    get_all_user_ids
 )
 
 from inline_keyboards import (
@@ -61,6 +62,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                     reply_markup=user_menu_markup, parse_mode=constants.ParseMode.HTML)
 
     await context.bot.send_message(648380859, f"{user_name} started bot")
+
+
+async def users_leaderboard(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    users_avg_elo = get_all_users_avg_elo()
+    await context.bot.send_message(648380859, users_avg_elo)
 
 
 async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -102,18 +109,28 @@ async def hero_winrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened winrates")
 
 
-def get_user_avg_elo(user_id):
-    all_matchids = get_matchids_foruser(user_id)
-    if all_matchids:
-        user_matches = [get_match_data(match_id) for match_id in all_matchids]
-        if user_matches:
-            total_elo = 0
-            for match_data in user_matches:
-                total_elo += match_data["match_elo"]
+def get_user_avg_elo(user_matches):
+    if user_matches:
+        total_elo = 0
+        for match_data in user_matches:
+            total_elo += match_data["match_elo"]
 
-            return int(total_elo / len(user_matches))
+        return int(total_elo / len(user_matches))
 
     return None
+
+
+def get_all_users_avg_elo():
+    users_avg_elo = {}
+    all_user_ids = get_all_user_ids()
+    for uid in all_user_ids:
+        user_matchids = get_matchids_foruser(uid)
+        if user_matchids:
+            standard_matches = get_user_matches_bymode(user_matchids, 1)
+            if standard_matches and len(standard_matches) >= 10:
+                users_avg_elo[uid] = get_user_avg_elo(standard_matches)
+
+        return users_avg_elo
 
 
 async def format_match_data(filtered_data) -> str:
@@ -303,10 +320,19 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         if elo_max_q.isdigit() and elo_min_q.isdigit():
             elo_max, elo_min = int(elo_max_q), int(elo_min_q)
         else:
-            user_avg_elo = get_user_avg_elo(user_id)
-
-            elo_max = user_avg_elo + 200 if user_avg_elo else 0
-            elo_min = user_avg_elo - 200 if user_avg_elo else 0
+            all_matchids = get_matchids_foruser(user_id)
+            if all_matchids:
+                standard_matches = get_user_matches_bymode(all_matchids, 1)
+                if standard_matches:
+                    user_avg_elo = get_user_avg_elo(standard_matches)
+                    elo_max = user_avg_elo + 200 if user_avg_elo else 0
+                    elo_min = user_avg_elo - 200 if user_avg_elo else 0
+                else:
+                    elo_max = 0
+                    elo_min = 0
+            else:
+                elo_max = 0
+                elo_min = 0
 
         current_timestamp = int(datetime.utcnow().timestamp())
         # week_ago_timestamp = int((datetime.utcnow() - timedelta(weeks=1)).timestamp())

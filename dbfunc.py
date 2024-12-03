@@ -86,6 +86,21 @@ def get_user_id(usteamid):
         db_conn.close()
 
 
+def get_all_user_ids():
+    try:
+        db_conn = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT user_id FROM users')
+        rows = cursor.fetchall()
+        users_ids = [row[0] for row in rows]
+
+        return users_ids
+
+    finally:
+        cursor.close()
+        db_conn.close()
+
+
 def insert_users_matches(matches):
     try:
         db_conn = psycopg2.connect(DB_URL, sslmode="require")
