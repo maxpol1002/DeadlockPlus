@@ -5,7 +5,7 @@ import html
 import pytz
 
 import telegram.error
-from telegram import Update, ReplyKeyboardMarkup, constants, ReplyKeyboardRemove
+from telegram import Update, ReplyKeyboardMarkup, constants, ReplyKeyboardRemove, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import ContextTypes, ConversationHandler
 
 from dlfunc import (
@@ -296,10 +296,15 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         match_id = int(query.data.split('_')[1])
         match_data = get_match_data(match_id)
         match_stats = create_match_stats(match_data, get_user_uid(user_id))
+        delete_button = [[InlineKeyboardButton("⬅️", callback_data=f"delete_msg")]]
 
-        await context.bot.send_message(user_id, match_stats, parse_mode=constants.ParseMode.HTML,
+        await context.bot.send_message(user_id, match_stats, reply_markup=InlineKeyboardMarkup(delete_button),
+                                       parse_mode=constants.ParseMode.HTML,
                                        disable_web_page_preview=True)
         await query.answer()
+
+    elif query.data == "delete_msg":
+        await update.effective_message.delete()
 
     elif query.data.startswith("lobby"):
         elo_max_q = query.data.split('_')[1]
