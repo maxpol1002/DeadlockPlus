@@ -45,11 +45,20 @@ def create_inline_matches(all_matches, user_id, is_first_page) -> InlineKeyboard
 
 def create_inline_leaderboard(users_avg_elo: dict):
     button_user_text = []
-    user_uids = [get_user_uid(key) for key in users_avg_elo.keys()]
+    updated_users_avg_elo = {}
+    user_uids = []
+    for key, value in users_avg_elo.items():
+        user_uid = get_user_uid(key)
+        updated_users_avg_elo[user_uid] = value
+        user_uids.append(user_uid)
+
     users_data = get_users_data(user_uids)
-    for user_info, avg_elo in zip(users_data.values(), users_avg_elo.values()):
-        button_user_text.append([InlineKeyboardButton(f"Username - {user_info['username']}, ELO - {avg_elo}",
-                                                      callback_data="nihuya")])
+
+    for uid, avg_elo in users_avg_elo.items():
+        for usteamid, user_info in users_data.items():
+            if uid == usteamid:
+                button_user_text.append([InlineKeyboardButton(f"Username - {user_info['username']}, ELO - {avg_elo}",
+                                                              callback_data="nihuya")])
 
     return InlineKeyboardMarkup(button_user_text)
 
