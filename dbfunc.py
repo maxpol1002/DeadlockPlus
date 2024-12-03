@@ -249,7 +249,7 @@ def get_all_users_avg_elot():
     ),
          max_elo AS (
              SELECT u.comm_id,
-                    MAX((m.data->>'match_elo')::float) AS max_elo
+                    MAX((m.data->>'match_elo')::int) AS max_elo
              FROM users u
                       JOIN LATERAL unnest(u.matches_list) AS u_match_id ON TRUE
                       JOIN matches m ON m.match_id = u_match_id
@@ -257,14 +257,14 @@ def get_all_users_avg_elot():
              GROUP BY u.comm_id
          )
     SELECT u.comm_id,
-           AVG((m.data->>'match_elo')::float) AS avg_elo
+           AVG((m.data->>'match_elo')::int) AS avg_elo
     FROM users u
              JOIN LATERAL unnest(u.matches_list) AS u_match_id ON TRUE
              JOIN matches m ON m.match_id = u_match_id
              JOIN max_elo me ON me.comm_id = u.comm_id
              JOIN match_counts mc ON mc.comm_id = u.comm_id
     WHERE (m.data->>'match_mode')::int = 1
-      AND (m.data->>'match_elo')::float >= me.max_elo - 300
+      AND (m.data->>'match_elo')::int >= me.max_elo - 300
     GROUP BY u.comm_id;
     '''
 
