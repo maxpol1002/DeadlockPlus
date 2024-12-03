@@ -130,7 +130,7 @@ def get_all_users_avg_elo():
             if standard_matches and len(standard_matches) >= 10:
                 users_avg_elo[uid] = get_user_avg_elo(standard_matches)
 
-        return users_avg_elo
+    return users_avg_elo
 
 
 async def format_match_data(filtered_data) -> str:
@@ -273,7 +273,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if standart_matches:
                 user_avgelo, avg_percentile, avg_top, fav_hero, avg_page, avg_pos = get_user_stats(standart_matches,
                                                                                                    get_user_uid(user.id))
-                await update.message.reply_text(construct_user_stats("Standart", user_avgelo, avg_percentile,
+                await update.message.reply_text(construct_user_stats("Standard", user_avgelo, avg_percentile,
                                                                      avg_top, fav_hero, avg_page, avg_pos),
                                                 reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
                                                 parse_mode=constants.ParseMode.HTML)
