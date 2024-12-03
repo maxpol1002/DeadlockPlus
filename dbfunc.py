@@ -237,26 +237,36 @@ def delete_match(match_id):
 def get_all_users_avg_elot():
     users_avg_elo = {}
     query = '''
-            WITH max_elo AS (
-                SELECT u.comm_id,  -- Change user_id to comm_id here
-                       MAX((m.data->>'match_elo')::float) AS max_elo
-                FROM users u
-                JOIN LATERAL unnest(u.matches_list) AS u_match_id ON TRUE
-                JOIN matches m ON m.match_id = u_match_id
-                WHERE (m.data->>'match_mode')::int = 1
-                GROUP BY u.comm_id  -- Group by comm_id instead of user_id
-            )
-            SELECT u.comm_id,  -- Change user_id to comm_id here
-                   AVG((m.data->>'match_elo')::float) AS avg_elo
-            FROM users u
-            JOIN LATERAL unnest(u.matches_list) AS u_match_id ON TRUE
-            JOIN matches m ON m.match_id = u_match_id
-            JOIN max_elo me ON me.comm_id = u.comm_id  -- Join on comm_id instead of user_id
-            WHERE (m.data->>'match_mode')::int = 1
-              AND (m.data->>'match_elo')::float >= me.max_elo - 300
-            GROUP BY u.comm_id  -- Group by comm_id instead of user_id
-            HAVING COUNT(CASE WHEN (m.data->>'match_mode')::int = 1 THEN 1 END) >= 10;
-        '''
+    WITH match_counts AS (
+        SELECT u.comm_id,
+               COUNT(*) AS total_matches
+        FROM users u
+                 JOIN LATERAL unnest(u.matches_list) AS u_match_id ON TRUE
+                 JOIN matches m ON m.match_id = u_match_id
+        WHERE (m.data->>'match_mode')::int = 1
+        GROUP BY u.comm_id
+        HAVING COUNT(*) >= 10
+    ),
+         max_elo AS (
+             SELECT u.comm_id,
+                    MAX((m.data->>'match_elo')::float) AS max_elo
+             FROM users u
+                      JOIN LATERAL unnest(u.matches_list) AS u_match_id ON TRUE
+                      JOIN matches m ON m.match_id = u_match_id
+             WHERE (m.data->>'match_mode')::int = 1
+             GROUP BY u.comm_id
+         )
+    SELECT u.comm_id,
+           AVG((m.data->>'match_elo')::float) AS avg_elo
+    FROM users u
+             JOIN LATERAL unnest(u.matches_list) AS u_match_id ON TRUE
+             JOIN matches m ON m.match_id = u_match_id
+             JOIN max_elo me ON me.comm_id = u.comm_id
+             JOIN match_counts mc ON mc.comm_id = u.comm_id
+    WHERE (m.data->>'match_mode')::int = 1
+      AND (m.data->>'match_elo')::float >= me.max_elo - 300
+    GROUP BY u.comm_id;
+    '''
 
     try:
         db_conn = psycopg2.connect(DB_URL, sslmode="require")
@@ -264,10 +274,9 @@ def get_all_users_avg_elot():
         cursor.execute(query)
         rows = cursor.fetchall()
 
-        # Store the results with comm_id as key and avg_elo as value
         for row in rows:
-            comm_id, avg_elo = row  # Unpack the comm_id and avg_elo
-            users_avg_elo[comm_id] = round(avg_elo)  # Use comm_id as the key
+            comm_id, avg_elo = row
+            users_avg_elo[comm_id] = round(avg_elo)
 
     finally:
         cursor.close()
