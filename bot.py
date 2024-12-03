@@ -30,7 +30,7 @@ from dbfunc import (
     get_matchids_foruser,
     get_match_data,
     get_user_uid,
-    get_all_user_ids, get_all_users_avg_elot
+    get_all_users_avg_elot
 )
 
 from inline_keyboards import (
@@ -121,19 +121,6 @@ def get_user_avg_elo(user_matches):
         return int(total_elo / len(user_matches))
 
     return None
-
-
-def get_all_users_avg_elo():
-    users_avg_elo = {}
-    all_user_ids = get_all_user_ids()
-    for uid in all_user_ids:
-        user_matchids = get_matchids_foruser(uid)
-        if user_matchids:
-            standard_matches = get_user_matches_bymode(user_matchids, 1)
-            if standard_matches and len(standard_matches) >= 10:
-                users_avg_elo[uid] = get_user_avg_elo(standard_matches)
-
-    return users_avg_elo
 
 
 async def format_match_data(filtered_data) -> str:

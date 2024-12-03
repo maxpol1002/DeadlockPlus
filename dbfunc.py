@@ -86,21 +86,6 @@ def get_user_id(usteamid):
         db_conn.close()
 
 
-def get_all_user_ids():
-    try:
-        db_conn = psycopg2.connect(DB_URL, sslmode="require")
-        cursor = db_conn.cursor()
-        cursor.execute('SELECT user_id FROM users')
-        rows = cursor.fetchall()
-        users_ids = [row[0] for row in rows]
-
-        return users_ids
-
-    finally:
-        cursor.close()
-        db_conn.close()
-
-
 def insert_users_matches(matches):
     try:
         db_conn = psycopg2.connect(DB_URL, sslmode="require")
@@ -251,12 +236,6 @@ def delete_match(match_id):
 
 def get_all_users_avg_elot():
     users_avg_elo = {}
-
-    # Step 1: Fetch all user IDs (batch query)
-    all_user_ids = get_all_user_ids()
-
-    # Step 2: Fetch match data for all users in one query
-    # This query gets the match data (match_elo) for each user where match_mode = 1 and at least 10 matches are present
     query = '''
             SELECT user_id, 
                    AVG((matches.data->>'match_elo')::float) AS avg_elo
@@ -264,6 +243,10 @@ def get_all_users_avg_elot():
             JOIN LATERAL unnest(users.matches_list) AS u_match_id ON TRUE
             JOIN matches ON matches.match_id = u_match_id
             WHERE (matches.data->>'match_mode')::int = 1
+              AND (matches.data->>'match_elo')::float >= 
+                  (SELECT MAX((matches.data->>'match_elo')::float) - 400 FROM matches WHERE matches.match_id = u_match_id)
+              AND (matches.data->>'match_elo')::float <= 
+                  (SELECT MAX((matches.data->>'match_elo')::float) FROM matches WHERE matches.match_id = u_match_id)
             GROUP BY user_id
             HAVING COUNT(CASE WHEN (matches.data->>'match_mode')::int = 1 THEN 1 END) >= 10;
         '''
@@ -283,3 +266,4 @@ def get_all_users_avg_elot():
         db_conn.close()
 
     return users_avg_elo
+
