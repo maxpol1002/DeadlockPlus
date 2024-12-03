@@ -2,7 +2,7 @@ import math
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from steamfunc import get_users_data
+from steamfunc import get_users_data_comm
 
 from dbfunc import get_user_uid
 
@@ -45,18 +45,11 @@ def create_inline_matches(all_matches, user_id, is_first_page) -> InlineKeyboard
 
 def create_inline_leaderboard(users_avg_elo: dict):
     button_user_text = []
-    updated_users_avg_elo = {}
-    user_uids = []
-    for key, value in users_avg_elo.items():
-        user_uid = get_user_uid(key)
-        updated_users_avg_elo[user_uid] = value
-        user_uids.append(user_uid)
-
-    users_data = get_users_data(user_uids)
-
-    for uid, avg_elo in users_avg_elo.items():
-        for usteamid, user_info in users_data.items():
-            if uid == usteamid:
+    user_comm_ids = [key for key in users_avg_elo.keys()]
+    users_data = get_users_data_comm(user_comm_ids)
+    for comm_id, avg_elo in users_avg_elo.items():
+        for ucomm_id, user_info in users_data.items():
+            if comm_id == ucomm_id:
                 button_user_text.append([InlineKeyboardButton(f"Username - {user_info['username']}, ELO - {avg_elo}",
                                                               callback_data="nihuya")])
 
