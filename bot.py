@@ -110,7 +110,7 @@ async def hero_winrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
 
-    await update.message.reply_text("Here you can check heroes winrates since last update (22/11)",
+    await update.message.reply_text("Here you can check heroes winrates since last update (07/12)",
                                     reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
     await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice())
     await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened winrates")
@@ -335,7 +335,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
 
         current_timestamp = int(datetime.utcnow().timestamp())
         # week_ago_timestamp = int((datetime.utcnow() - timedelta(weeks=1)).timestamp())
-        last_patch_timestamp = 1732238580
+        last_patch_timestamp = 1733472360
         kyiv_tz = pytz.timezone('Europe/Kyiv')
         current_time_eest = datetime.fromtimestamp(current_timestamp, kyiv_tz).strftime("%d/%m")
         # week_ago_time_eest = datetime.fromtimestamp(week_ago_timestamp, kyiv_tz).strftime("%d/%m")
