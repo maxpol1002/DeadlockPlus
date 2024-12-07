@@ -53,9 +53,6 @@ def create_inline_leaderboard(users_avg_elo: dict):
         button_user_text.append([InlineKeyboardButton(f"{pos_emoji} {user_steam_name} - {avg_elo}",
                                  url=users_data[str(comm_id)]['user_link'])])
 
-    button_user_text.append([InlineKeyboardButton("Honorable mention - Клім - 150",
-                                                  url="https://steamcommunity.com/profiles/76561198875118935/")])
-
     return InlineKeyboardMarkup(button_user_text)
 
 
