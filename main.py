@@ -44,7 +44,7 @@ if __name__ == '__main__':
                            filters.Command("ua_tg") |
                            filters.Command("hero_winrates") |
                            filters.Command("users_leaderboard") |
-                           filters.Command("heroes_pickrates"),
+                           filters.Command("hero_pickrates"),
                            end_conv)
         ]
     )
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     application.add_handler(CommandHandler("ua_tg", ua_tg))
     application.add_handler(CommandHandler("hero_winrates", hero_winrates))
     application.add_handler(CommandHandler("users_leaderboard", users_leaderboard))
-    application.add_handler(CommandHandler("heroes_pickrates", hero_pickrates))
+    application.add_handler(CommandHandler("hero_pickrates", hero_pickrates))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
     application.add_handler(CallbackQueryHandler(callback_data_handler))
     application.job_queue.run_once(start_job, when=0)
