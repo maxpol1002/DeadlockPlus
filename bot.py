@@ -382,12 +382,14 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         hero_wins = int(hero_data[2])
         hero_losses = int(hero_data[3])
         hero_winrate = hero_data[4]
+        hero_pickrate = hero_data[5]
         hero_icon = get_hero_icon(hero_name)
 
         message = f"————————————————\n"
         message += f"{hero_icon} <b>{hero_name} Stats</b>\n"
         message += f"————————————————\n"
         message += f"<b>Winrate</b>: {hero_winrate}%\n"
+        message += f"<b>Pickrate</b>: {hero_pickrate}%\n"
         message += f"<b>Total games</b>: {hero_wins + hero_losses}\n"
         message += f"<b>Wins</b>: {hero_wins}\n"
         message += f"<b>Losses</b>: {hero_losses}\n"

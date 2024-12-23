@@ -93,23 +93,23 @@ def create_hero_stats(heroes_wr, is_w) -> InlineKeyboardMarkup:
         hero_2_icon = get_hero_icon(hero_2_name)
         if is_w:
             hero_wr_text.append([InlineKeyboardButton(f"{hero_1_icon} {hero_1_name} - {heroes_wr[i]['wr']}%",
-                                 callback_data=f"hero_{hero_1_name}_{heroes_wr[i]['wins']}_{heroes_wr[i]['losses']}_{heroes_wr[i]['wr']}"),
+                                 callback_data=f"hero_{hero_1_name}_{heroes_wr[i]['wins']}_{heroes_wr[i]['losses']}_{heroes_wr[i]['wr']}_{heroes_wr[i]['pr']}"),
                                  InlineKeyboardButton(f"{hero_2_icon} {hero_2_name} - {heroes_wr[i + int(heroes_len/2)]['wr']}%",
-                                 callback_data=f"hero_{hero_2_name}_{heroes_wr[i + int(heroes_len/2)]['wins']}_{heroes_wr[i + int(heroes_len/2)]['losses']}_{heroes_wr[i + int(heroes_len/2)]['wr']}")])
+                                 callback_data=f"hero_{hero_2_name}_{heroes_wr[i + int(heroes_len/2)]['wins']}_{heroes_wr[i + int(heroes_len/2)]['losses']}_{heroes_wr[i + int(heroes_len/2)]['wr']}_{heroes_wr[i + int(heroes_len/2)]['pr']}")])
         else:
             hero_wr_text.append([InlineKeyboardButton(f"{hero_1_icon} {hero_1_name} - {heroes_wr[i]['pr']}%",
-                                                      callback_data=f"hero_{hero_1_name}_{heroes_wr[i]['wins']}_{heroes_wr[i]['losses']}_{heroes_wr[i]['wr']}"),
+                                                      callback_data=f"hero_{hero_1_name}_{heroes_wr[i]['wins']}_{heroes_wr[i]['losses']}_{heroes_wr[i]['wr']}_{heroes_wr[i]['pr']}"),
                                  InlineKeyboardButton(f"{hero_2_icon} {hero_2_name} - {heroes_wr[i + int(heroes_len / 2)]['pr']}%",
-                                                      callback_data=f"hero_{hero_2_name}_{heroes_wr[i + int(heroes_len / 2)]['wins']}_{heroes_wr[i + int(heroes_len / 2)]['losses']}_{heroes_wr[i + int(heroes_len / 2)]['wr']}")])
+                                                      callback_data=f"hero_{hero_2_name}_{heroes_wr[i + int(heroes_len / 2)]['wins']}_{heroes_wr[i + int(heroes_len / 2)]['losses']}_{heroes_wr[i + int(heroes_len / 2)]['wr']}_{heroes_wr[i + int(heroes_len / 2)]['pr']}")])
     if heroes_len % 2 != 0:
         hero_name = get_hero_by_id(all_heroes, heroes_wr[-1]["hero_id"])
         hero_icon = get_hero_icon(hero_name)
         if is_w:
             hero_wr_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {heroes_wr[-1]['wr']}%",
-                                callback_data=f"hero_{hero_name}_{heroes_wr[-1]['wins']}_{heroes_wr[-1]['losses']}_{heroes_wr[-1]['wr']}")])
+                                callback_data=f"hero_{hero_name}_{heroes_wr[-1]['wins']}_{heroes_wr[-1]['losses']}_{heroes_wr[-1]['wr']}_{heroes_wr[-1]['pr']}")])
         else:
             hero_wr_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {heroes_wr[-1]['pr']}%",
-                                                      callback_data=f"hero_{hero_name}_{heroes_wr[-1]['wins']}_{heroes_wr[-1]['losses']}_{heroes_wr[-1]['wr']}")])
+                                callback_data=f"hero_{hero_name}_{heroes_wr[-1]['wins']}_{heroes_wr[-1]['losses']}_{heroes_wr[-1]['wr']}_{heroes_wr[-1]['pr']}")])
 
     return InlineKeyboardMarkup(hero_wr_text)
 
