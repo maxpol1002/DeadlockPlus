@@ -74,11 +74,13 @@ def get_elo_gain(elo_int: int) -> str:
 #     return InlineKeyboardMarkup(modes)
 
 
-def create_hero_winrates(heroes_wr) -> InlineKeyboardMarkup:
+def create_hero_stats(heroes_wr, is_w) -> InlineKeyboardMarkup:
     hero_wr_text = []
     all_heroes = get_all_heroes()
+    total_games = 0
     for hero in heroes_wr:
         hero["wr"] = round((hero["wins"] / (hero["wins"] + hero["losses"])) * 100, 2)
+        total_games += hero["wins"] + hero["losses"]
 
     heroes_wr.sort(key=lambda h: h["wr"], reverse=True)
     heroes_len = len(heroes_wr)
@@ -88,25 +90,44 @@ def create_hero_winrates(heroes_wr) -> InlineKeyboardMarkup:
         hero_1_icon = get_hero_icon(hero_1_name)
         hero_2_name = get_hero_by_id(all_heroes, heroes_wr[i+int(heroes_len/2)]["hero_id"])
         hero_2_icon = get_hero_icon(hero_2_name)
-        hero_wr_text.append([InlineKeyboardButton(f"{hero_1_icon} {hero_1_name} - {heroes_wr[i]['wr']}%",
-                             callback_data=f"hero_{hero_1_name}_{heroes_wr[i]['wins']}_{heroes_wr[i]['losses']}_{heroes_wr[i]['wr']}"),
-                             InlineKeyboardButton(f"{hero_2_icon} {hero_2_name} - {heroes_wr[i + int(heroes_len/2)]['wr']}%",
-                             callback_data=f"hero_{hero_2_name}_{heroes_wr[i + int(heroes_len/2)]['wins']}_{heroes_wr[i + int(heroes_len/2)]['losses']}_{heroes_wr[i + int(heroes_len/2)]['wr']}")])
+        if is_w:
+            hero_wr_text.append([InlineKeyboardButton(f"{hero_1_icon} {hero_1_name} - {heroes_wr[i]['wr']}%",
+                                 callback_data=f"hero_{hero_1_name}_{heroes_wr[i]['wins']}_{heroes_wr[i]['losses']}_{heroes_wr[i]['wr']}"),
+                                 InlineKeyboardButton(f"{hero_2_icon} {hero_2_name} - {heroes_wr[i + int(heroes_len/2)]['wr']}%",
+                                 callback_data=f"hero_{hero_2_name}_{heroes_wr[i + int(heroes_len/2)]['wins']}_{heroes_wr[i + int(heroes_len/2)]['losses']}_{heroes_wr[i + int(heroes_len/2)]['wr']}")])
+        else:
+            hero_1_pickrate = round((heroes_wr[i]["wins"] + heroes_wr[i]["losses"]) / total_games, 2)
+            hero_2_pickrate = round((heroes_wr[i + int(heroes_len / 2)]["wins"] + heroes_wr[i + int(heroes_len / 2)]["losses"]) / total_games, 2)
 
+            hero_wr_text.append([InlineKeyboardButton(f"{hero_1_icon} {hero_1_name} - {hero_1_pickrate}%",
+                                                      callback_data=f"hero_{hero_1_name}_{heroes_wr[i]['wins']}_{heroes_wr[i]['losses']}_{heroes_wr[i]['wr']}"),
+                                 InlineKeyboardButton(f"{hero_2_icon} {hero_2_name} - {hero_2_pickrate}%",
+                                                      callback_data=f"hero_{hero_2_name}_{heroes_wr[i + int(heroes_len / 2)]['wins']}_{heroes_wr[i + int(heroes_len / 2)]['losses']}_{heroes_wr[i + int(heroes_len / 2)]['wr']}")])
     if heroes_len % 2 != 0:
-        hero_name = get_hero_by_id(all_heroes, heroes_wr[-1])
+        hero_name = get_hero_by_id(all_heroes, heroes_wr[-1]["hero_id"])
         hero_icon = get_hero_icon(hero_name)
-        hero_wr_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {heroes_wr[-1]['wr']}%",
-                            callback_data=f"hero_{hero_name}_{heroes_wr[-1]['wins']}_{heroes_wr[-1]['losses']}_{heroes_wr[-1]['wr']}")])
+        if is_w:
+            hero_wr_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {heroes_wr[-1]['wr']}%",
+                                callback_data=f"hero_{hero_name}_{heroes_wr[-1]['wins']}_{heroes_wr[-1]['losses']}_{heroes_wr[-1]['wr']}")])
+        else:
+            hero_pickrate = round((heroes_wr[-1]["wins"] + heroes_wr[-1]["losses"]) / total_games, 2)
+            hero_wr_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {hero_pickrate}%",
+                                                      callback_data=f"hero_{hero_name}_{heroes_wr[-1]['wins']}_{heroes_wr[-1]['losses']}_{heroes_wr[-1]['wr']}")])
 
     return InlineKeyboardMarkup(hero_wr_text)
 
 
-def lobby_rank_choice() -> InlineKeyboardMarkup:
-    ranks = [[InlineKeyboardButton("TOP 1%", callback_data="lobby_3000_2500"),
-              InlineKeyboardButton("TOP 5%", callback_data="lobby_3000_2250"),
-              InlineKeyboardButton("All matches", callback_data="lobby_3000_1"),
-              InlineKeyboardButton("Your ELO", callback_data=f"lobby_user_elo")]]
+def lobby_rank_choice(is_w: bool) -> InlineKeyboardMarkup:
+    if is_w:
+        ranks = [[InlineKeyboardButton("TOP 1%", callback_data="lobby_3000_2500_w"),
+                  InlineKeyboardButton("TOP 5%", callback_data="lobby_3000_2250_w"),
+                  InlineKeyboardButton("All matches", callback_data="lobby_3000_1_w"),
+                  InlineKeyboardButton("Your ELO", callback_data=f"w_lobby_user_elo_w")]]
+    else:
+        ranks = [[InlineKeyboardButton("TOP 1%", callback_data="lobby_3000_2500_p"),
+                  InlineKeyboardButton("TOP 5%", callback_data="lobby_3000_2250_p"),
+                  InlineKeyboardButton("All matches", callback_data="lobby_3000_1_p"),
+                  InlineKeyboardButton("Your ELO", callback_data=f"lobby_user_elo_p")]]
 
     return InlineKeyboardMarkup(ranks)
 

@@ -35,7 +35,7 @@ from dbfunc import (
 
 from inline_keyboards import (
     create_inline_matches,
-    create_hero_winrates,
+    create_hero_stats,
     lobby_rank_choice,
     create_inline_leaderboard
 )
@@ -110,10 +110,22 @@ async def hero_winrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
 
-    await update.message.reply_text("Here you can check heroes winrates since last update (07/12)",
+    await update.message.reply_text("Here you can check heroes winrates since last update (21/12)",
                                     reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
-    await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice())
+    await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice(is_w=True))
     await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened winrates")
+
+
+async def hero_pickrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if is_user_registered(update.effective_user.id):
+        user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
+    else:
+        user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
+
+    await update.message.reply_text("Here you can check heroes pick rates since last update (21/12)",
+                                    reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+    await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice(is_w=False))
+    await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened pickrates")
 
 
 def get_user_avg_elo(user_matches):
@@ -309,6 +321,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
     elif query.data.startswith("lobby"):
         elo_max_q = query.data.split('_')[1]
         elo_min_q = query.data.split('_')[2]
+        mode = query.data.split('_')[-1]
         lobby_type = {
             "2500": "TOP 1%",
             "2250": "TOP 5%",
@@ -335,7 +348,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
 
         current_timestamp = int(datetime.utcnow().timestamp())
         # week_ago_timestamp = int((datetime.utcnow() - timedelta(weeks=1)).timestamp())
-        last_patch_timestamp = 1733472360
+        last_patch_timestamp = 1734774960
         kyiv_tz = pytz.timezone('Europe/Kyiv')
         current_time_eest = datetime.fromtimestamp(current_timestamp, kyiv_tz).strftime("%d/%m")
         # week_ago_time_eest = datetime.fromtimestamp(week_ago_timestamp, kyiv_tz).strftime("%d/%m")
@@ -344,10 +357,17 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         if elo_max != 0 and elo_min != 0:
             hero_wrs = get_hero_winrates(elo_min, elo_max, last_patch_timestamp, current_timestamp)
             if hero_wrs:
-                await context.bot.send_message(user_id, f"Heroes winrates <b>({last_patch_time_eest} - {current_time_eest})</b> "
-                                                        f"- <b>{lobby_type[elo_min_q]}</b>",
-                                                        reply_markup=create_hero_winrates(hero_wrs),
-                                                        parse_mode=constants.ParseMode.HTML)
+                if mode == 'w':
+                    await context.bot.send_message(user_id, f"Heroes winrates <b>({last_patch_time_eest} - {current_time_eest})</b> "
+                                                            f"- <b>{lobby_type[elo_min_q]}</b>",
+                                                            reply_markup=create_hero_stats(hero_wrs, is_w=True),
+                                                            parse_mode=constants.ParseMode.HTML)
+                else:
+                    await context.bot.send_message(user_id,
+                                                   f"Heroes pick rates <b>({last_patch_time_eest} - {current_time_eest})</b> "
+                                                   f"- <b>{lobby_type[elo_min_q]}</b>",
+                                                   reply_markup=create_hero_stats(hero_wrs, is_w=False),
+                                                   parse_mode=constants.ParseMode.HTML)
         else:
             await context.bot.send_message(user_id, "You have no tracked games so we can't use your elo. "
                                                     "Choose different option.")
