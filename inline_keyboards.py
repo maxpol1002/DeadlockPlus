@@ -77,12 +77,13 @@ def get_elo_gain(elo_int: int) -> str:
 def create_hero_stats(heroes_wr, is_w) -> InlineKeyboardMarkup:
     hero_wr_text = []
     all_heroes = get_all_heroes()
-    total_games = 0
+    total_games = sum(hero["wins"] + hero["losses"] for hero in heroes_wr)
+
     for hero in heroes_wr:
         hero["wr"] = round((hero["wins"] / (hero["wins"] + hero["losses"])) * 100, 2)
-        total_games += hero["wins"] + hero["losses"]
+        hero["pr"] = (hero["wins"] + hero["losses"]) / total_games * 12 * 100
 
-    heroes_wr.sort(key=lambda h: h["wr"], reverse=True)
+    heroes_wr.sort(key=lambda h: h["wr"], reverse=True) if is_w else heroes_wr.sort(key=lambda h: h["pr"], reverse=True)
     heroes_len = len(heroes_wr)
 
     for i in range(int(heroes_len / 2)):
@@ -96,12 +97,9 @@ def create_hero_stats(heroes_wr, is_w) -> InlineKeyboardMarkup:
                                  InlineKeyboardButton(f"{hero_2_icon} {hero_2_name} - {heroes_wr[i + int(heroes_len/2)]['wr']}%",
                                  callback_data=f"hero_{hero_2_name}_{heroes_wr[i + int(heroes_len/2)]['wins']}_{heroes_wr[i + int(heroes_len/2)]['losses']}_{heroes_wr[i + int(heroes_len/2)]['wr']}")])
         else:
-            hero_1_pickrate = round((heroes_wr[i]["wins"] + heroes_wr[i]["losses"]) / total_games * 12 * 100, 2)
-            hero_2_pickrate = round((heroes_wr[i + int(heroes_len / 2)]["wins"] + heroes_wr[i + int(heroes_len / 2)]["losses"]) / total_games * 12 * 100, 2)
-
-            hero_wr_text.append([InlineKeyboardButton(f"{hero_1_icon} {hero_1_name} - {hero_1_pickrate}%",
+            hero_wr_text.append([InlineKeyboardButton(f"{hero_1_icon} {hero_1_name} - {heroes_wr[i]['pr']}%",
                                                       callback_data=f"hero_{hero_1_name}_{heroes_wr[i]['wins']}_{heroes_wr[i]['losses']}_{heroes_wr[i]['wr']}"),
-                                 InlineKeyboardButton(f"{hero_2_icon} {hero_2_name} - {hero_2_pickrate}%",
+                                 InlineKeyboardButton(f"{hero_2_icon} {hero_2_name} - {heroes_wr[i + int(heroes_len / 2)]['pr']}%",
                                                       callback_data=f"hero_{hero_2_name}_{heroes_wr[i + int(heroes_len / 2)]['wins']}_{heroes_wr[i + int(heroes_len / 2)]['losses']}_{heroes_wr[i + int(heroes_len / 2)]['wr']}")])
     if heroes_len % 2 != 0:
         hero_name = get_hero_by_id(all_heroes, heroes_wr[-1]["hero_id"])
@@ -110,8 +108,7 @@ def create_hero_stats(heroes_wr, is_w) -> InlineKeyboardMarkup:
             hero_wr_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {heroes_wr[-1]['wr']}%",
                                 callback_data=f"hero_{hero_name}_{heroes_wr[-1]['wins']}_{heroes_wr[-1]['losses']}_{heroes_wr[-1]['wr']}")])
         else:
-            hero_pickrate = round((heroes_wr[-1]["wins"] + heroes_wr[-1]["losses"]) / total_games * 12 * 100, 2)
-            hero_wr_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {hero_pickrate}%",
+            hero_wr_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {heroes_wr[-1]['pr']}%",
                                                       callback_data=f"hero_{hero_name}_{heroes_wr[-1]['wins']}_{heroes_wr[-1]['losses']}_{heroes_wr[-1]['wr']}")])
 
     return InlineKeyboardMarkup(hero_wr_text)
