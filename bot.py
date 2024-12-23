@@ -368,6 +368,8 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
                                                    f"- <b>{lobby_type[elo_min_q]}</b>",
                                                    reply_markup=create_hero_stats(hero_wrs, is_w=False),
                                                    parse_mode=constants.ParseMode.HTML)
+            else:
+                await context.bot.send_message(user_id, "No data available now, try again later.")
         else:
             await context.bot.send_message(user_id, "You have no tracked games so we can't use your elo. "
                                                     "Choose different option.")
