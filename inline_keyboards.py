@@ -78,13 +78,13 @@ def create_hero_stats(heroes_wr, is_w) -> InlineKeyboardMarkup:
     hero_wr_text = []
     all_heroes = get_all_heroes()
     total_games = sum(hero["wins"] + hero["losses"] for hero in heroes_wr)
+    heroes_len = len(heroes_wr)
 
     for hero in heroes_wr:
         hero["wr"] = round((hero["wins"] / (hero["wins"] + hero["losses"])) * 100, 2)
-        hero["pr"] = round((hero["wins"] + hero["losses"]) / total_games * 12 * 100, 2)
+        hero["pr"] = round((hero["wins"] + hero["losses"]) / total_games * heroes_len * 100, 2)
 
     heroes_wr.sort(key=lambda h: h["wr"], reverse=True) if is_w else heroes_wr.sort(key=lambda h: h["pr"], reverse=True)
-    heroes_len = len(heroes_wr)
 
     for i in range(int(heroes_len / 2)):
         hero_1_name = get_hero_by_id(all_heroes, heroes_wr[i]["hero_id"])
