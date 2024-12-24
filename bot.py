@@ -356,18 +356,18 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
 
         if elo_max != 0 and elo_min != 0:
             hero_wrs = get_hero_winrates(elo_min, elo_max, last_patch_timestamp, current_timestamp)
-            if hero_wrs:
-                if mode == 'w':
-                    await context.bot.send_message(user_id, f"Heroes winrates <b>({last_patch_time_eest} - {current_time_eest})</b> "
-                                                            f"- <b>{lobby_type[elo_min_q]}</b>",
-                                                            reply_markup=create_hero_stats(hero_wrs, is_w=True),
-                                                            parse_mode=constants.ParseMode.HTML)
-                else:
-                    await context.bot.send_message(user_id,
-                                                   f"Heroes pick rates <b>({last_patch_time_eest} - {current_time_eest})</b> "
-                                                   f"- <b>{lobby_type[elo_min_q]}</b>",
-                                                   reply_markup=create_hero_stats(hero_wrs, is_w=False),
-                                                   parse_mode=constants.ParseMode.HTML)
+            if hero_wrs and mode == 'w':
+                await context.bot.send_message(user_id, f"Heroes winrates <b>({last_patch_time_eest} - {current_time_eest})</b> "
+                                                        f"- <b>{lobby_type[elo_min_q]}</b>",
+                                                        reply_markup=create_hero_stats(hero_wrs, is_w=True),
+                                                        parse_mode=constants.ParseMode.HTML)
+
+            elif mode == 'p' and len(hero_wrs) == 22:
+                await context.bot.send_message(user_id,
+                                               f"Heroes pick rates <b>({last_patch_time_eest} - {current_time_eest})</b> "
+                                               f"- <b>{lobby_type[elo_min_q]}</b>",
+                                               reply_markup=create_hero_stats(hero_wrs, is_w=False),
+                                               parse_mode=constants.ParseMode.HTML)
             else:
                 await context.bot.send_message(user_id, "No data available now, try again later.")
         else:
