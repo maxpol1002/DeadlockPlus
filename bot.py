@@ -362,7 +362,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
                                                         reply_markup=create_hero_stats(hero_wrs, is_w=True),
                                                         parse_mode=constants.ParseMode.HTML)
 
-            elif mode == 'p' and len(hero_wrs) == 22:
+            elif mode == 'p' and len(hero_wrs) == 26:
                 await context.bot.send_message(user_id,
                                                f"Heroes pick rates <b>({last_patch_time_eest} - {current_time_eest})</b> "
                                                f"- <b>{lobby_type[elo_min_q]}</b>",
