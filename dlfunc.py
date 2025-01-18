@@ -56,7 +56,7 @@ def get_hero_icon(hero_name: str) -> str:
         "Shiv": "🩸",
         "Vindicta": "🎯",
         "Viscous": "🟢",
-        "Vyper": "🦎",
+        "Viper": "🦎",
         "Warden": "👮‍♂️",
         "Wraith": "🃏",
         "Yamato": "⛩"
