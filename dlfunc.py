@@ -46,7 +46,7 @@ def get_hero_icon(hero_name: str) -> str:
         "Kelvin": "🥶",
         "Lady Geist": "🔫",
         "Lash": "👨‍🦰",
-        "Magician": "🧙",
+        "THE MAGNIFICENT SINCLAIR": "🧙",
         "McGinnis": "🚀",
         "Mirage": "🌪",
         "Mo & Krill": "🐽",
@@ -56,7 +56,7 @@ def get_hero_icon(hero_name: str) -> str:
         "Shiv": "🩸",
         "Vindicta": "🎯",
         "Viscous": "🟢",
-        "Viper": "🦎",
+        "Vyper": "🦎",
         "Warden": "👮‍♂️",
         "Wraith": "🃏",
         "Yamato": "⛩"
