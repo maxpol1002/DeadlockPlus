@@ -47,6 +47,7 @@ def get_hero_icon(hero_name: str) -> str:
         "Lady Geist": "🔫",
         "Lash": "👨‍🦰",
         "THE MAGNIFICENT SINCLAIR": "🧙",
+        "Magician": "🧙",
         "McGinnis": "🚀",
         "Mirage": "🌪",
         "Mo & Krill": "🐽",
