@@ -27,7 +27,7 @@ def get_all_heroes():
 def get_hero_by_id(all_heroes, hero_id: int) -> str or None:
     for hero in all_heroes:
         if hero['id'] == hero_id:
-            return "Magician" if hero['id'] == 60 else hero['name']
+            return "Sinclair" if hero['id'] == 60 else hero['name']
 
     return "Unknown"
 
@@ -47,7 +47,7 @@ def get_hero_icon(hero_name: str) -> str:
         "Lady Geist": "🔫",
         "Lash": "👨‍🦰",
         "THE MAGNIFICENT SINCLAIR": "🧙",
-        "Magician": "🧙",
+        "Sinclair": "🧙",
         "McGinnis": "🚀",
         "Mirage": "🌪",
         "Mo & Krill": "🐽",

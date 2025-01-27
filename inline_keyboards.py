@@ -25,7 +25,7 @@ def create_inline_matches(all_matches, user_id, is_first_page) -> InlineKeyboard
                 elo_gain = get_elo_gain(elo_int)
 
             user_hero = get_user_hero(match_data, get_user_uid(user_id))
-            user_hero = "Magician" if user_hero == "THE MAGNIFICENT SINCLAIR" else user_hero
+            user_hero = "Sinclair" if user_hero == "THE MAGNIFICENT SINCLAIR" else user_hero
 
             hero_icon = get_hero_icon(user_hero)
 
