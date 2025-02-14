@@ -43,7 +43,7 @@ async def parse_users_matches(user_uids: list, active_matches: list, context: Co
                 await notify_user(get_user_id(player['account_id']), match['match_id'], match['match_score'], context)
                 user_matchids = get_matchids_foruser(get_user_id(player['account_id']))
 
-                if get_user_match_count(user_matchids, match['match_mode']) == 30:
+                if get_user_match_count(user_matchids, match['match_mode']) == 50:
                     removed_match_id = remove_user_first_match(user_matchids, match['match_mode'], player['account_id'])
 
                     if not if_any_user_has_match(removed_match_id):
@@ -105,7 +105,7 @@ async def parse_matches_job(context: ContextTypes.DEFAULT_TYPE):
 
 
 async def start_job(context: ContextTypes.DEFAULT_TYPE):
-    context.job_queue.run_repeating(parse_matches_job, interval=20, first=0)
+    context.job_queue.run_repeating(parse_matches_job, interval=30, first=0)
 
 
 def get_match_datetime(timestamp):

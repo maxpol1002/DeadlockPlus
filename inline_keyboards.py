@@ -39,7 +39,6 @@ def create_inline_matches(all_matches, user_id, page_number) -> InlineKeyboardMa
             match_pos += 1
 
     controls = []
-    pages_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
     for i in range(1, pages_count + 1):
         page_text = f"· {i} ·" if i == page_number else str(i)
         controls.append(InlineKeyboardButton(page_text, callback_data=f"page_{i}"))
@@ -150,9 +149,3 @@ def get_position_emoji(position: int) -> str:
     }
 
     return positions.get(position, '?')
-
-
-def get_page_emoji(page_number: int) -> str:
-    pages_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
-
-    return pages_emojis[page_number - 1]
