@@ -10,15 +10,15 @@ from dlfunc import get_hero_icon, get_user_hero, get_all_heroes, get_hero_by_id
 def create_inline_matches(all_matches, user_id, is_first_page) -> InlineKeyboardMarkup:
     button_match_text = []
     all_matches_count = len(all_matches)
-    matches = all_matches[:10] if is_first_page else all_matches[10:]
+    matches = all_matches[:15] if is_first_page else all_matches[15:]
     page_match_count = len(matches)
     match_pos = 0
     for match_data in matches:
         if match_data is not None:
-            if (match_pos == page_match_count - 1 and not is_first_page) or (match_pos == page_match_count - 1 and is_first_page and all_matches_count <= 10):
+            if (match_pos == page_match_count - 1 and not is_first_page) or (match_pos == page_match_count - 1 and is_first_page and all_matches_count <= 15):
                 elo_gain = '-'
-            elif match_pos == page_match_count - 1 and is_first_page and all_matches_count > 10:
-                elo_int = match_data['match_elo'] - all_matches[10]['match_elo']
+            elif match_pos == page_match_count - 1 and is_first_page and all_matches_count > 15:
+                elo_int = match_data['match_elo'] - all_matches[15]['match_elo']
                 elo_gain = get_elo_gain(elo_int)
             else:
                 elo_int = match_data['match_elo'] - matches[match_pos + 1]['match_elo']
@@ -35,7 +35,7 @@ def create_inline_matches(all_matches, user_id, is_first_page) -> InlineKeyboard
 
             match_pos += 1
 
-    if all_matches_count > 10:
+    if all_matches_count > 15:
         controls = "▶️" if is_first_page else "◀️"
         cb_data = "page_second" if is_first_page else "page_first"
         button_match_text.append([InlineKeyboardButton(controls, callback_data=cb_data)])
