@@ -41,7 +41,7 @@ def create_inline_matches(all_matches, user_id, page_number) -> InlineKeyboardMa
     controls = []
     pages_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
     for i in range(1, pages_count + 1):
-        page_text = f"·{i}·" if i == page_number else str(i)
+        page_text = f"· {i} ·" if i == page_number else str(i)
         controls.append(InlineKeyboardButton(page_text, callback_data=f"page_{i}"))
 
     button_match_text.append(controls)
