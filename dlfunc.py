@@ -146,7 +146,8 @@ def filter_match_data(match_id, active_matches) -> dict or str:
     if data:
         heroes = get_all_heroes()
         players_accids = [player["account_id"] for player in data["players"]]
-        players_data = get_users_data(players_accids)
+        players_commids = [usteamid_to_commid(accid) for accid in players_accids]
+        players_data = get_users_data(players_commids)
         start_time = parse_match_time(data["start_time"])
         page_number, match_number = find_match_position(match_id, active_matches)
         matches_count = len(active_matches)

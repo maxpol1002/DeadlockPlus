@@ -55,24 +55,24 @@ def get_user_playtime(account_id):
     return "N/A", "N/A"
 
 
+# def get_users_data(acc_ids: list):
+#     commids = [usteamid_to_commid(accid) for accid in acc_ids]
+#     commids_str = '.'.join(str(commid) for commid in commids)
+#     url = f"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={os.getenv('skey')}&steamids={commids_str}"
+#     response = requests.get(url)
+#     data = response.json()['response']['players']
+#     users_data = {
+#         player["steamid"]: {
+#             "username": player["personaname"],
+#             "user_link": player["profileurl"]
+#         }
+#         for player in data
+#     }
+#
+#     return users_data
+
+
 def get_users_data(acc_ids: list):
-    commids = [usteamid_to_commid(accid) for accid in acc_ids]
-    commids_str = '.'.join(str(commid) for commid in commids)
-    url = f"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={os.getenv('skey')}&steamids={commids_str}"
-    response = requests.get(url)
-    data = response.json()['response']['players']
-    users_data = {
-        player["steamid"]: {
-            "username": player["personaname"],
-            "user_link": player["profileurl"]
-        }
-        for player in data
-    }
-
-    return users_data
-
-
-def get_users_data_comm(acc_ids: list):
     commids_str = '.'.join(str(acc_id) for acc_id in acc_ids)
     url = f"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={os.getenv('skey')}&steamids={commids_str}"
     response = requests.get(url)
