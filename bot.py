@@ -262,7 +262,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             all_matchids = sorted(get_matchids_foruser(user.id), reverse=True)
             standart_matches = get_user_matches_bymode(all_matchids, 1)
             await context.bot.send_message(user.id, "⬇️ <b>Your matches</b> ⬇️",
-                                           reply_markup=create_inline_matches(standart_matches, user.id, is_first_page=True),
+                                           reply_markup=create_inline_matches(standart_matches, user.id, page_number=1),
                                            parse_mode=constants.ParseMode.HTML)
 
         else:
@@ -400,22 +400,14 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         await query.answer()
 
     elif query.data.startswith("page"):
-        page_number = query.data.split("_")[1]
+        page_number = int(query.data.split("_")[1])
         all_matchids = sorted(get_matchids_foruser(query.from_user.id), reverse=True)
         standart_matches = get_user_matches_bymode(all_matchids, 1)
-        if page_number == "first":
-            try:
-                await query.edit_message_reply_markup(create_inline_matches(standart_matches, query.from_user.id,
-                                                                            is_first_page=True))
-            except telegram.error.BadRequest:
-                pass
-
-        else:
-            try:
-                await query.edit_message_reply_markup(create_inline_matches(standart_matches, query.from_user.id,
-                                                                            is_first_page=False))
-            except telegram.error.BadRequest:
-                pass
+        try:
+            await query.edit_message_reply_markup(create_inline_matches(standart_matches, query.from_user.id,
+                                                                        page_number=page_number))
+        except telegram.error.BadRequest:
+            pass
 
         await query.answer()
 

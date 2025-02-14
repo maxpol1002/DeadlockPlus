@@ -1,3 +1,5 @@
+import math
+
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from steamfunc import get_users_data
@@ -7,18 +9,19 @@ from dbfunc import get_user_uid
 from dlfunc import get_hero_icon, get_user_hero, get_all_heroes, get_hero_by_id
 
 
-def create_inline_matches(all_matches, user_id, is_first_page) -> InlineKeyboardMarkup:
+def create_inline_matches(all_matches, user_id, page_number) -> InlineKeyboardMarkup:
     button_match_text = []
     all_matches_count = len(all_matches)
-    matches = all_matches[:10] if is_first_page else all_matches[10:]
+    pages_count = math.ceil(all_matches_count / 10)
+    matches = all_matches[:10] if page_number == 1 else all_matches[(page_number * 10) - 10:(page_number * 10)]
     page_match_count = len(matches)
     match_pos = 0
     for match_data in matches:
         if match_data is not None:
-            if (match_pos == page_match_count - 1 and not is_first_page) or (match_pos == page_match_count - 1 and is_first_page and all_matches_count <= 10):
+            if match_data["match_id"] == all_matches[-1]["match_id"]:
                 elo_gain = '-'
-            elif match_pos == page_match_count - 1 and is_first_page and all_matches_count > 10:
-                elo_int = match_data['match_elo'] - all_matches[10]['match_elo']
+            elif match_pos == page_match_count - 1 and all_matches_count > 10:
+                elo_int = match_data['match_elo'] - all_matches[page_number * 10]['match_elo']
                 elo_gain = get_elo_gain(elo_int)
             else:
                 elo_int = match_data['match_elo'] - matches[match_pos + 1]['match_elo']
@@ -35,10 +38,12 @@ def create_inline_matches(all_matches, user_id, is_first_page) -> InlineKeyboard
 
             match_pos += 1
 
-    if all_matches_count > 10:
-        controls = "▶️" if is_first_page else "◀️"
-        cb_data = "page_second" if is_first_page else "page_first"
-        button_match_text.append([InlineKeyboardButton(controls, callback_data=cb_data)])
+    controls = []
+    pages_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
+    for i in range(pages_count):
+        controls.append([InlineKeyboardButton(pages_emojis[i], callback_data=f"page_{i + 1}")])
+
+    button_match_text.append(controls)
 
     return InlineKeyboardMarkup(button_match_text)
 
@@ -144,3 +149,9 @@ def get_position_emoji(position: int) -> str:
     }
 
     return positions.get(position, '?')
+
+
+def get_page_emoji(page_number: int) -> str:
+    pages_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
+
+    return pages_emojis[page_number - 1]
