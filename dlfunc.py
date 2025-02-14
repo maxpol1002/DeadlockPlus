@@ -1,6 +1,7 @@
 import math
 import pytz
 import requests
+import html
 
 from datetime import datetime
 
@@ -167,7 +168,7 @@ def filter_match_data(match_id, active_matches) -> dict or str:
             "players": [
                 {
                     "hero": get_hero_by_id(heroes, player["hero_id"]),
-                    "player_name": players_data[usteamid_to_commid(player["account_id"])]["username"],
+                    "player_name": html.escape(players_data[usteamid_to_commid(player["account_id"])]["username"]),
                     "account_link": players_data[usteamid_to_commid(player["account_id"])]["user_link"],
                     "playtime": {
                         "total": game_data[0] if game_data else "N/A",
