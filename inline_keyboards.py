@@ -1,6 +1,6 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from steamfunc import get_users_data_comm
+from steamfunc import get_users_data
 
 from dbfunc import get_user_uid
 
@@ -46,7 +46,7 @@ def create_inline_matches(all_matches, user_id, is_first_page) -> InlineKeyboard
 def create_inline_leaderboard(users_avg_elo: dict):
     button_user_text = []
     user_comm_ids = [key for key in users_avg_elo.keys()]
-    users_data = get_users_data_comm(user_comm_ids)
+    users_data = get_users_data(user_comm_ids)
     for index, (comm_id, avg_elo) in enumerate(users_avg_elo.items(), start=0):
         user_steam_name = users_data[str(comm_id)]['username']
         pos_emoji = get_position_emoji(index)
