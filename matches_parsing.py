@@ -61,7 +61,7 @@ def filter_data(match_data, active_matches):
     heroes = get_all_heroes()
     players_accids = [player["account_id"] for player in match_data["players"]]
     players_commids = [usteamid_to_commid(accid) for accid in players_accids]
-    players_data = get_users_data_comm(players_commids)
+    players_data = get_users_data(players_commids)
     page_number, match_number = find_match_position(match_data['match_id'], active_matches)
     matches_count = len(active_matches)
     filtered_data = {
