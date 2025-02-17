@@ -348,6 +348,9 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         await query.edit_message_text("Select a hero to check matchups", reply_markup=create_inline_matchups(matchups))
         await query.answer()
 
+    elif query.data == "nothing":
+        await query.answer()
+
     elif query.data.startswith("lobby"):
         elo_max_q = query.data.split('_')[1]
         elo_min_q = query.data.split('_')[2]
@@ -469,6 +472,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         message += f"————————————————\n"
 
         markup = InlineKeyboardMarkup([[InlineKeyboardButton("❌", callback_data=f"delete_msg")]])
+
         await context.bot.send_message(user_id, message, reply_markup=markup, parse_mode=constants.ParseMode.HTML)
         await query.answer()
 

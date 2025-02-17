@@ -141,7 +141,9 @@ def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -
     else:
         chosen_hero_name = get_hero_by_id(all_heroes, selected_hero_id)
         chosen_hero_icon = get_hero_icon(chosen_hero_name)
-        hero_button_text.append([InlineKeyboardButton(f"{chosen_hero_icon} {chosen_hero_name} ✅", callback_data="s")])
+        hero_button_text.append([InlineKeyboardButton(f"{chosen_hero_icon} {chosen_hero_name} ✅",
+                                                      callback_data="nothing")])
+
         matchups = get_matchups_for_hero(hero_matchups, selected_hero_id)
         for matchup in matchups:
             hero_name = get_hero_by_id(all_heroes, matchup["hero_id"])
