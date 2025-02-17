@@ -124,11 +124,15 @@ def create_inline_matchups(hero_id: None, min_ts, max_ts) -> InlineKeyboardMarku
     all_heroes = get_all_heroes()
     if not hero_id:
         hero_button_text = []
+        buttons_row = []
         for hero in hero_matchups:
             hero_id = hero["hero_id"]
             hero_name = get_hero_by_id(all_heroes, hero_id)
             hero_icon = get_hero_icon(hero_name)
-            hero_button_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data=f"matchups_{hero_id}")])
+            buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data=f"matchups_{hero_id}"))
+            if len(buttons_row) == 2:
+                hero_button_text.append(buttons_row)
+                buttons_row = []
 
         return InlineKeyboardMarkup(hero_button_text)
 
