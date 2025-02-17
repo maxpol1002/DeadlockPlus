@@ -155,6 +155,8 @@ def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -
         if buttons_row:
             hero_button_text.append(buttons_row)
 
+        hero_button_text.append([InlineKeyboardButton("⬅️", callback_data="open_matchups")])
+
     return InlineKeyboardMarkup(hero_button_text)
 
 

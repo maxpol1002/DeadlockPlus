@@ -147,7 +147,7 @@ async def hero_matchups(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"Here you can check heroes matchups <b>({last_patch_time_eest} - {current_time_eest})</b>",
                                     reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
                                     parse_mode=constants.ParseMode.HTML)
-    await update.message.reply_text("Select a hero to check matchups.", reply_markup=create_inline_matchups(matchups))
+    await update.message.reply_text("Select a hero to check matchups", reply_markup=create_inline_matchups(matchups))
 
 
 def get_user_avg_elo(user_matches):
@@ -339,6 +339,14 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
 
     elif query.data == "delete_msg":
         await update.effective_message.delete()
+        await query.answer()
+
+    elif query.data == "open_matchups":
+        current_timestamp = int(datetime.utcnow().timestamp())
+        last_patch_timestamp = 1739319840
+        matchups = get_hero_matchups(min_ts=last_patch_timestamp, max_ts=current_timestamp)
+        await query.edit_message_text("Select a hero to check matchups", reply_markup=create_inline_matchups(matchups))
+        await query.answer()
 
     elif query.data.startswith("lobby"):
         elo_max_q = query.data.split('_')[1]
@@ -437,6 +445,8 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         last_patch_timestamp = 1739319840
         matchups = get_hero_matchups(min_ts=last_patch_timestamp, max_ts=current_timestamp)
         await query.edit_message_text("Matchups ⬇️", reply_markup=create_inline_matchups(matchups, hero_id))
+
+        await query.answer()
 
 
 def get_user_matches_bymode(all_matchids, match_mode):
