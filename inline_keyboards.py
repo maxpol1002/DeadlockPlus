@@ -142,24 +142,18 @@ def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -
         chosen_hero_name = get_hero_by_id(all_heroes, selected_hero_id)
         chosen_hero_icon = get_hero_icon(chosen_hero_name)
         hero_button_text.append([InlineKeyboardButton(f"{chosen_hero_icon} {chosen_hero_name} ✅", callback_data="s")])
+        matchups = get_matchups_for_hero(hero_matchups, selected_hero_id)
+        for matchup in matchups:
+            hero_name = get_hero_by_id(all_heroes, matchup["hero_id"])
+            hero_icon = get_hero_icon(hero_name)
+            buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {matchup['wr']}%", callback_data=f"s"))
 
-        for hero in hero_matchups:
-            if hero["hero_id"] == selected_hero_id:
-                for matchup in hero["matchups"]:
-                    hero_id = matchup["hero_id"]
-                    hero_name = get_hero_by_id(all_heroes, hero_id)
-                    hero_icon = get_hero_icon(hero_name)
-                    hero_wr = round((matchup["wins"] / matchup["matches"]) * 100, 2)
-                    buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {hero_wr}%", callback_data=f"s"))
+            if len(buttons_row) == 2:
+                hero_button_text.append(buttons_row)
+                buttons_row = []
 
-                    if len(buttons_row) == 2:
-                        hero_button_text.append(buttons_row)
-                        buttons_row = []
-
-                if buttons_row:
-                    hero_button_text.append(buttons_row)
-
-                break
+        if buttons_row:
+            hero_button_text.append(buttons_row)
 
     return InlineKeyboardMarkup(hero_button_text)
 
@@ -194,3 +188,15 @@ def get_position_emoji(position: int) -> str:
     }
 
     return positions.get(position, '?')
+
+
+def get_matchups_for_hero(hero_data, hero_id):
+    for hero in hero_data:
+        if hero["hero_id"] == hero_id:
+            matchups = hero["matchups"]
+            for matchup in matchups:
+                matchup["wr"] = round((matchup["wins"] / matchup["matches"]) * 100, 2) if matchup["matches"] > 0 else 0
+
+            return sorted(matchups, key=lambda x: x["wr"], reverse=True)
+
+    return None

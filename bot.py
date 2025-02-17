@@ -144,8 +144,9 @@ async def hero_matchups(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     matchups = get_hero_matchups(min_ts=last_patch_timestamp, max_ts=current_timestamp)
 
-    await update.message.reply_text(f"Here you can check heroes matchups ({last_patch_time_eest} - {current_time_eest})",
-                                    reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+    await update.message.reply_text(f"Here you can check heroes matchups <b>({last_patch_time_eest} - {current_time_eest})</b>",
+                                    reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
+                                    parse_mode=constants.ParseMode.HTML)
     await update.message.reply_text("Select a hero to check matchups.", reply_markup=create_inline_matchups(matchups))
 
 
@@ -435,7 +436,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         current_timestamp = int(datetime.utcnow().timestamp())
         last_patch_timestamp = 1739319840
         matchups = get_hero_matchups(min_ts=last_patch_timestamp, max_ts=current_timestamp)
-        await query.edit_message_reply_markup(create_inline_matchups(matchups, hero_id))
+        await query.edit_message_text("Matchups ⬇️", reply_markup=create_inline_matchups(matchups, hero_id))
 
 
 def get_user_matches_bymode(all_matchids, match_mode):
