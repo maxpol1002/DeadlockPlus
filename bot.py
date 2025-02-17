@@ -1,6 +1,6 @@
 from collections import Counter
 
-from datetime import datetime, timedelta
+from datetime import datetime
 import html
 import pytz
 
@@ -37,7 +37,8 @@ from inline_keyboards import (
     create_inline_matches,
     create_hero_stats,
     lobby_rank_choice,
-    create_inline_leaderboard
+    create_inline_leaderboard,
+    create_inline_matchups
 )
 
 
@@ -126,6 +127,21 @@ async def hero_pickrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                     reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
     await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice(is_w=False))
     await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened pickrates")
+
+
+async def hero_matchups(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if is_user_registered(update.effective_user.id):
+        user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
+    else:
+        user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
+
+    current_timestamp = int(datetime.utcnow().timestamp())
+    last_patch_timestamp = 1739319840
+    kyiv_tz = pytz.timezone('Europe/Kyiv')
+    current_time_eest = datetime.fromtimestamp(current_timestamp, kyiv_tz).strftime("%d/%m")
+    last_patch_time_eest = datetime.fromtimestamp(last_patch_timestamp, kyiv_tz).strftime("%d/%m")
+
+    await update.message.reply_text("TEST", reply_markup=create_inline_matchups(hero_id=None, min_ts=last_patch_timestamp, max_ts=current_timestamp))
 
 
 def get_user_avg_elo(user_matches):
@@ -347,11 +363,9 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
                 elo_min = 0
 
         current_timestamp = int(datetime.utcnow().timestamp())
-        # week_ago_timestamp = int((datetime.utcnow() - timedelta(weeks=1)).timestamp())
         last_patch_timestamp = 1739319840
         kyiv_tz = pytz.timezone('Europe/Kyiv')
         current_time_eest = datetime.fromtimestamp(current_timestamp, kyiv_tz).strftime("%d/%m")
-        # week_ago_time_eest = datetime.fromtimestamp(week_ago_timestamp, kyiv_tz).strftime("%d/%m")
         last_patch_time_eest = datetime.fromtimestamp(last_patch_timestamp, kyiv_tz).strftime("%d/%m")
 
         if elo_max != 0 and elo_min != 0:

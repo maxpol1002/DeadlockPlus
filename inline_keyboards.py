@@ -6,7 +6,7 @@ from steamfunc import get_users_data
 
 from dbfunc import get_user_uid
 
-from dlfunc import get_hero_icon, get_user_hero, get_all_heroes, get_hero_by_id
+from dlfunc import get_hero_icon, get_user_hero, get_all_heroes, get_hero_by_id, get_hero_matchups
 
 
 def create_inline_matches(all_matches, user_id, page_number) -> InlineKeyboardMarkup:
@@ -117,6 +117,20 @@ def create_hero_stats(heroes_wr, is_w) -> InlineKeyboardMarkup:
                                 callback_data=f"hero_{hero_name}_{heroes_wr[-1]['wins']}_{heroes_wr[-1]['losses']}_{heroes_wr[-1]['wr']}_{heroes_wr[-1]['pr']}")])
 
     return InlineKeyboardMarkup(hero_wr_text)
+
+
+def create_inline_matchups(hero_id: None, min_ts, max_ts) -> InlineKeyboardMarkup:
+    hero_matchups = get_hero_matchups(min_ts=min_ts, max_ts=max_ts)
+    all_heroes = get_all_heroes()
+    if not hero_id:
+        hero_button_text = []
+        for hero in hero_matchups:
+            hero_id = hero["hero_id"]
+            hero_name = get_hero_by_id(all_heroes, hero_id)
+            hero_icon = get_hero_icon(hero_name)
+            hero_button_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data=f"matchups_{hero_id}")])
+
+        return InlineKeyboardMarkup(hero_button_text)
 
 
 def lobby_rank_choice(is_w: bool) -> InlineKeyboardMarkup:

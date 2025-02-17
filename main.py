@@ -20,7 +20,8 @@ from bot import (
     ua_tg,
     hero_winrates,
     hero_pickrates,
-    users_leaderboard
+    users_leaderboard,
+    hero_matchups
 )
 
 from matches_parsing import start_job
@@ -44,7 +45,8 @@ if __name__ == '__main__':
                            filters.Command("ua_tg") |
                            filters.Command("hero_winrates") |
                            filters.Command("users_leaderboard") |
-                           filters.Command("hero_pickrates"),
+                           filters.Command("hero_pickrates") |
+                           filters.Command("hero_matchups"),
                            end_conv)
         ]
     )
@@ -57,6 +59,7 @@ if __name__ == '__main__':
     application.add_handler(CommandHandler("hero_winrates", hero_winrates))
     application.add_handler(CommandHandler("users_leaderboard", users_leaderboard))
     application.add_handler(CommandHandler("hero_pickrates", hero_pickrates))
+    application.add_handler(CommandHandler("hero_matchups", hero_matchups))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
     application.add_handler(CallbackQueryHandler(callback_data_handler))
     application.job_queue.run_once(start_job, when=0)
