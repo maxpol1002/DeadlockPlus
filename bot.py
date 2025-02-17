@@ -460,7 +460,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         chosen_hero_icon = get_hero_icon(chosen_hero_name)
 
         message = f"————————————————\n"
-        message += f"{chosen_hero_icon} <b>{chosen_hero_name}</b> VS {matchup_hero_icon} <b>{matchup_hero_name}</b>\n"
+        message += f"{chosen_hero_icon} <b>{chosen_hero_name}</b> VS <b>{matchup_hero_name}</b> {matchup_hero_icon}\n"
         message += f"————————————————\n"
         message += f"<b>Winrate</b>: {matchup_hero_wr}%\n"
         message += f"<b>Total games</b>: {matchup_hero_wins + matchup_hero_losses}\n"
@@ -468,7 +468,8 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         message += f"<b>Losses</b>: {matchup_hero_losses}\n"
         message += f"————————————————\n"
 
-        await context.bot.send_message(user_id, message, parse_mode=constants.ParseMode.HTML)
+        markup = InlineKeyboardMarkup([[InlineKeyboardButton("❌", callback_data=f"delete_msg")]])
+        await context.bot.send_message(user_id, message, reply_markup=markup, parse_mode=constants.ParseMode.HTML)
         await query.answer()
 
 
