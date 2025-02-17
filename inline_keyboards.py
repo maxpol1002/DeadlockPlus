@@ -119,17 +119,19 @@ def create_hero_stats(heroes_wr, is_w) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(hero_wr_text)
 
 
-def create_inline_matchups(hero_id: None, min_ts, max_ts) -> InlineKeyboardMarkup:
-    hero_matchups = get_hero_matchups(min_ts=min_ts, max_ts=max_ts)
+def create_inline_matchups(hero_matchups, hero_id: int | None = None) -> InlineKeyboardMarkup:
     all_heroes = get_all_heroes()
+    hero_button_text = []
+    buttons_row = []
+
     if not hero_id:
-        hero_button_text = []
-        buttons_row = []
+
         for hero in hero_matchups:
             hero_id = hero["hero_id"]
             hero_name = get_hero_by_id(all_heroes, hero_id)
             hero_icon = get_hero_icon(hero_name)
             buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data=f"matchups_{hero_id}"))
+
             if len(buttons_row) == 3:
                 hero_button_text.append(buttons_row)
                 buttons_row = []
@@ -137,7 +139,26 @@ def create_inline_matchups(hero_id: None, min_ts, max_ts) -> InlineKeyboardMarku
         if buttons_row:
             hero_button_text.append(buttons_row)
 
-        return InlineKeyboardMarkup(hero_button_text)
+    else:
+        chosen_hero_name = get_hero_by_id(all_heroes, hero_id)
+        chosen_hero_icon = get_hero_icon(chosen_hero_name)
+        buttons_row.append(InlineKeyboardButton(f"✅ {chosen_hero_icon} {chosen_hero_name}"))
+
+        for hero in hero_matchups:
+            hero_id = hero["hero_id"]
+            hero_name = get_hero_by_id(all_heroes, hero_id)
+            hero_icon = get_hero_icon(hero_name)
+            hero_wr = round(hero["wins"] / hero["matches"], 2)
+            buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {hero_wr}%", callback_data=f"s"))
+
+            if len(buttons_row) == 2:
+                hero_button_text.append(buttons_row)
+                buttons_row = []
+
+        if buttons_row:
+            hero_button_text.append(buttons_row)
+
+    return InlineKeyboardMarkup(hero_button_text)
 
 
 def lobby_rank_choice(is_w: bool) -> InlineKeyboardMarkup:

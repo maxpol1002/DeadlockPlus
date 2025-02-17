@@ -16,7 +16,8 @@ from dlfunc import (
     get_user_hero,
     convert_match_mode,
     get_hero_winrates,
-    convert_ranked_rank
+    convert_ranked_rank,
+    get_hero_matchups
 )
 
 from steamfunc import (
@@ -141,7 +142,11 @@ async def hero_matchups(update: Update, context: ContextTypes.DEFAULT_TYPE):
     current_time_eest = datetime.fromtimestamp(current_timestamp, kyiv_tz).strftime("%d/%m")
     last_patch_time_eest = datetime.fromtimestamp(last_patch_timestamp, kyiv_tz).strftime("%d/%m")
 
-    await update.message.reply_text("TEST", reply_markup=create_inline_matchups(hero_id=None, min_ts=last_patch_timestamp, max_ts=current_timestamp))
+    matchups = get_hero_matchups(min_ts=last_patch_timestamp, max_ts=current_timestamp)
+
+    await update.message.reply_text(f"Here you can check heroes matchups ({last_patch_time_eest} - {current_time_eest})",
+                                    reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+    await update.message.reply_text("Select a hero to check matchups.", reply_markup=create_inline_matchups(matchups, hero_id=None))
 
 
 def get_user_avg_elo(user_matches):
@@ -424,6 +429,13 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
             pass
 
         await query.answer()
+
+    elif query.data.startswith("matchups"):
+        hero_id = int(query.data.split("_")[1])
+        current_timestamp = int(datetime.utcnow().timestamp())
+        last_patch_timestamp = 1739319840
+        matchups = get_hero_matchups(min_ts=last_patch_timestamp, max_ts=current_timestamp)
+        await query.edit_message_reply_markup(create_inline_matchups(matchups, hero_id))
 
 
 def get_user_matches_bymode(all_matchids, match_mode):
