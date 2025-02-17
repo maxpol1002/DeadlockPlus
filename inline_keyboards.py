@@ -119,18 +119,17 @@ def create_hero_stats(heroes_wr, is_w) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(hero_wr_text)
 
 
-def create_inline_matchups(hero_matchups, hero_id: int | None = None) -> InlineKeyboardMarkup:
+def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -> InlineKeyboardMarkup:
     all_heroes = get_all_heroes()
     hero_button_text = []
     buttons_row = []
 
-    if not hero_id:
+    if not selected_hero_id:
 
         for hero in hero_matchups:
-            hero_id = hero["hero_id"]
-            hero_name = get_hero_by_id(all_heroes, hero_id)
+            hero_name = get_hero_by_id(all_heroes, hero["hero_id"])
             hero_icon = get_hero_icon(hero_name)
-            buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data=f"hmatchups_{hero_id}"))
+            buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data=f"hmatchups_{hero['hero_id']}"))
 
             if len(buttons_row) == 3:
                 hero_button_text.append(buttons_row)
@@ -140,23 +139,27 @@ def create_inline_matchups(hero_matchups, hero_id: int | None = None) -> InlineK
             hero_button_text.append(buttons_row)
 
     else:
-        chosen_hero_name = get_hero_by_id(all_heroes, hero_id)
+        chosen_hero_name = get_hero_by_id(all_heroes, selected_hero_id)
         chosen_hero_icon = get_hero_icon(chosen_hero_name)
         buttons_row.append(InlineKeyboardButton(f"✅ {chosen_hero_icon} {chosen_hero_name}"))
 
         for hero in hero_matchups:
-            hero_id = hero["hero_id"]
-            hero_name = get_hero_by_id(all_heroes, hero_id)
-            hero_icon = get_hero_icon(hero_name)
-            hero_wr = round(hero["wins"] / hero["matches"], 2)
-            buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {hero_wr}%", callback_data=f"s"))
+            if hero["hero_id"] == selected_hero_id:
+                for matchup in hero["matchups"]:
+                    hero_id = matchup["hero_id"]
+                    hero_name = get_hero_by_id(all_heroes, hero_id)
+                    hero_icon = get_hero_icon(hero_name)
+                    hero_wr = round(matchup["wins"] / matchup["matches"], 2)
+                    buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {hero_wr}%", callback_data=f"s"))
 
-            if len(buttons_row) == 2:
-                hero_button_text.append(buttons_row)
-                buttons_row = []
+                    if len(buttons_row) == 2:
+                        hero_button_text.append(buttons_row)
+                        buttons_row = []
 
-        if buttons_row:
-            hero_button_text.append(buttons_row)
+                if buttons_row:
+                    hero_button_text.append(buttons_row)
+
+                break
 
     return InlineKeyboardMarkup(hero_button_text)
 
