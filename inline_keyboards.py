@@ -146,7 +146,8 @@ def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -
         for matchup in matchups:
             hero_name = get_hero_by_id(all_heroes, matchup["hero_id"])
             hero_icon = get_hero_icon(hero_name)
-            buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {matchup['wr']}%", callback_data=f"s"))
+            buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {matchup['wr']}%",
+                                                    callback_data=f"hem_{hero_name}_{matchup['wr']}_{matchup['wins']}_{matchup['losses']}_{chosen_hero_name}"))
 
             if len(buttons_row) == 2:
                 hero_button_text.append(buttons_row)

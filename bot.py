@@ -448,6 +448,29 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
 
         await query.answer()
 
+    elif query.data.startswith("hem"):
+        matchup_data = query.data.split('_')
+        matchup_hero_name = matchup_data[1]
+        matchup_hero_wr = float(matchup_data[2])
+        matchup_hero_wins = int(matchup_data[3])
+        matchup_hero_losses = int(matchup_data[4])
+        chosen_hero_name = matchup_data[5]
+
+        matchup_hero_icon = get_hero_icon(matchup_hero_name)
+        chosen_hero_icon = get_hero_icon(chosen_hero_name)
+
+        message = f"————————————————\n"
+        message += f"{chosen_hero_icon} <b>{chosen_hero_name}</b> VS {matchup_hero_icon} <b>{matchup_hero_name}</b>\n"
+        message += f"————————————————\n"
+        message += f"<b>Winrate</b>: {matchup_hero_wr}%\n"
+        message += f"<b>Total games</b>: {matchup_hero_wins + matchup_hero_losses}\n"
+        message += f"<b>Wins</b>: {matchup_hero_wins}\n"
+        message += f"<b>Losses</b>: {matchup_hero_losses}\n"
+        message += f"————————————————\n"
+
+        await context.bot.send_message(user_id, message, parse_mode=constants.ParseMode.HTML)
+        await query.answer()
+
 
 def get_user_matches_bymode(all_matchids, match_mode):
     user_matches = []
