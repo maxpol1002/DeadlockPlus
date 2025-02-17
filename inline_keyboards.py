@@ -6,7 +6,7 @@ from steamfunc import get_users_data
 
 from dbfunc import get_user_uid
 
-from dlfunc import get_hero_icon, get_user_hero, get_all_heroes, get_hero_by_id, get_hero_matchups
+from dlfunc import get_hero_icon, get_user_hero, get_all_heroes, get_hero_by_id
 
 
 def create_inline_matches(all_matches, user_id, page_number) -> InlineKeyboardMarkup:
@@ -141,7 +141,7 @@ def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -
     else:
         chosen_hero_name = get_hero_by_id(all_heroes, selected_hero_id)
         chosen_hero_icon = get_hero_icon(chosen_hero_name)
-        buttons_row.append(InlineKeyboardButton(f"✅ {chosen_hero_icon} {chosen_hero_name}"))
+        buttons_row.append(InlineKeyboardButton(f"✅ {chosen_hero_icon} {chosen_hero_name}", callback_data="s"))
 
         for hero in hero_matchups:
             if hero["hero_id"] == selected_hero_id:
