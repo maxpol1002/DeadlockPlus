@@ -146,7 +146,7 @@ async def hero_matchups(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(f"Here you can check heroes matchups ({last_patch_time_eest} - {current_time_eest})",
                                     reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
-    await update.message.reply_text("Select a hero to check matchups.", reply_markup=create_inline_matchups(matchups, hero_id=None))
+    await update.message.reply_text("Select a hero to check matchups.", reply_markup=create_inline_matchups(matchups))
 
 
 def get_user_avg_elo(user_matches):
