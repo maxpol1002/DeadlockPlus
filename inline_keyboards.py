@@ -130,7 +130,7 @@ def create_inline_matchups(hero_matchups, hero_id: int | None = None) -> InlineK
             hero_id = hero["hero_id"]
             hero_name = get_hero_by_id(all_heroes, hero_id)
             hero_icon = get_hero_icon(hero_name)
-            buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data=f"matchups_{hero_id}"))
+            buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data=f"hmatchups_{hero_id}"))
 
             if len(buttons_row) == 3:
                 hero_button_text.append(buttons_row)

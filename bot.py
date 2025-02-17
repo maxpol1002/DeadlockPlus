@@ -430,7 +430,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
 
         await query.answer()
 
-    elif query.data.startswith("matchups"):
+    elif query.data.startswith("hmatchups"):
         hero_id = int(query.data.split("_")[1])
         current_timestamp = int(datetime.utcnow().timestamp())
         last_patch_timestamp = 1739319840
