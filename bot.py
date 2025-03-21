@@ -482,7 +482,7 @@ def get_user_matches_bymode(all_matchids, match_mode):
     user_matches = []
     for match_id in all_matchids:
         match_data = get_match_data(match_id)
-        if match_data['match_mode'] == match_mode:
+        if match_data and match_data['match_mode'] == match_mode:
             user_matches.append(match_data)
 
     return user_matches
