@@ -386,25 +386,21 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         current_time_eest = datetime.fromtimestamp(current_timestamp, kyiv_tz).strftime("%d/%m")
         last_patch_time_eest = datetime.fromtimestamp(last_patch_timestamp, kyiv_tz).strftime("%d/%m")
 
-        if elo_max != 0 and elo_min != 0:
-            hero_wrs = get_hero_winrates(elo_min, elo_max, last_patch_timestamp, current_timestamp)
-            if hero_wrs and mode == 'w':
-                await context.bot.send_message(user_id, f"Heroes winrates <b>({last_patch_time_eest} - {current_time_eest})</b> "
-                                                        f"- <b>{lobby_type[elo_min_q]}</b>",
-                                                        reply_markup=create_hero_stats(hero_wrs, is_w=True),
-                                                        parse_mode=constants.ParseMode.HTML)
+        hero_wrs = get_hero_winrates(elo_min, elo_max, last_patch_timestamp, current_timestamp)
+        if hero_wrs and mode == 'w':
+            await context.bot.send_message(user_id, f"Heroes winrates <b>({last_patch_time_eest} - {current_time_eest})</b> "
+                                                    f"- <b>{lobby_type[elo_min_q]}</b>",
+                                                    reply_markup=create_hero_stats(hero_wrs, is_w=True),
+                                                    parse_mode=constants.ParseMode.HTML)
 
-            elif mode == 'p' and len(hero_wrs) == 26:
-                await context.bot.send_message(user_id,
-                                               f"Heroes pick rates <b>({last_patch_time_eest} - {current_time_eest})</b> "
-                                               f"- <b>{lobby_type[elo_min_q]}</b>",
-                                               reply_markup=create_hero_stats(hero_wrs, is_w=False),
-                                               parse_mode=constants.ParseMode.HTML)
-            else:
-                await context.bot.send_message(user_id, "No data available now, try again later.")
+        elif mode == 'p' and len(hero_wrs) == 26:
+            await context.bot.send_message(user_id,
+                                           f"Heroes pick rates <b>({last_patch_time_eest} - {current_time_eest})</b> "
+                                           f"- <b>{lobby_type[elo_min_q]}</b>",
+                                           reply_markup=create_hero_stats(hero_wrs, is_w=False),
+                                           parse_mode=constants.ParseMode.HTML)
         else:
-            await context.bot.send_message(user_id, "You have no tracked games so we can't use your elo. "
-                                                    "Choose different option.")
+            await context.bot.send_message(user_id, "No data available now, try again later.")
 
         await query.answer()
 
