@@ -359,7 +359,9 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         lobby_type = {
             "111": "Eternus",
             "101": "Ascendant",
-            "81": "Phantom & Oracle",
+            "91": "Phantom",
+            "81": "Oracle",
+            "11": "Init-Archon",
             "0": "All ranks"
         }
 
