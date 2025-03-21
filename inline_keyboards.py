@@ -167,12 +167,12 @@ def lobby_rank_choice(is_w: bool) -> InlineKeyboardMarkup:
     if is_w:
         ranks = [[InlineKeyboardButton("Eternus", callback_data="lobby_116_111_w"),
                   InlineKeyboardButton("Ascendant", callback_data="lobby_106_101_w"),
-                  InlineKeyboardButton("Phantom & Oracle", callback_data="lobby_96_81_w"),
+                  InlineKeyboardButton("Phantom,Oracle", callback_data="lobby_96_81_w"),
                   InlineKeyboardButton("All ranks", callback_data=f"lobby_116_0_w")]]
     else:
         ranks = [[InlineKeyboardButton("Eternus", callback_data="lobby_116_111_p"),
                   InlineKeyboardButton("Ascendant", callback_data="lobby_106_101_p"),
-                  InlineKeyboardButton("Phantom & Oracle", callback_data="lobby_96_81_p"),
+                  InlineKeyboardButton("Phantom,Oracle", callback_data="lobby_96_81_p"),
                   InlineKeyboardButton("All ranks", callback_data=f"lobby_116_0_p")]]
 
     return InlineKeyboardMarkup(ranks)
