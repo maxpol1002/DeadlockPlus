@@ -165,15 +165,15 @@ def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -
 
 def lobby_rank_choice(is_w: bool) -> InlineKeyboardMarkup:
     if is_w:
-        ranks = [[InlineKeyboardButton("TOP 1%", callback_data="lobby_3000_2500_w"),
-                  InlineKeyboardButton("TOP 5%", callback_data="lobby_3000_2250_w"),
-                  InlineKeyboardButton("All matches", callback_data="lobby_3000_1_w"),
-                  InlineKeyboardButton("Your ELO", callback_data=f"w_lobby_user_elo_w")]]
+        ranks = [[InlineKeyboardButton("Eternus", callback_data="lobby_116_111_w"),
+                  InlineKeyboardButton("Ascendant", callback_data="lobby_106_101_w"),
+                  InlineKeyboardButton("Phantom & Oracle", callback_data="lobby_96_81_w"),
+                  InlineKeyboardButton("All ranks", callback_data=f"lobby_116_0_w")]]
     else:
-        ranks = [[InlineKeyboardButton("TOP 1%", callback_data="lobby_3000_2500_p"),
-                  InlineKeyboardButton("TOP 5%", callback_data="lobby_3000_2250_p"),
-                  InlineKeyboardButton("All matches", callback_data="lobby_3000_1_p"),
-                  InlineKeyboardButton("Your ELO", callback_data=f"lobby_user_elo_p")]]
+        ranks = [[InlineKeyboardButton("Eternus", callback_data="lobby_116_111_p"),
+                  InlineKeyboardButton("Ascendant", callback_data="lobby_106_101_p"),
+                  InlineKeyboardButton("Phantom & Oracle", callback_data="lobby_96_81_p"),
+                  InlineKeyboardButton("All ranks", callback_data=f"lobby_116_0_p")]]
 
     return InlineKeyboardMarkup(ranks)
 

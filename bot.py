@@ -357,28 +357,28 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         elo_min_q = query.data.split('_')[2]
         mode = query.data.split('_')[-1]
         lobby_type = {
-            "2500": "TOP 1%",
-            "2250": "TOP 5%",
-            "1": "All matches",
-            "elo": "Your ELO"
+            "111": "Eternus",
+            "101": "Ascendant",
+            "81": "Phantom & Oracle",
+            "0": "All matches"
         }
 
         if elo_max_q.isdigit() and elo_min_q.isdigit():
             elo_max, elo_min = int(elo_max_q), int(elo_min_q)
-        else:
-            all_matchids = get_matchids_foruser(user_id)
-            if all_matchids:
-                standard_matches = get_user_matches_bymode(all_matchids, 1)
-                if standard_matches:
-                    user_avg_elo = get_user_avg_elo(standard_matches)
-                    elo_max = user_avg_elo + 200 if user_avg_elo else 0
-                    elo_min = user_avg_elo - 200 if user_avg_elo else 0
-                else:
-                    elo_max = 0
-                    elo_min = 0
-            else:
-                elo_max = 0
-                elo_min = 0
+        # else:
+        #     all_matchids = get_matchids_foruser(user_id)
+        #     if all_matchids:
+        #         standard_matches = get_user_matches_bymode(all_matchids, 1)
+        #         if standard_matches:
+        #             user_avg_elo = get_user_avg_elo(standard_matches)
+        #             elo_max = user_avg_elo + 200 if user_avg_elo else 0
+        #             elo_min = user_avg_elo - 200 if user_avg_elo else 0
+        #         else:
+        #             elo_max = 0
+        #             elo_min = 0
+        #     else:
+        #         elo_max = 0
+        #         elo_min = 0
 
         current_timestamp = int(datetime.utcnow().timestamp())
         last_patch_timestamp = 1742171580

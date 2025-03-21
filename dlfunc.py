@@ -83,9 +83,9 @@ def get_active_matches() -> list:
     return []
 
 
-def get_hero_winrates(min_elo, max_elo, min_ts, max_ts):
-    url = f"https://analytics.deadlock-api.com/v1/hero-win-loss-stats?" \
-          f"min_match_score={min_elo}&max_match_score={max_elo}&min_unix_timestamp={min_ts}&max_unix_timestamp={max_ts}"
+def get_hero_winrates(min_badge, max_badge, min_ts, max_ts):
+    url = f"https://api.deadlock-api.com/v1/analytics/hero-win-loss-stats?" \
+          f"min_average_badge={min_badge}&max_average_badge={max_badge}&min_unix_timestamp={min_ts}&max_unix_timestamp={max_ts}"
     response = requests.get(url)
     if response.status_code == 200:
         hero_winrates = response.json()
