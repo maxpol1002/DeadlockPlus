@@ -360,7 +360,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
             "111": "Eternus",
             "101": "Ascendant",
             "81": "Phantom & Oracle",
-            "0": "All matches"
+            "0": "All ranks"
         }
 
         if elo_max_q.isdigit() and elo_min_q.isdigit():
