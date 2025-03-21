@@ -165,22 +165,22 @@ def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -
 
 def lobby_rank_choice(is_w: bool) -> InlineKeyboardMarkup:
     if is_w:
-        ranks = [[InlineKeyboardButton("All ranks", callback_data="lobby_116_0_w"),
-                  InlineKeyboardButton("Eternus", callback_data="lobby_116_111_w"),
-                  InlineKeyboardButton("Ascendant", callback_data="lobby_106_101_w")],
+        ranks = [[InlineKeyboardButton("🌍 All ranks", callback_data="lobby_116_0_w"),
+                  InlineKeyboardButton("🩵 Eternus", callback_data="lobby_116_111_w"),
+                  InlineKeyboardButton("☀️ Ascendant", callback_data="lobby_106_101_w")],
 
-                 [InlineKeyboardButton("Phantom", callback_data=f"lobby_96_91_w"),
-                  InlineKeyboardButton("Oracle", callback_data=f"lobby_86_81_w"),
-                  InlineKeyboardButton("Init-Archon", callback_data=f"lobby_76_11_w")]
+                 [InlineKeyboardButton("💀 Phantom", callback_data=f"lobby_96_91_w"),
+                  InlineKeyboardButton("🐐 Oracle", callback_data=f"lobby_86_81_w"),
+                  InlineKeyboardButton("📶 Archon-Init", callback_data=f"lobby_76_11_w")]
                  ]
     else:
-        ranks = [[InlineKeyboardButton("All ranks", callback_data="lobby_116_0_p"),
-                  InlineKeyboardButton("Eternus", callback_data="lobby_116_111_p"),
-                  InlineKeyboardButton("Ascendant", callback_data="lobby_106_101_p")],
+        ranks = [[InlineKeyboardButton("🌍 All ranks", callback_data="lobby_116_0_p"),
+                  InlineKeyboardButton("🩵 Eternus", callback_data="lobby_116_111_p"),
+                  InlineKeyboardButton("☀️ Ascendant", callback_data="lobby_106_101_p")],
 
-                 [InlineKeyboardButton("Phantom", callback_data=f"lobby_96_91_p"),
-                  InlineKeyboardButton("Oracle", callback_data=f"lobby_86_81_p"),
-                  InlineKeyboardButton("Init-Archon", callback_data=f"lobby_76_11_p")]
+                 [InlineKeyboardButton("💀 Phantom", callback_data=f"lobby_96_91_p"),
+                  InlineKeyboardButton("🐐 Oracle", callback_data=f"lobby_86_81_p"),
+                  InlineKeyboardButton("📶 Archon-Init", callback_data=f"lobby_76_11_p")]
                  ]
 
     return InlineKeyboardMarkup(ranks)
