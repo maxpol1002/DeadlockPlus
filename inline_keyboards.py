@@ -153,7 +153,7 @@ def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -
 
         matchups = get_matchups_for_hero(hero_matchups, selected_hero_id)
         for matchup in matchups:
-            hero_name = get_hero_by_id(all_heroes, matchup["hero_id"])
+            hero_name = get_hero_by_id(all_heroes, matchup["enemy_hero_id"])
             hero_icon = get_hero_icon(hero_name)
             buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name} - {matchup['wr']}%",
                                                     callback_data=f"hem_{hero_name}_{matchup['wr']}_{matchup['wins']}_{matchup['losses']}_{chosen_hero_name}"))
@@ -210,13 +210,14 @@ def get_position_emoji(position: int) -> str:
     return positions.get(position, '?')
 
 
-def get_matchups_for_hero(hero_data, hero_id):
-    for hero in hero_data:
-        if hero["hero_id"] == hero_id:
-            matchups = hero["matchups"]
-            for matchup in matchups:
-                matchup["wr"] = round((matchup["wins"] / matchup["matches"]) * 100, 2) if matchup["matches"] > 0 else 0
+def get_matchups_for_hero(all_matchups_data, selected_hero_id):
+    hero_matchups_data = []
+    for matchup in all_matchups_data:
+        if matchup["hero_id"] == selected_hero_id:
+            matchup["losses"] = matchup["matches_played"] - matchup["wins"]
+            matchup["wr"] = round((matchup["wins"] / matchup["matches_played"]) * 100, 2) if matchup["matches_played"] > 0 else 0
+            hero_matchups_data.append(matchup)
 
-            return sorted(matchups, key=lambda x: x["wr"], reverse=True)
+            return sorted(hero_matchups_data, key=lambda x: x["wr"], reverse=True)
 
     return None
