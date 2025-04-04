@@ -126,14 +126,14 @@ def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -
 
     if not selected_hero_id:
         seen_hero_ids = set()
-        unique_hero_ids = []
+        unique_hero_data = []
 
         for hero_data in hero_matchups:
             if hero_data["hero_id"] not in seen_hero_ids:
                 seen_hero_ids.add(hero_data["hero_id"])
-                unique_hero_ids.append(hero_data)
+                unique_hero_data.append(hero_data)
 
-        for hero in hero_matchups:
+        for hero in unique_hero_data:
             hero_name = get_hero_by_id(all_heroes, hero["hero_id"])
             hero_icon = get_hero_icon(hero_name)
             buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data=f"hmatchups_{hero['hero_id']}"))
