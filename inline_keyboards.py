@@ -218,6 +218,7 @@ def get_matchups_for_hero(all_matchups_data, selected_hero_id):
             matchup["wr"] = round((matchup["wins"] / matchup["matches_played"]) * 100, 2) if matchup["matches_played"] > 0 else 0
             hero_matchups_data.append(matchup)
 
-            return sorted(hero_matchups_data, key=lambda x: x["wr"], reverse=True)
+    if hero_matchups_data:
+        return sorted(hero_matchups_data, key=lambda x: x["wr"], reverse=True)
 
     return None
