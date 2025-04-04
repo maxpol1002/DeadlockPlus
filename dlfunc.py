@@ -96,8 +96,8 @@ def get_hero_winrates(min_badge, max_badge, min_ts, max_ts):
 
 
 def get_hero_matchups(min_ts, max_ts):
-    url = f"https://analytics.deadlock-api.com/v2/hero-matchups-win-loss-stats?" \
-          f"min_unix_timestamp={min_ts}&max_unix_timestamp={max_ts}&region=Europe"
+    url = f"https://api.deadlock-api.com/v1/analytics/hero-counter-stats?" \
+          f"min_unix_timestamp={min_ts}&max_unix_timestamp={max_ts}"
 
     response = requests.get(url)
     if response.status_code == 200:
