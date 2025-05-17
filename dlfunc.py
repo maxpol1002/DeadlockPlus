@@ -74,7 +74,7 @@ def get_user_hero(match_data, user_uid) -> str:
 
 
 def get_active_matches() -> list:
-    url = "https://data.deadlock-api.com/active-matches"
+    url = "https://api.deadlock-api.com/v1/matches/active"
     response = requests.get(url)
     if response.status_code == 200:
         active_matches = response.json()
