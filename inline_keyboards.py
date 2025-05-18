@@ -173,10 +173,13 @@ def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -
 def create_user_hero_stats(user_hero_stats) -> InlineKeyboardMarkup:
     all_heroes = get_all_heroes()
     hero_button_text = []
+    user_hero_stats_s = sorted(user_hero_stats, key=lambda x: x['matches_played'], reverse=True)
+
     for hero in user_hero_stats:
         hero_name = get_hero_by_id(all_heroes, hero["hero_id"])
         hero_icon = get_hero_icon(hero_name)
-        hero_button_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {hero['matches_played']}",
+        hero_wr = round(hero["wins"] / hero["matches_played"], 2)
+        hero_button_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {hero['matches_played']} matches - {hero_wr}%",
                                                       callback_data="wip")])
 
     return InlineKeyboardMarkup(hero_button_text)
