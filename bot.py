@@ -501,7 +501,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
     elif query.data.startswith("uhs_hero"):
         _, _, hero_id = query.data.split('_')
         user_hero_stats = context.user_data["user_hero_stats"]
-        hero_data = get_hero_stats_by_id(user_hero_stats, hero_id)
+        hero_data = get_hero_stats_by_id(user_hero_stats, int(hero_id))
 
         await context.bot.send_message(user_id, f"{hero_id}")
 
