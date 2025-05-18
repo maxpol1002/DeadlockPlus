@@ -206,11 +206,12 @@ def create_user_hero_stats(user_hero_stats, sort_value, is_reverse) -> InlineKey
 
     for hero in user_hero_stats_s:
         hero_icon = get_hero_icon(hero["name"])
+        cb_data = f"uhs_hero_{hero['hero_id']}"
 
-        buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero['name']}", callback_data="sdaf"))
-        buttons_row.append(InlineKeyboardButton(f"{hero['matches_played']}", callback_data="nothing"))
-        buttons_row.append(InlineKeyboardButton(f"{hero['winrate']}%", callback_data="nothing"))
-        buttons_row.append(InlineKeyboardButton(f"{hero['kd']}", callback_data="nothing"))
+        buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero['name']}", callback_data=cb_data))
+        buttons_row.append(InlineKeyboardButton(f"{hero['matches_played']}", callback_data=cb_data))
+        buttons_row.append(InlineKeyboardButton(f"{hero['winrate']}%", callback_data=cb_data))
+        buttons_row.append(InlineKeyboardButton(f"{hero['kd']}", callback_data=cb_data))
 
         column_buttons.append(buttons_row)
         buttons_row = []

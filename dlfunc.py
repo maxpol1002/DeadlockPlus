@@ -289,3 +289,11 @@ def convert_ranked_rank(ranked_badge_level: int) -> str:
     }
 
     return f"{ranks.get(rank, 'Unknown')} {subranks.get(subrank, ' ')}"
+
+
+def get_hero_stats_by_id(user_hero_stats, hero_id):
+    for hero_data in user_hero_stats:
+        if hero_data['hero_id'] == hero_id:
+            return hero_data
+
+    return []

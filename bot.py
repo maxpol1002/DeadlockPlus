@@ -17,7 +17,10 @@ from dlfunc import (
     get_hero_winrates,
     convert_ranked_rank,
     get_hero_matchups,
-    get_user_hero_stats
+    get_user_hero_stats,
+    get_hero_stats_by_id,
+    get_all_heroes,
+    get_hero_by_id
 )
 
 from steamfunc import (
@@ -486,6 +489,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
     elif query.data.startswith("uhs-sort"):
         _, _, sort_value, sort_dir = query.data.split('-')
         is_reverse = True if sort_dir == "desc" else False
+
         try:
             await query.edit_message_reply_markup(create_user_hero_stats(context.user_data["user_hero_stats"],
                                                                          sort_value,
@@ -493,6 +497,18 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
 
         except telegram.error.BadRequest:
             pass
+
+        await query.answer()
+
+    elif query.data.startswith("uhs_hero"):
+        _, _, hero_id = query.data.split('_')
+        user_hero_stats = context.user_data["user_hero_stats"]
+        hero_data = get_hero_stats_by_id(user_hero_stats, hero_id)
+
+        msg = construct_hero_stats(hero_data)
+        markup = InlineKeyboardMarkup([[InlineKeyboardButton("❌", callback_data=f"delete_msg")]])
+
+        await context.bot.send_message(user_id, msg, reply_markup=markup, parse_mode=constants.ParseMode.HTML)
 
         await query.answer()
 
@@ -562,7 +578,7 @@ def get_user_stats(user_matches, user_uid):
     return user_avgelo, avg_percentile, avg_top, fav_hero, page_stat, matchpos_stat
 
 
-def create_match_stats(match_data, user_uid):
+def create_match_stats(match_data, user_uid) -> str:
     player_hero = get_user_hero(match_data, user_uid)
     message = f"<b>Match</b> | <b>{match_data['match_id']}</b> | <b>{match_data['start_time']}</b>\n"
     message += "————————————————\n"
@@ -591,6 +607,30 @@ def create_match_stats(match_data, user_uid):
             message += f"{get_hero_icon(player['hero'])} {player['hero']} (<a href='{player['account_link']}'><b>{player_name}</b></a>)\n"
 
         position += 1
+
+    return message
+
+
+async def construct_hero_stats(hero_data) -> str:
+    if not hero_data:
+        message = "No available data at this moment. Try again later."
+    else:
+        hero_icon = get_hero_icon(hero_data['hero_name'])
+        message = f"————————————————\n"
+        message += f"{hero_icon} <b>{hero_data['hero_name']}</b>\n"
+        message += f"————————————————\n"
+        message += f"<b>Winrate</b>: {hero_data['wr']}%\n"
+        message += f"<b>Total games</b>: {hero_data['matches_played']}\n"
+        message += f"<b>Wins</b>: {hero_data['wins']}\n"
+        message += f"<b>Losses</b>: {hero_data['matches_played'] - hero_data['wins']}\n"
+        message += f"————————————————\n"
+        message += f"Kills: {hero_data['kills']}\n"
+        message += f"Deaths: {hero_data['deaths']}\n"
+        message += f"Assists: {hero_data['assists']}\n"
+        message += f"————————————————\n"
+        message += f"Accuracy: {hero_data['accuracy']}%\n"
+        message += f"Crit Rate: {hero_data['crit_shot_rate']}%\n"
+        message += f"SPM: {hero_data['networth_per_min']}\n"
 
     return message
 
