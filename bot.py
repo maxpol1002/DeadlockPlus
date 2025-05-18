@@ -484,8 +484,8 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         await query.answer()
 
     elif query.data.startswith("uhs-sort"):
-        _, _, sort_value, next_dir = query.data.split('-')
-        is_reverse = True if next_dir == "desc" else False
+        _, _, sort_value, sort_dir = query.data.split('-')
+        is_reverse = True if sort_dir == "desc" else False
         try:
             await query.edit_message_reply_markup(create_user_hero_stats(context.user_data["user_hero_stats"],
                                                                          sort_value,
