@@ -615,9 +615,9 @@ async def construct_hero_stats(hero_data) -> str:
     if not hero_data:
         message = "No available data at this moment. Try again later."
     else:
-        hero_icon = get_hero_icon(hero_data['hero_name'])
+        hero_icon = get_hero_icon(hero_data['name'])
         message = f"————————————————\n"
-        message += f"{hero_icon} <b>{hero_data['hero_name']}</b>\n"
+        message += f"{hero_icon} <b>{hero_data['name']}</b>\n"
         message += f"————————————————\n"
         message += f"<b>Winrate</b>: {hero_data['wr']}%\n"
         message += f"<b>Total games</b>: {hero_data['matches_played']}\n"
