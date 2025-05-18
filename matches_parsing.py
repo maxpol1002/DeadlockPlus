@@ -34,7 +34,8 @@ from steamfunc import (
 from bot import notify_user
 
 
-async def parse_users_matches(user_uids: list, active_matches: list, context: ContextTypes.DEFAULT_TYPE):
+async def parse_users_matches(user_uids: list, active_matches: list,
+                              context: ContextTypes.DEFAULT_TYPE):
     found_matches = []
     user_uids_set = set(user_uids)
     for match in active_matches:
@@ -105,7 +106,7 @@ async def parse_matches_job(context: ContextTypes.DEFAULT_TYPE):
 
 
 async def start_job(context: ContextTypes.DEFAULT_TYPE):
-    context.job_queue.run_repeating(parse_matches_job, interval=30, first=0)
+    context.job_queue.run_repeating(parse_matches_job, interval=60, first=0)
 
 
 def get_match_datetime(timestamp):
