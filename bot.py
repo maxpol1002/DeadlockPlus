@@ -629,8 +629,8 @@ async def construct_hero_stats(hero_data) -> str:
         message += f"Deaths: {hero_data['deaths']}\n"
         message += f"Assists: {hero_data['assists']}\n"
         message += f"—————————————\n"
-        message += f"Accuracy: {round(hero_data['accuracy'], 2)}%\n"
-        message += f"Crit Rate: {round(hero_data['crit_shot_rate'], 2)}%\n"
+        message += f"Accuracy: {round(hero_data['accuracy'] * 100, 2)}%\n"
+        message += f"Crit Rate: {round(hero_data['crit_shot_rate'] * 100, 2)}%\n"
         message += f"SPM: {round(hero_data['networth_per_min'], 0)}\n"
 
     return message
