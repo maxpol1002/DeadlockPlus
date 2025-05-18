@@ -170,13 +170,23 @@ def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -
     return InlineKeyboardMarkup(hero_button_text)
 
 
-def create_user_hero_stats(user_hero_stats, sort_type, is_reverse) -> InlineKeyboardMarkup:
-    hero_button_text = [[InlineKeyboardButton(text="Name", callback_data="sadsda"),
-                         InlineKeyboardButton(text="Matches", callback_data="adasd"),
-                         InlineKeyboardButton(text="WR", callback_data="asdasd"),
-                         InlineKeyboardButton(text=f"K/D", callback_data="nothing")]]
+def create_user_hero_stats(user_hero_stats, sort_value, is_reverse) -> InlineKeyboardMarkup:
+    columns_names = ["Name", "Matches", "WR", "K/D"]
+    column_buttons = [[]]
+    sort_indicator = "🔽" if is_reverse else "🔼"
 
-    user_hero_stats_s = sorted(user_hero_stats, key=lambda x: x[sort_type], reverse=is_reverse)
+    sort_values = {
+        "Name": "name",
+        "Matches": "matches_played",
+        "WR": "winrate",
+        "K/D": "kd"
+    }
+
+    for column_name in columns_names:
+        button_text = f"{column_name} {sort_indicator}" if sort_values[column_name] == sort_value else column_name
+        column_buttons.append(InlineKeyboardButton(text=button_text, callback_data=f"uhs_sort_{sort_values[column_name]}"))
+
+    user_hero_stats_s = sorted(user_hero_stats, key=lambda x: x[sort_value], reverse=is_reverse)
 
     all_heroes = get_all_heroes()
     buttons_row = []
@@ -184,18 +194,16 @@ def create_user_hero_stats(user_hero_stats, sort_type, is_reverse) -> InlineKeyb
     for hero in user_hero_stats_s:
         hero_name = get_hero_by_id(all_heroes, hero["hero_id"])
         hero_icon = get_hero_icon(hero_name)
-        hero_wr = round(hero["wins"] / hero["matches_played"], 2) * 100
-        hero_kd = round(hero["kills"] / hero["deaths"], 2)
 
         buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data="sdaf"))
         buttons_row.append(InlineKeyboardButton(f"{hero['matches_played']}", callback_data="sdaf"))
-        buttons_row.append(InlineKeyboardButton(f"{hero_wr}%", callback_data="sdaf"))
-        buttons_row.append(InlineKeyboardButton(f"{hero_kd}", callback_data="sdaf"))
+        buttons_row.append(InlineKeyboardButton(f"{hero['winrate']}%", callback_data="sdaf"))
+        buttons_row.append(InlineKeyboardButton(f"{hero['kd']}", callback_data="sdaf"))
 
-        hero_button_text.append(buttons_row)
+        column_buttons.append(buttons_row)
         buttons_row = []
 
-    return InlineKeyboardMarkup(hero_button_text)
+    return InlineKeyboardMarkup(column_buttons)
 
 
 

@@ -13,10 +13,11 @@ def get_hero_stats(hero_name: str):
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
+
         return data
 
     else:
-        print(response.status_code)
+        return []
 
 
 def get_all_heroes():
@@ -114,6 +115,10 @@ def get_user_hero_stats(account_id):
     response = requests.get(url)
     if response.status_code == 200:
         user_hero_stats = response.json()
+
+        for hero in user_hero_stats:
+            hero["winrate"] = round(hero["wins"] / hero["matches_played"], 2) * 100
+            hero["kd"] = round(hero["kills"] / hero["deaths"], 2)
 
         return user_hero_stats
 
