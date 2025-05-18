@@ -198,14 +198,13 @@ def create_user_hero_stats(user_hero_stats, sort_value, is_reverse) -> InlineKey
 
     column_buttons.append(tmp)
 
-    all_heroes = get_all_heroes()
+
     buttons_row = []
 
     for hero in user_hero_stats_s:
-        hero_name = get_hero_by_id(all_heroes, hero["hero_id"])
-        hero_icon = get_hero_icon(hero_name)
+        hero_icon = get_hero_icon(hero["name"])
 
-        buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data="sdaf"))
+        buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero['name']}", callback_data="sdaf"))
         buttons_row.append(InlineKeyboardButton(f"{hero['matches_played']}", callback_data="nothing"))
         buttons_row.append(InlineKeyboardButton(f"{hero['winrate']}%", callback_data="nothing"))
         buttons_row.append(InlineKeyboardButton(f"{hero['kd']}", callback_data="nothing"))
