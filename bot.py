@@ -487,7 +487,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         sort_value = query.data.split('_')[2]
         try:
             await query.edit_message_reply_markup(create_user_hero_stats(context.user_data["user_hero_stats"], sort_value, is_reverse=True))
-            await context.bot.send_message(648380859, sort_value)
+            await context.bot.send_message(648380859, query.data)
 
         except telegram.error.BadRequest:
             pass
