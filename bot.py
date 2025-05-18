@@ -483,11 +483,10 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         await context.bot.send_message(user_id, message, reply_markup=markup, parse_mode=constants.ParseMode.HTML)
         await query.answer()
 
-    elif query.data.startswith("uhs_sort"):
+    elif query.data.startswith("uhs-sort"):
         sort_value = query.data.split('_')[2]
         try:
             await query.edit_message_reply_markup(create_user_hero_stats(context.user_data["user_hero_stats"], sort_value, is_reverse=True))
-            await context.bot.send_message(648380859, query.data)
 
         except telegram.error.BadRequest:
             pass
