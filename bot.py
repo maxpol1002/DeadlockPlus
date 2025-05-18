@@ -18,9 +18,7 @@ from dlfunc import (
     convert_ranked_rank,
     get_hero_matchups,
     get_user_hero_stats,
-    get_hero_stats_by_id,
-    get_all_heroes,
-    get_hero_by_id
+    get_hero_stats_by_id
 )
 
 from steamfunc import (
@@ -505,7 +503,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         user_hero_stats = context.user_data["user_hero_stats"]
         hero_data = get_hero_stats_by_id(user_hero_stats, hero_id)
 
-        await context.bot.send_message(user_id, f"{hero_data}")
+        await context.bot.send_message(user_id, f"{hero_id}")
 
         msg = await construct_hero_stats(hero_data)
         markup = InlineKeyboardMarkup([[InlineKeyboardButton("❌", callback_data=f"delete_msg")]])
