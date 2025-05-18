@@ -391,7 +391,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         #         elo_min = 0
 
         current_timestamp = int(datetime.utcnow().timestamp())
-        last_patch_timestamp = 1746947220
+        last_patch_timestamp = 1739319840
         kyiv_tz = pytz.timezone('Europe/Kyiv')
         current_time_eest = datetime.fromtimestamp(current_timestamp, kyiv_tz).strftime("%d/%m")
         last_patch_time_eest = datetime.fromtimestamp(last_patch_timestamp, kyiv_tz).strftime("%d/%m")
@@ -487,6 +487,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         sort_value = query.data.split('_')[2]
         try:
             await query.edit_message_reply_markup(create_user_hero_stats(context.user_data["user_hero_stats"], sort_value, is_reverse=True))
+            await context.bot.send_message(648380859, sort_value)
 
         except telegram.error.BadRequest:
             pass

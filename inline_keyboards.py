@@ -174,7 +174,6 @@ def create_user_hero_stats(user_hero_stats, sort_value, is_reverse) -> InlineKey
     columns_names = ["Name", "Matches", "WR", "K/D"]
     column_buttons = []
     sort_indicator = "🔽" if is_reverse else "🔼"
-
     sort_values = {
         "Name": "name",
         "Matches": "matches_played",
@@ -185,7 +184,7 @@ def create_user_hero_stats(user_hero_stats, sort_value, is_reverse) -> InlineKey
     tmp = []
 
     for column_name in columns_names:
-        button_text = f"{column_name} {sort_indicator}" if sort_values[column_name] == sort_value else column_name
+        button_text = f"{sort_indicator} {column_name}" if sort_values[column_name] == sort_value else column_name
         tmp.append(InlineKeyboardButton(text=button_text, callback_data=f"uhs_sort_{sort_values[column_name]}"))
 
     column_buttons.append(tmp)
@@ -200,9 +199,9 @@ def create_user_hero_stats(user_hero_stats, sort_value, is_reverse) -> InlineKey
         hero_icon = get_hero_icon(hero_name)
 
         buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data="sdaf"))
-        buttons_row.append(InlineKeyboardButton(f"{hero['matches_played']}", callback_data="sdaf"))
-        buttons_row.append(InlineKeyboardButton(f"{hero['winrate']}%", callback_data="sdaf"))
-        buttons_row.append(InlineKeyboardButton(f"{hero['kd']}", callback_data="sdaf"))
+        buttons_row.append(InlineKeyboardButton(f"{hero['matches_played']}", callback_data="nothing"))
+        buttons_row.append(InlineKeyboardButton(f"{hero['winrate']}%", callback_data="nothing"))
+        buttons_row.append(InlineKeyboardButton(f"{hero['kd']}", callback_data="nothing"))
 
         column_buttons.append(buttons_row)
         buttons_row = []
