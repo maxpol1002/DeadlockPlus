@@ -170,6 +170,18 @@ def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -
     return InlineKeyboardMarkup(hero_button_text)
 
 
+def create_user_hero_stats(user_hero_stats) -> InlineKeyboardMarkup:
+    all_heroes = get_all_heroes()
+    hero_button_text = []
+    for hero in user_hero_stats:
+        hero_name = get_hero_by_id(all_heroes, hero["hero_id"])
+        hero_icon = get_hero_icon(hero_name)
+        hero_button_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {hero['matches_played']}")])
+
+    return InlineKeyboardMarkup(hero_button_text)
+
+
+
 def lobby_rank_choice(is_w: bool) -> InlineKeyboardMarkup:
     if is_w:
         ranks = [[InlineKeyboardButton("🌍 All ranks", callback_data="lobby_116_0_w"),

@@ -108,6 +108,18 @@ def get_hero_matchups(min_ts, max_ts):
     return []
 
 
+def get_user_hero_stats(account_id):
+    url = f"https://api.deadlock-api.com/v1/players/{account_id}/hero-stats"
+
+    response = requests.get(url)
+    if response.status_code == 200:
+        user_hero_stats = response.json()
+
+        return user_hero_stats
+
+    return []
+
+
 def sort_matches_byelo(matches, reverse: bool):
     if reverse:
         sorted_matches = sorted(matches, key=lambda x: x['match_score'], reverse=True)

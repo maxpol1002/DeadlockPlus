@@ -12,12 +12,12 @@ from dlfunc import (
     get_active_matches,
     filter_match_data,
     get_hero_icon,
-    get_current_minmaxelo,
     get_user_hero,
     convert_match_mode,
     get_hero_winrates,
     convert_ranked_rank,
-    get_hero_matchups
+    get_hero_matchups,
+    get_user_hero_stats
 )
 
 from steamfunc import (
@@ -39,7 +39,7 @@ from inline_keyboards import (
     create_hero_stats,
     lobby_rank_choice,
     create_inline_leaderboard,
-    create_inline_matchups
+    create_inline_matchups, create_user_hero_stats
 )
 
 
@@ -320,8 +320,14 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("We have updated buttons now!",
                                         reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
-    elif user_input == "asdasdasd" and user.id == 648380859:
-        await context.bot.send_message(648380859, get_current_minmaxelo())
+
+    elif user_input == "Hero Stats":
+        account_id = get_user_uid(user.id)
+        user_hero_stats = get_user_hero_stats(account_id)
+        if user_hero_stats:
+            await update.message.reply_text("Your stats:",
+                                            reply_markup=create_user_hero_stats(user_hero_stats),
+                                            parse_mode=constants.ParseMode.HTML)
 
 
 async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
