@@ -181,15 +181,17 @@ def create_user_hero_stats(user_hero_stats, sort_value, is_reverse) -> InlineKey
         "K/D": "kd"
     }
 
+    user_hero_stats_s = sorted(user_hero_stats, key=lambda x: x[sort_value], reverse=is_reverse)
+
     tmp = []
 
     for column_name in columns_names:
         button_text = f"{sort_indicator} {column_name}" if sort_values[column_name] == sort_value else column_name
-        tmp.append(InlineKeyboardButton(text=button_text, callback_data=f"uhs-sort-{sort_values[column_name]}"))
+        next_dir = "desc" if sort_values["column_name"] == sort_value else "asc"
+        cb_data = f"uhs-sort-{sort_values[column_name]}-{next_dir}" if sort_value != "name" else "nothing"
+        tmp.append(InlineKeyboardButton(text=button_text, callback_data=cb_data))
 
     column_buttons.append(tmp)
-
-    user_hero_stats_s = sorted(user_hero_stats, key=lambda x: x[sort_value], reverse=is_reverse)
 
     all_heroes = get_all_heroes()
     buttons_row = []

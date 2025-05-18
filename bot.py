@@ -484,12 +484,17 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         await query.answer()
 
     elif query.data.startswith("uhs-sort"):
-        sort_value = query.data.split('-')[2]
+        _, _, sort_value, next_dir = query.data.split('-')
+        is_reverse = True if next_dir == "desc" else False
         try:
-            await query.edit_message_reply_markup(create_user_hero_stats(context.user_data["user_hero_stats"], sort_value, is_reverse=True))
+            await query.edit_message_reply_markup(create_user_hero_stats(context.user_data["user_hero_stats"],
+                                                                         sort_value,
+                                                                         is_reverse=is_reverse))
 
         except telegram.error.BadRequest:
             pass
+
+        await query.answer()
 
 
 def get_user_matches_bymode(all_matchids, match_mode):
