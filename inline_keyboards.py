@@ -171,11 +171,11 @@ def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -
 
 
 def create_user_hero_stats(user_hero_stats, sort_value, is_reverse) -> InlineKeyboardMarkup:
-    columns_names = ["Name", "Matches", "WR", "K/D"]
+    columns_names = ["Hero", "Matches", "WR", "K/D"]
     column_buttons = []
     sort_indicator = "🔽" if is_reverse else "🔼"
     sort_values = {
-        "Name": "name",
+        "Hero": "name",
         "Matches": "matches_played",
         "WR": "winrate",
         "K/D": "kd"
@@ -190,7 +190,7 @@ def create_user_hero_stats(user_hero_stats, sort_value, is_reverse) -> InlineKey
             button_text = f"{sort_indicator} {column_name}"
             sort_dir = "asc" if is_reverse else "desc"
             cb_data = f"uhs-sort-{sort_values[column_name]}-{sort_dir}"
-        elif column_name == "Name":
+        elif column_name == "Hero":
             button_text = column_name
             cb_data = f"uhs-sort-{sort_values[column_name]}-asc"
         else:
