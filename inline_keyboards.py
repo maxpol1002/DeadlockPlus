@@ -176,7 +176,8 @@ def create_user_hero_stats(user_hero_stats) -> InlineKeyboardMarkup:
     for hero in user_hero_stats:
         hero_name = get_hero_by_id(all_heroes, hero["hero_id"])
         hero_icon = get_hero_icon(hero_name)
-        hero_button_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {hero['matches_played']}")])
+        hero_button_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {hero['matches_played']}",
+                                                      callback_data="wip")])
 
     return InlineKeyboardMarkup(hero_button_text)
 
