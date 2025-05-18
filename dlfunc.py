@@ -7,6 +7,10 @@ from datetime import datetime
 
 from steamfunc import get_user_playtime, get_users_data, usteamid_to_commid
 
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
 
 def get_hero_stats(hero_name: str):
     url = f"https://assets.deadlock-api.com/v1/heroes/by-name/{hero_name}?language=english"
@@ -292,8 +296,11 @@ def convert_ranked_rank(ranked_badge_level: int) -> str:
 
 
 def get_hero_stats_by_id(user_hero_stats, hero_id):
+    logging.info(user_hero_stats)
     for hero_data in user_hero_stats:
-        if hero_data['hero_id'] == hero_id:
+        logging.info(f"Checking hero: {hero_data.get('hero_id')} against {hero_id}")
+        if hero_data.get('hero_id') == hero_id:
+            logging.info(f"Hero found: {hero_data}")
             return hero_data
-
-    return []
+    logging.info("Hero not found")
+    return None
