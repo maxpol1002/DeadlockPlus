@@ -296,11 +296,12 @@ def convert_ranked_rank(ranked_badge_level: int) -> str:
 
 
 def get_hero_stats_by_id(user_hero_stats, hero_id):
-    logging.info(user_hero_stats)
     for hero_data in user_hero_stats:
-        logging.info(f"Checking hero: {hero_data.get('hero_id')} against {hero_id}")
+        logging.info(f"Checking hero: {hero_data.get('hero_id')} (type: {type(hero_data.get('hero_id'))}) against {hero_id} (type: {type(hero_id)})")
         if hero_data.get('hero_id') == hero_id:
             logging.info(f"Hero found: {hero_data}")
             return hero_data
+
     logging.info("Hero not found")
     return None
+
