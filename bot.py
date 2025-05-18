@@ -505,6 +505,8 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         user_hero_stats = context.user_data["user_hero_stats"]
         hero_data = get_hero_stats_by_id(user_hero_stats, hero_id)
 
+        await context.bot.send_message(user_id, f"{user_hero_stats} + {hero_data}")
+
         msg = await construct_hero_stats(hero_data)
         markup = InlineKeyboardMarkup([[InlineKeyboardButton("❌", callback_data=f"delete_msg")]])
 
