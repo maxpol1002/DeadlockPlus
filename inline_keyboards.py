@@ -182,11 +182,12 @@ def create_user_hero_stats(user_hero_stats) -> InlineKeyboardMarkup:
         hero_name = get_hero_by_id(all_heroes, hero["hero_id"])
         hero_icon = get_hero_icon(hero_name)
         hero_wr = round(hero["wins"] / hero["matches_played"], 2) * 100
-        buttons_row.append([InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data="sdaf")])
-        buttons_row.append([InlineKeyboardButton(f"{hero['matches_played']}", callback_data="sdaf")])
-        buttons_row.append([InlineKeyboardButton(f"{hero_wr}", callback_data="sdaf")])
-        buttons_row.append([InlineKeyboardButton("...", callback_data="sdaf")])
+        buttons_row.append(InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data="sdaf"))
+        buttons_row.append(InlineKeyboardButton(f"{hero['matches_played']}", callback_data="sdaf"))
+        buttons_row.append(InlineKeyboardButton(f"{hero_wr}", callback_data="sdaf"))
+        buttons_row.append(InlineKeyboardButton("...", callback_data="sdaf"))
         hero_button_text.append(buttons_row)
+        buttons_row = []
 
     return InlineKeyboardMarkup(hero_button_text)
 
