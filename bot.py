@@ -616,22 +616,22 @@ async def construct_hero_stats(hero_data) -> str:
         message = "No available data at this moment. Try again later."
     else:
         hero_icon = get_hero_icon(hero_data['name'])
-        message = f"————————————————\n"
+        message = f"—————————————\n"
         message += f"{hero_icon} <b>{hero_data['name']}</b>\n"
-        message += f"————————————————\n"
+        message += f"—————————————\n"
         message += f"<b>Winrate</b>: {hero_data['winrate']}%\n"
         message += f"<b>Total games</b>: {hero_data['matches_played']}\n"
         message += f"<b>Wins</b>: {hero_data['wins']}\n"
         message += f"<b>Losses</b>: {hero_data['matches_played'] - hero_data['wins']}\n"
-        message += f"————————————————\n"
-        message += f"K/D: {hero_data['kd']}\n"
+        message += f"—————————————\n"
+        message += f"<b>K/D</b>: {hero_data['kd']}\n"
         message += f"Kills: {hero_data['kills']}\n"
         message += f"Deaths: {hero_data['deaths']}\n"
         message += f"Assists: {hero_data['assists']}\n"
-        message += f"————————————————\n"
-        message += f"Accuracy: {hero_data['accuracy']}%\n"
-        message += f"Crit Rate: {hero_data['crit_shot_rate']}%\n"
-        message += f"SPM: {hero_data['networth_per_min']}\n"
+        message += f"—————————————\n"
+        message += f"Accuracy: {round(hero_data['accuracy'], 2)}%\n"
+        message += f"Crit Rate: {round(hero_data['crit_shot_rate'], 2)}%\n"
+        message += f"SPM: {round(hero_data['networth_per_min'], 0)}\n"
 
     return message
 
