@@ -295,7 +295,11 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif user_input == "📊 My Stats":
         user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
+        account_id = get_user_uid(user.id)
+
         all_matchids = get_matchids_foruser(user.id)
+        user_hero_stats = get_user_hero_stats(account_id)
+
         if all_matchids:
             all_matchids_s = sorted(all_matchids, reverse=True)
             standart_matches = get_user_matches_bymode(all_matchids_s, 1)
@@ -307,6 +311,14 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                                                      avg_top, fav_hero, avg_page, avg_pos),
                                                 reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
                                                 parse_mode=constants.ParseMode.HTML)
+
+        if user_hero_stats:
+            context.user_data["user_hero_stats"] = user_hero_stats
+
+            await update.message.reply_text("Detailed hero statistics:",
+                                            reply_markup=create_user_hero_stats(user_hero_stats, "matches_played",
+                                                                                is_reverse=True),
+                                            parse_mode=constants.ParseMode.HTML)
 
         else:
             await update.message.reply_text("You have no observed matches at this moment.",
@@ -320,17 +332,6 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await update.message.reply_text("We have updated buttons now!",
                                         reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
-
-
-    elif user_input == "Hero Stats":
-        account_id = get_user_uid(user.id)
-        user_hero_stats = get_user_hero_stats(account_id)
-        if user_hero_stats:
-            context.user_data["user_hero_stats"] = user_hero_stats
-
-            await update.message.reply_text("Your stats:",
-                                            reply_markup=create_user_hero_stats(user_hero_stats, "matches_played", is_reverse=True),
-                                            parse_mode=constants.ParseMode.HTML)
 
 
 async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -502,8 +503,6 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         _, _, hero_id = query.data.split('_')
         user_hero_stats = context.user_data["user_hero_stats"]
         hero_data = get_hero_stats_by_id(user_hero_stats, int(hero_id))
-
-        await context.bot.send_message(user_id, f"{hero_id}")
 
         msg = await construct_hero_stats(hero_data)
         markup = InlineKeyboardMarkup([[InlineKeyboardButton("❌", callback_data=f"delete_msg")]])
