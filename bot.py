@@ -325,8 +325,10 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         account_id = get_user_uid(user.id)
         user_hero_stats = get_user_hero_stats(account_id)
         if user_hero_stats:
+            context.user_data["user_hero_stats"] = user_hero_stats
+
             await update.message.reply_text("Your stats:",
-                                            reply_markup=create_user_hero_stats(user_hero_stats),
+                                            reply_markup=create_user_hero_stats(user_hero_stats, "matches_played"),
                                             parse_mode=constants.ParseMode.HTML)
 
 
