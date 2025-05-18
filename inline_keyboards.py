@@ -172,15 +172,21 @@ def create_inline_matchups(hero_matchups, selected_hero_id: int | None = None) -
 
 def create_user_hero_stats(user_hero_stats) -> InlineKeyboardMarkup:
     all_heroes = get_all_heroes()
-    hero_button_text = []
+    hero_button_text = [[InlineKeyboardButton(text="name", callback_data="sdssd"),
+                         InlineKeyboardButton(text="Matches", callback_data="adasd"),
+                         InlineKeyboardButton(text="WR", callback_data="asdasd")]]
+    buttons_row = []
     user_hero_stats_s = sorted(user_hero_stats, key=lambda x: x['matches_played'], reverse=True)
 
-    for hero in user_hero_stats:
+    for hero in user_hero_stats_s:
         hero_name = get_hero_by_id(all_heroes, hero["hero_id"])
         hero_icon = get_hero_icon(hero_name)
         hero_wr = round(hero["wins"] / hero["matches_played"], 2) * 100
-        hero_button_text.append([InlineKeyboardButton(f"{hero_icon} {hero_name} - {hero['matches_played']} matches - {hero_wr}%",
-                                                      callback_data=f"us_{hero_name}_{hero['matches_played']}_")])
+        buttons_row.append([InlineKeyboardButton(f"{hero_icon} {hero_name}", callback_data="sdaf")])
+        buttons_row.append([InlineKeyboardButton(f"{hero['matches_played']}", callback_data="sdaf")])
+        buttons_row.append([InlineKeyboardButton(f"{hero_wr}", callback_data="sdaf")])
+        buttons_row.append([InlineKeyboardButton("...", callback_data="sdaf")])
+        hero_button_text.append(buttons_row)
 
     return InlineKeyboardMarkup(hero_button_text)
 
