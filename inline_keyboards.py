@@ -190,6 +190,9 @@ def create_user_hero_stats(user_hero_stats, sort_value, is_reverse) -> InlineKey
             button_text = f"{sort_indicator} {column_name}"
             sort_dir = "asc" if is_reverse else "desc"
             cb_data = f"uhs-sort-{sort_values[column_name]}-{sort_dir}"
+        elif column_name == "Name":
+            button_text = column_name
+            cb_data = f"uhs-sort-{sort_values[column_name]}-asc"
         else:
             button_text = column_name
             cb_data = f"uhs-sort-{sort_values[column_name]}-desc"
