@@ -54,7 +54,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = user.id
     user_name = user.first_name
 
-    if user_id != 648380859:
+    if user_id != 747138285:
         if is_user_registered(user_id):
             user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
         else:
@@ -72,7 +72,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def users_leaderboard(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != 648380859:
+    if update.effective_user.id != 747138285:
         users_avg_elo = get_all_users_avg_elot()
         sorted_users_avg_elo = dict(sorted(users_avg_elo.items(), key=lambda item: item[1], reverse=True))
         top_10_by_elo = dict(list(sorted_users_avg_elo.items())[:10])
@@ -85,7 +85,7 @@ async def users_leaderboard(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != 648380859:
+    if update.effective_user.id != 747138285:
         if is_user_registered(update.effective_user.id):
             user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
         else:
@@ -104,7 +104,7 @@ async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def ua_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != 648380859:
+    if update.effective_user.id != 747138285:
         if is_user_registered(update.effective_user.id):
             user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
         else:
@@ -115,7 +115,7 @@ async def ua_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def hero_winrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != 648380859:
+    if update.effective_user.id != 747138285:
         if is_user_registered(update.effective_user.id):
             user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
         else:
@@ -129,7 +129,7 @@ async def hero_winrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def hero_pickrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != 648380859:
+    if update.effective_user.id != 747138285:
         if is_user_registered(update.effective_user.id):
             user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
         else:
@@ -143,7 +143,7 @@ async def hero_pickrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def hero_matchups(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != 648380859:
+    if update.effective_user.id != 747138285:
         if is_user_registered(update.effective_user.id):
             user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
         else:
@@ -230,7 +230,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_name = user.first_name
     await context.bot.send_message(648380859, f"{user_name}({username}) typed {user_input}")
 
-    if user.id != 648380859:
+    if user.id != 747138285:
 
         if user_input == "🔍 Search LIVE game by id":
             context.user_data.clear()
@@ -711,16 +711,17 @@ async def match_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def notify_user(user_id, match_id, match_elo, context: ContextTypes.DEFAULT_TYPE):
-    try:
-        msg = f"Hey, we found you in a match <b>{match_id}</b>.\n"
-        msg += f"Match ELO: <b>{match_elo}</b>"
-        await context.bot.send_message(user_id, msg, parse_mode=constants.ParseMode.HTML)
+    if user_id != 747138285:
+        try:
+            msg = f"Hey, we found you in a match <b>{match_id}</b>.\n"
+            msg += f"Match ELO: <b>{match_elo}</b>"
+            await context.bot.send_message(user_id, msg, parse_mode=constants.ParseMode.HTML)
 
-    except telegram.error.BadRequest as e:
-        await context.bot.send_message(648380859, f"{e} for user_id: {user_id}")
+        except telegram.error.BadRequest as e:
+            await context.bot.send_message(648380859, f"{e} for user_id: {user_id}")
 
-    except telegram.error.Forbidden as e:
-        await context.bot.send_message(648380859, f"{e} for user_id: {user_id}")
+        except telegram.error.Forbidden as e:
+            await context.bot.send_message(648380859, f"{e} for user_id: {user_id}")
 
 
 async def end_conv(update: Update, context: ContextTypes.DEFAULT_TYPE) -> ConversationHandler.END:
