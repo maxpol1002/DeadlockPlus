@@ -230,7 +230,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_name = user.first_name
     await context.bot.send_message(648380859, f"{user_name}({username}) typed {user_input}")
 
-    if user.id != 747138285:
+    if user.id != 648380859:
 
         if user_input == "🔍 Search LIVE game by id":
             context.user_data.clear()
