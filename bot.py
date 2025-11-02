@@ -121,7 +121,7 @@ async def hero_winrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
 
-        await update.message.reply_text("Here you can check heroes winrates since last update (11/05)",
+        await update.message.reply_text("Here you can check heroes winrates since last update (25/10)",
                                         reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
         await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice(is_w=True))
 
@@ -135,7 +135,7 @@ async def hero_pickrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
 
-        await update.message.reply_text("Here you can check heroes pick rates since last update (11/05)",
+        await update.message.reply_text("Here you can check heroes pick rates since last update (25/10)",
                                         reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
         await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice(is_w=False))
 
@@ -150,7 +150,7 @@ async def hero_matchups(update: Update, context: ContextTypes.DEFAULT_TYPE):
             user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
 
         current_timestamp = int(datetime.utcnow().timestamp())
-        last_patch_timestamp = 1746947220
+        last_patch_timestamp = 1761350400
         kyiv_tz = pytz.timezone('Europe/Kyiv')
         current_time_eest = datetime.fromtimestamp(current_timestamp, kyiv_tz).strftime("%d/%m")
         last_patch_time_eest = datetime.fromtimestamp(last_patch_timestamp, kyiv_tz).strftime("%d/%m")
@@ -373,7 +373,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
 
     elif query.data == "open_matchups":
         current_timestamp = int(datetime.utcnow().timestamp())
-        last_patch_timestamp = 1739319840
+        last_patch_timestamp = 1761350400
         matchups = get_hero_matchups(min_ts=last_patch_timestamp, max_ts=current_timestamp)
         await query.edit_message_text("Select a hero to check matchups", reply_markup=create_inline_matchups(matchups))
         await query.answer()
@@ -412,7 +412,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
         #         elo_min = 0
 
         current_timestamp = int(datetime.utcnow().timestamp())
-        last_patch_timestamp = 1746947220
+        last_patch_timestamp = 1761350400
         kyiv_tz = pytz.timezone('Europe/Kyiv')
         current_time_eest = datetime.fromtimestamp(current_timestamp, kyiv_tz).strftime("%d/%m")
         last_patch_time_eest = datetime.fromtimestamp(last_patch_timestamp, kyiv_tz).strftime("%d/%m")
@@ -473,7 +473,7 @@ async def callback_data_handler(update: Update, context: ContextTypes.DEFAULT_TY
     elif query.data.startswith("hmatchups"):
         hero_id = int(query.data.split("_")[1])
         current_timestamp = int(datetime.utcnow().timestamp())
-        last_patch_timestamp = 1739319840
+        last_patch_timestamp = 1761350400
         matchups = get_hero_matchups(min_ts=last_patch_timestamp, max_ts=current_timestamp)
         await query.edit_message_text("Matchups ⬇️", reply_markup=create_inline_matchups(matchups, hero_id))
 
