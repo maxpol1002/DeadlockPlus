@@ -264,7 +264,7 @@ def get_all_users_avg_elot():
              JOIN max_elo me ON me.comm_id = u.comm_id
              JOIN match_counts mc ON mc.comm_id = u.comm_id
     WHERE (m.data->>'match_mode')::int = 1
-      AND (m.data->>'match_elo')::int >= me.max_elo - 300
+      AND (m.data->>'match_elo')::int >= me.max_elo - 1000
     GROUP BY u.comm_id;
     '''
 
