@@ -38,7 +38,9 @@ def get_hero_icon(hero_name: str) -> str:
     hero_icons = {
         "Abrams": "😈",
         "Bebop": "🤖",
+        "Billy": "🐐",
         "Calico": "🐈‍⬛",
+        "Drifter": "🧛",
         "Dynamo": "❎",
         "Grey Talon": "🏹",
         "Haze": "😶‍🌫️",
@@ -51,17 +53,21 @@ def get_hero_icon(hero_name: str) -> str:
         "THE MAGNIFICENT SINCLAIR": "🧙",
         "Sinclair": "🧙",
         "McGinnis": "🚀",
+        "Mina": "⛱",
         "Mirage": "🌪",
         "Mo & Krill": "🐽",
+        "Paige": "📗",
         "Paradox": "🔄",
         "Pocket": "💼",
         "Seven": "⚡️",
         "Shiv": "🩸",
+        "Victor": "🧟",
         "Vindicta": "🎯",
         "Viscous": "🟢",
         "Vyper": "🦎",
         "Warden": "👮‍♂️",
         "Wraith": "🃏",
+        "The Doorman": "🚪",
         "Yamato": "⛩"
     }
 
