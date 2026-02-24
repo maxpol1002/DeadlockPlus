@@ -54,113 +54,106 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = user.id
     user_name = user.first_name
 
-    if user_id != 747138285:
-        if is_user_registered(user_id):
-            user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
-        else:
-            user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
+    if is_user_registered(user_id):
+        user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
+    else:
+        user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
 
-        user_menu_markup = ReplyKeyboardMarkup(user_menu, resize_keyboard=True)
+    user_menu_markup = ReplyKeyboardMarkup(user_menu, resize_keyboard=True)
 
-        await update.message.reply_text(f"Hello, <b>{user_name}</b>, with this bot you can search live game's data such as <b>official lobby MMR</b>, <b>players</b>, "
-                                        f"<b>page number</b> and many other useful things.\nPress the button below to start. "
-                                        f"Register so we can track your matches.\n"
-                                        f"<b>(IMPORTANT: Your game must be LIVE and in the Watch tab so we can track it.)</b>",
-                                        reply_markup=user_menu_markup, parse_mode=constants.ParseMode.HTML)
+    await update.message.reply_text(f"Hello, <b>{user_name}</b>, with this bot you can search live game's data such as <b>official lobby MMR</b>, <b>players</b>, "
+                                    f"<b>page number</b> and many other useful things.\nPress the button below to start. "
+                                    f"Register so we can track your matches.\n"
+                                    f"<b>(IMPORTANT: Your game must be LIVE and in the Watch tab so we can track it.)</b>",
+                                    reply_markup=user_menu_markup, parse_mode=constants.ParseMode.HTML)
 
     await context.bot.send_message(648380859, f"{user_name} started bot")
 
 
 async def users_leaderboard(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != 747138285:
-        users_avg_elo = get_all_users_avg_elot()
-        sorted_users_avg_elo = dict(sorted(users_avg_elo.items(), key=lambda item: item[1], reverse=True))
-        top_10_by_elo = dict(list(sorted_users_avg_elo.items())[:10])
+    users_avg_elo = get_all_users_avg_elot()
+    sorted_users_avg_elo = dict(sorted(users_avg_elo.items(), key=lambda item: item[1], reverse=True))
+    top_10_by_elo = dict(list(sorted_users_avg_elo.items())[:10])
 
-        await update.message.reply_text("🏆 <b>TOP 10 users</b> 🏆",
-                                        reply_markup=create_inline_leaderboard(top_10_by_elo),
-                                        parse_mode=constants.ParseMode.HTML)
+    await update.message.reply_text("🏆 <b>TOP 10 users</b> 🏆",
+                                    reply_markup=create_inline_leaderboard(top_10_by_elo),
+                                    parse_mode=constants.ParseMode.HTML)
 
     await context.bot.send_message(648380859, f"{update.effective_user.username} opened leaderboards")
 
 
 async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != 747138285:
-        if is_user_registered(update.effective_user.id):
-            user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
-        else:
-            user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
+    if is_user_registered(update.effective_user.id):
+        user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
+    else:
+        user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
 
-        markup = ReplyKeyboardMarkup(user_menu, resize_keyboard=True)
-        await update.message.reply_text("1. <b>How to use this bot?</b> Just follow bot instuctions and let the magic do its work :)\n"
-                                        "2. <b>Why can't I find my match?</b> If you can't find your match there can be 3 reasons: "
-                                        "1 - You entered wrong match id, 2 - Your match is already finished, 3 - Your match didn't reach 'watch' tab in game.\n"
-                                        "3. <b>Is match MMR(elo) real?</b> Yes, this is Valve's official average lobby rating.\n"
-                                        "4. <b>What is percentile?</b> It means that you are better than some % of players. "
-                                        "<b>Example</b>: Percentile 90% means that you are better than 90% of players.",
-                                        parse_mode=constants.ParseMode.HTML, reply_markup=markup)
+    markup = ReplyKeyboardMarkup(user_menu, resize_keyboard=True)
+    await update.message.reply_text("1. <b>How to use this bot?</b> Just follow bot instuctions and let the magic do its work :)\n"
+                                    "2. <b>Why can't I find my match?</b> If you can't find your match there can be 3 reasons: "
+                                    "1 - You entered wrong match id, 2 - Your match is already finished, 3 - Your match didn't reach 'watch' tab in game.\n"
+                                    "3. <b>Is match MMR(elo) real?</b> Yes, this is Valve's official average lobby rating.\n"
+                                    "4. <b>What is percentile?</b> It means that you are better than some % of players. "
+                                    "<b>Example</b>: Percentile 90% means that you are better than 90% of players.",
+                                    parse_mode=constants.ParseMode.HTML, reply_markup=markup)
 
     await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened faq")
 
 
 async def ua_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != 747138285:
-        if is_user_registered(update.effective_user.id):
-            user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
-        else:
-            user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
+    if is_user_registered(update.effective_user.id):
+        user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
+    else:
+        user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
 
-        await update.message.reply_text("Join ukrainian channel! t.me/Deadlock_UA_News",
-                                        reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+    await update.message.reply_text("Join ukrainian channel! t.me/Deadlock_UA_News",
+                                    reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
 
 
 async def hero_winrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != 747138285:
-        if is_user_registered(update.effective_user.id):
-            user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
-        else:
-            user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
+    if is_user_registered(update.effective_user.id):
+        user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
+    else:
+        user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
 
-        await update.message.reply_text("Here you can check heroes winrates since last update (25/10)",
-                                        reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
-        await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice(is_w=True))
+    await update.message.reply_text("Here you can check heroes winrates since last update (25/10)",
+                                    reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+    await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice(is_w=True))
 
     await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened winrates")
 
 
 async def hero_pickrates(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != 747138285:
-        if is_user_registered(update.effective_user.id):
-            user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
-        else:
-            user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
+    if is_user_registered(update.effective_user.id):
+        user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
+    else:
+        user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
 
-        await update.message.reply_text("Here you can check heroes pick rates since last update (25/10)",
-                                        reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
-        await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice(is_w=False))
+    await update.message.reply_text("Here you can check heroes pick rates since last update (25/10)",
+                                    reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True))
+    await update.message.reply_text("Choose lobby rank ⬇️", reply_markup=lobby_rank_choice(is_w=False))
 
     await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened pickrates")
 
 
 async def hero_matchups(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != 747138285:
-        if is_user_registered(update.effective_user.id):
-            user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
-        else:
-            user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
+    if is_user_registered(update.effective_user.id):
+        user_menu = [["⚔️ My Matches", "📊 My Stats"], ["🔍 Search LIVE game by id"]]
+    else:
+        user_menu = [["🔍 Search LIVE game by id"], ["Registration"]]
 
-        current_timestamp = int(datetime.utcnow().timestamp())
-        last_patch_timestamp = 1761350400
-        kyiv_tz = pytz.timezone('Europe/Kyiv')
-        current_time_eest = datetime.fromtimestamp(current_timestamp, kyiv_tz).strftime("%d/%m")
-        last_patch_time_eest = datetime.fromtimestamp(last_patch_timestamp, kyiv_tz).strftime("%d/%m")
+    current_timestamp = int(datetime.utcnow().timestamp())
+    last_patch_timestamp = 1761350400
+    kyiv_tz = pytz.timezone('Europe/Kyiv')
+    current_time_eest = datetime.fromtimestamp(current_timestamp, kyiv_tz).strftime("%d/%m")
+    last_patch_time_eest = datetime.fromtimestamp(last_patch_timestamp, kyiv_tz).strftime("%d/%m")
 
-        matchups = get_hero_matchups(min_ts=last_patch_timestamp, max_ts=current_timestamp)
+    matchups = get_hero_matchups(min_ts=last_patch_timestamp, max_ts=current_timestamp)
 
-        await update.message.reply_text(f"Here you can check heroes matchups <b>({last_patch_time_eest} - {current_time_eest})</b>",
-                                        reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
-                                        parse_mode=constants.ParseMode.HTML)
-        await update.message.reply_text("Select a hero to check matchups", reply_markup=create_inline_matchups(matchups))
+    await update.message.reply_text(f"Here you can check heroes matchups <b>({last_patch_time_eest} - {current_time_eest})</b>",
+                                    reply_markup=ReplyKeyboardMarkup(user_menu, resize_keyboard=True),
+                                    parse_mode=constants.ParseMode.HTML)
+    await update.message.reply_text("Select a hero to check matchups", reply_markup=create_inline_matchups(matchups))
 
     await context.bot.send_message(648380859, f"{update.effective_user.first_name} opened matchups")
 
